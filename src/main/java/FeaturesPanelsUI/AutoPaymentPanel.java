@@ -25,6 +25,9 @@ public class AutoPaymentPanel extends JPanel implements ActionListener{
         lblTemp = new JLabel("DI PA TAPOS TO :))))");
         lblTemp.setBounds(25,25,787,30);
         add(lblTemp);
+        
+        //b
+        
     }
     @Override
     public void actionPerformed(ActionEvent e) {

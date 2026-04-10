@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import DashboardUIDefault.MainDashboard;
 
 /**
  *
@@ -74,13 +75,8 @@ public class DashboardPanel extends JPanel implements ActionListener{
         
         // Recent Transactions
         
-        lblTransactions = new JLabel("View All Accounts");
-        lblTransactions.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblTransactions.setBounds(35, 230, 325, 35);
-        add(lblTransactions);
-        
         pnlTransactions = new JPanel();
-        pnlTransactions.setBounds(25, 270, 425, 260);
+        pnlTransactions.setBounds(25, 250, 425, 285);
         pnlTransactions.setBackground(new Color(243, 243, 243));
         pnlTransactions.setBorder(new LineBorder(Color.LIGHT_GRAY));
         pnlTransactions.setLayout(null);
@@ -96,7 +92,7 @@ public class DashboardPanel extends JPanel implements ActionListener{
         TransactionsTable = new JTable(model);
         TransactionsTable.getTableHeader().setReorderingAllowed(false);
         scroll = new JScrollPane(TransactionsTable);
-        scroll.setBounds(25, 45, 375, 195);
+        scroll.setBounds(25, 45, 375, 220);
         pnlTransactions.add(scroll);
         
         // Scheduled Payments
@@ -194,5 +190,15 @@ public class DashboardPanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         
         
+        if (e.getSource() == btnDeposit) {
+            DashboardUIDefault.MainDashboard.mainPanel.removeAll();
+//            DashboardUIDefault.MainDashboard.topBar.lblTopBar.setText("Deposit");
+            DashboardUIDefault.MainDashboard.pnlDeposit = new DepositPanel();
+            DashboardUIDefault.MainDashboard.mainPanel.add(DashboardUIDefault.MainDashboard.pnlDeposit);
+
     }
+        
+        DashboardUIDefault.MainDashboard.mainPanel.revalidate();
+        DashboardUIDefault.MainDashboard.mainPanel.repaint();
+}
 }

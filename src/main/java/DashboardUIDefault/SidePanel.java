@@ -13,7 +13,7 @@ import javax.swing.border.LineBorder;
  *
  * @author rafra
  */
-class SidePanel extends JPanel implements MouseListener {
+public class SidePanel extends JPanel implements MouseListener {
 
     JPanel pnlSideBar, pnlSideBar_Header, pnlAccount;
     JLabel lblBank, lblAccName, lblLine, lblSelectIndicator;

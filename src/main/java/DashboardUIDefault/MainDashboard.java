@@ -19,15 +19,15 @@ import javax.swing.border.LineBorder;
  */
 public class MainDashboard extends JFrame implements ActionListener {
 
-    private JPanel pnlTopBar, pnlBotBar, pnlMain;
-    private JLabel lblTopBar, lblDateToday, lblSystemName;
-    private SidePanel sideBar;
-    private TopPanel topBar;
+    public static JPanel pnlTopBar, pnlBotBar, pnlMain;
+    public static JLabel lblTopBar, lblDateToday, lblSystemName;
+    public static SidePanel sideBar;
+    public static TopPanel topBar;
     private BottomPanel botBar;
-    private MainPanel mainPanel;
+    public static MainPanel mainPanel;
     private AutoPaymentPanel pnlAutoPay;
     private DashboardPanel pnlDashboard;
-    private DepositPanel pnlDeposit;
+    public static DepositPanel pnlDeposit;
     private SettingsPanel pnlSettings;
     private TransactionsPanel pnlTransactions;
     private TransferPanel pnlTransfer;

@@ -20,9 +20,14 @@ public class AutoPaymentPanel extends JPanel implements ActionListener{
     private JPanel pnlAutoPayment;
     private JTextField txtRecipient, txtAmount;
     private JTextArea txtReceipt;
-    private JComboBox<String> cmbFrequency, cmbBirthDay, cmbBirthMonth, cmbBirthYear;
-    private String[] frequency = {"Monthly", "Quarterly", "Semi-Anually", "Anually"};     
-            
+    int startYear = 1970, endYear = 2050;
+    private JComboBox<String> cmbFrequency, cmbDay, cmbMonth, cmbYear;
+    private String[]
+                    frequency = {"every second", "Monthly", "Quarterly", "Semi-Anually", "Anually"},
+                    months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"},
+                    days = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"},   
+                    years = {"2026"};
+    
     public AutoPaymentPanel() {
         
         setBounds(0, 0, 837, 560);
@@ -32,11 +37,11 @@ public class AutoPaymentPanel extends JPanel implements ActionListener{
         
         //---------------------------------AUTOPAYMENT
         
-        lblAutoPayment = new JLabel("Auto Payment Setup");
-        lblAutoPayment.setForeground(Color.GRAY);
-        lblAutoPayment.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblAutoPayment.setBounds(25, 25, 250, 35);
-        add(lblAutoPayment);
+//        lblAutoPayment = new JLabel("Auto Payment Setup");
+//        lblAutoPayment.setForeground(Color.GRAY);
+//        lblAutoPayment.setFont(new Font("Arial", Font.PLAIN, 18));
+//        lblAutoPayment.setBounds(25, 25, 250, 35);
+//        add(lblAutoPayment);
         
         pnlAutoPayment = new JPanel();
         pnlAutoPayment.setBounds(25, 70, 375, 465);
@@ -93,12 +98,12 @@ public class AutoPaymentPanel extends JPanel implements ActionListener{
         lblMonth.setHorizontalAlignment(JLabel.CENTER);
         pnlAutoPayment.add(lblMonth);
 
-        cmbBirthMonth = new JComboBox();
-        cmbBirthMonth.setBounds(25, 280, 130, 35);
-        cmbBirthMonth.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbBirthMonth.setOpaque(false);
-        cmbBirthMonth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlAutoPayment.add(cmbBirthMonth);
+        cmbMonth = new JComboBox<String>(months);
+        cmbMonth.setBounds(25, 280, 130, 35);
+        cmbMonth.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
+        cmbMonth.setOpaque(false);
+        cmbMonth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        pnlAutoPayment.add(cmbMonth);
         
         lblDay = new JLabel("Day");
         lblDay.setBounds(175, 275, 25, 10);
@@ -108,12 +113,12 @@ public class AutoPaymentPanel extends JPanel implements ActionListener{
         lblDay.setHorizontalAlignment(JLabel.CENTER);
         pnlAutoPayment.add(lblDay);
 
-        cmbBirthDay = new JComboBox();
-        cmbBirthDay.setBounds(170, 280, 80, 35);
-        cmbBirthDay.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbBirthDay.setOpaque(false);
-        cmbBirthDay.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlAutoPayment.add(cmbBirthDay);
+        cmbDay = new JComboBox<String>(days);
+        cmbDay.setBounds(170, 280, 80, 35);
+        cmbDay.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
+        cmbDay.setOpaque(false);
+        cmbDay.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        pnlAutoPayment.add(cmbDay);
         
         lblYear = new JLabel("Year");
         lblYear.setBounds(260, 275, 30, 10);
@@ -123,12 +128,12 @@ public class AutoPaymentPanel extends JPanel implements ActionListener{
         lblYear.setHorizontalAlignment(JLabel.CENTER);
         pnlAutoPayment.add(lblYear);
 
-        cmbBirthYear = new JComboBox();
-        cmbBirthYear.setBounds(265, 280, 85, 35);
-        cmbBirthYear.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbBirthYear.setOpaque(false);
-        cmbBirthYear.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlAutoPayment.add(cmbBirthYear);
+        cmbYear = new JComboBox<String>(years);
+        cmbYear.setBounds(265, 280, 85, 35);
+        cmbYear.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
+        cmbYear.setOpaque(false);
+        cmbYear.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        pnlAutoPayment.add(cmbYear);
         
         btnEnableAuto = new JButton("Set Up Payment");
         btnEnableAuto.setHorizontalAlignment(JButton.CENTER);
@@ -150,7 +155,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener{
         
         //---------------------------------RECEIPT
         
-        lblReceipt = new JLabel("Receipt");
+        lblReceipt = new JLabel("Enabled Auto Payments");
         lblReceipt.setForeground(Color.GRAY);
         lblReceipt.setFont(new Font("Arial", Font.PLAIN, 18));
         lblReceipt.setBounds(425, 25, 325, 35);
@@ -164,14 +169,13 @@ public class AutoPaymentPanel extends JPanel implements ActionListener{
         txtReceipt.setEditable(false);
         add(txtReceipt);
         
-        
-        
-        
-        
-        
-     
     }
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        if (e.getSource() == btnEnableAuto) {
+            txtReceipt.append(txtRecipient.getText() + "\n" + txtAmount.getText() + "\n" + cmbFrequency.getSelectedItem() + "\n" + cmbMonth.getSelectedItem() + " " + cmbDay.getSelectedItem() + " " + cmbYear.getSelectedItem());
+        }
+        
     }
 }

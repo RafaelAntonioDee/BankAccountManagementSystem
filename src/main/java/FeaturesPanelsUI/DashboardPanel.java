@@ -192,10 +192,9 @@ public class DashboardPanel extends JPanel implements ActionListener{
         
         if (e.getSource() == btnDeposit) {
             DashboardUIDefault.MainDashboard.mainPanel.removeAll();
-//            DashboardUIDefault.MainDashboard.topBar.lblTopBar.setText("Deposit");
+            DashboardUIDefault.TopPanel.lblTopBar.setText("Deposit");
             DashboardUIDefault.MainDashboard.pnlDeposit = new DepositPanel();
             DashboardUIDefault.MainDashboard.mainPanel.add(DashboardUIDefault.MainDashboard.pnlDeposit);
-
     }
         
         DashboardUIDefault.MainDashboard.mainPanel.revalidate();

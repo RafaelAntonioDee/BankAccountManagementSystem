@@ -14,7 +14,7 @@ import javax.swing.border.LineBorder;
  */
 public class TopPanel extends JPanel {
 
-    JLabel lblTopBar;
+    public static JLabel lblTopBar;
 
     TopPanel() {
         setBounds(175, 0, 837, 60);

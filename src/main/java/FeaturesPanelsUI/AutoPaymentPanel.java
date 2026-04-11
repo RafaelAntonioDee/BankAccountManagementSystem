@@ -20,7 +20,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
     private JPanel pnlAutoPayment, pnlScheduledPayment, pnlAutoPayListContent;
     private JScrollPane pnlAutoPayList;
     private JTextField txtRecipient, txtAmount;
-    private int startYear = 1970, endYear = 2050, ScheduledCount = 0, y = 15;
+    private int startYear = 1970, endYear = 2050, ScheduledCount = 0, y = 0;
     private JComboBox<String> cmbFrequency, cmbDay, cmbMonth, cmbYear;
     private String[] frequency = {"every second", "Monthly", "Quarterly", "Semi-Anually", "Anually"},
             months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"},
@@ -119,7 +119,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         pnlAutoPayment.add(cmbDay);
 
         lblYear = new JLabel("Year");
-        lblYear.setBounds(262, 275, 30, 10);
+        lblYear.setBounds(268, 275, 30, 10);
         lblYear.setOpaque(true);
         lblYear.setBackground(new Color(243, 243, 243));
         lblYear.setFont(new Font("Arial", Font.PLAIN, 10));
@@ -159,7 +159,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         add(lblReceipt);
 
         pnlAutoPayList = new JScrollPane();
-        pnlAutoPayList.setBounds(425, 65, 395, 470);
+        pnlAutoPayList.setBounds(425, 70, 395, 465);
         pnlAutoPayList.setOpaque(false);
         pnlAutoPayList.setBorder(null);
         add(pnlAutoPayList);

@@ -19,15 +19,15 @@ import javax.swing.border.LineBorder;
  */
 public class MainDashboard extends JFrame implements ActionListener {
 
-    public static JPanel pnlTopBar, pnlBotBar, pnlMain;
-    public static JLabel lblTopBar, lblDateToday, lblSystemName;
-    public static SidePanel sideBar;
-    public static TopPanel topBar;
+    private JPanel pnlTopBar, pnlBotBar, pnlMain;
+    private JLabel lblTopBar, lblDateToday, lblSystemName;
+    public SidePanel sideBar;
+    private TopPanel topBar;
     private BottomPanel botBar;
-    public static MainPanel mainPanel;
+    private MainPanel mainPanel;
     private AutoPaymentPanel pnlAutoPay;
     private DashboardPanel pnlDashboard;
-    public static DepositPanel pnlDeposit;
+    private DepositPanel pnlDeposit;
     private SettingsPanel pnlSettings;
     private TransactionsPanel pnlTransactions;
     private TransferPanel pnlTransfer;
@@ -44,6 +44,7 @@ public class MainDashboard extends JFrame implements ActionListener {
         //------------------------------- Panels Setup -------------------------------
         //SIDE BAR
         sideBar = new SidePanel();
+        sideBar.setName("sideBar");
         add(sideBar);
 
         sideBar.btnLogout.addActionListener(this);
@@ -67,8 +68,25 @@ public class MainDashboard extends JFrame implements ActionListener {
         mainPanel = new MainPanel();
         add(mainPanel);
 
-        pnlDashboard = new DashboardPanel();
+        pnlDashboard = new DashboardPanel(this);
         mainPanel.add(pnlDashboard);
+    }
+
+    public void switchPanel(JButton button, String name, String title, JPanel panel) {
+        sideBar.removeIndicator();
+        button.add(sideBar.lblSelectIndicator);
+        sideBar.SelectedButton = name;
+        sideBar.clearSelected();
+
+        mainPanel.removeAll();
+        topBar.lblTopBar.setText(title);
+
+        mainPanel.add(panel);
+        mainPanel.revalidate();
+        mainPanel.repaint();
+        button.setContentAreaFilled(true);
+        sideBar.revalidate();
+        sideBar.repaint();
     }
 
     @Override
@@ -78,68 +96,25 @@ public class MainDashboard extends JFrame implements ActionListener {
             LoginPage page = new LoginPage();
             page.setVisible(true);
         } else if (e.getSource() == sideBar.btnDashboard) {
-            sideBar.removeIndicator();
-            sideBar.btnDashboard.add(sideBar.lblSelectIndicator);
-            sideBar.SelectedButton = "btnDashboard";
-            sideBar.clearSelected();
-            mainPanel.removeAll();
-            topBar.lblTopBar.setText("Dashboard");
-            pnlDashboard = new DashboardPanel();
-            mainPanel.add(pnlDashboard);
+            switchPanel(sideBar.btnDashboard, "btnDashboard", "Dashboard", new DashboardPanel(this));
+
         } else if (e.getSource() == sideBar.btnDeposit) {
-            sideBar.removeIndicator();
-            sideBar.btnDeposit.add(sideBar.lblSelectIndicator);
-            sideBar.SelectedButton = "btnDeposit";
-            sideBar.clearSelected();
-            mainPanel.removeAll();
-            topBar.lblTopBar.setText("Deposit");
-            pnlDeposit = new DepositPanel();
-            mainPanel.add(pnlDeposit);
+            switchPanel(sideBar.btnDeposit, "btnDeposit", "Deposit", new DepositPanel());
+
         } else if (e.getSource() == sideBar.btnWithdraw) {
-            sideBar.removeIndicator();
-            sideBar.btnWithdraw.add(sideBar.lblSelectIndicator);
-            sideBar.SelectedButton = "btnWithdraw";
-            sideBar.clearSelected();
-            mainPanel.removeAll();
-            topBar.lblTopBar.setText("Withdraw");
-            pnlWithdraw = new WithdrawPanel();
-            mainPanel.add(pnlWithdraw);
+            switchPanel(sideBar.btnWithdraw, "btnWithdraw", "Withdraw", new WithdrawPanel());
+
         } else if (e.getSource() == sideBar.btnTransfer) {
-            sideBar.removeIndicator();
-            sideBar.btnTransfer.add(sideBar.lblSelectIndicator);
-            sideBar.SelectedButton = "btnTransfer";
-            sideBar.clearSelected();
-            mainPanel.removeAll();
-            topBar.lblTopBar.setText("Transfer");
-            pnlTransfer = new TransferPanel();
-            mainPanel.add(pnlTransfer);
+            switchPanel(sideBar.btnTransfer, "btnTransfer", "Transfer", new TransferPanel());
+
         } else if (e.getSource() == sideBar.btnTransactions) {
-            sideBar.removeIndicator();
-            sideBar.btnTransactions.add(sideBar.lblSelectIndicator);
-            sideBar.SelectedButton = "btnTransactions";
-            sideBar.clearSelected();
-            mainPanel.removeAll();
-            topBar.lblTopBar.setText("Transaction History");
-            pnlTransactions = new TransactionsPanel();
-            mainPanel.add(pnlTransactions);
+            switchPanel(sideBar.btnTransactions, "btnTransactions", "Transaction History", new TransactionsPanel());
+
         } else if (e.getSource() == sideBar.btnAutoPayments) {
-            sideBar.removeIndicator();
-            sideBar.btnAutoPayments.add(sideBar.lblSelectIndicator);
-            sideBar.SelectedButton = "btnAutoPayments";
-            sideBar.clearSelected();
-            mainPanel.removeAll();
-            topBar.lblTopBar.setText("Auto Payments");
-            pnlAutoPay = new AutoPaymentPanel();
-            mainPanel.add(pnlAutoPay);
+            switchPanel(sideBar.btnAutoPayments, "btnAutoPayments", "Auto Payments", new AutoPaymentPanel());
+
         } else if (e.getSource() == sideBar.btnSettings) {
-            sideBar.removeIndicator();
-            sideBar.btnSettings.add(sideBar.lblSelectIndicator);
-            sideBar.SelectedButton = "btnSettings";
-            sideBar.clearSelected();
-            mainPanel.removeAll();
-            topBar.lblTopBar.setText("Settings");
-            pnlSettings = new SettingsPanel();
-            mainPanel.add(pnlSettings);
+            switchPanel(sideBar.btnSettings, "btnSettings", "Settings", new SettingsPanel());
         }
         mainPanel.revalidate();
         mainPanel.repaint();

@@ -15,10 +15,10 @@ import javax.swing.border.LineBorder;
  */
 public class SidePanel extends JPanel implements MouseListener {
 
-    JPanel pnlSideBar, pnlSideBar_Header, pnlAccount;
-    JLabel lblBank, lblAccName, lblLine, lblSelectIndicator;
-    JButton btnDashboard, btnDeposit, btnWithdraw, btnTransfer, btnTransactions, btnAutoPayments, btnSettings, btnLogout;
-    String SelectedButton = "btnDashboard";
+    public JPanel pnlSideBar, pnlSideBar_Header, pnlAccount;
+    public JLabel lblBank, lblAccName, lblLine, lblSelectIndicator;
+    public JButton btnDashboard, btnDeposit, btnWithdraw, btnTransfer, btnTransactions, btnAutoPayments, btnSettings, btnLogout;
+    public String SelectedButton = "btnDashboard";
 
     SidePanel() {
         setBounds(0, 0, 175, 620);

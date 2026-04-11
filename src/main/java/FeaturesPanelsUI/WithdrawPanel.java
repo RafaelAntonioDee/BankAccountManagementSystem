@@ -9,18 +9,16 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
-/**
- *
- * @author rafra
- */
 public class WithdrawPanel extends JPanel implements ActionListener {
 
     private JLabel lblBalance, lblBalanceAmount, lblAmount, lblModeOfTransac, lblReceipt;
     private JButton btnWithdraw, btnCancel;
     private JTextField txtAmount;
-    private JComboBox cmbModeOfTransac;
+    private JComboBox<String> cmbModeOfTransac;
     private JPanel pnlProcess;
     private JTextArea txtReceipt;
+
+    double balance = 5000;
 
     public WithdrawPanel() {
         setBounds(0, 0, 837, 560);
@@ -34,7 +32,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         lblBalance.setBounds(25, 25, 250, 35);
         add(lblBalance);
 
-        lblBalanceAmount = new JLabel("    ₱0.00");
+        lblBalanceAmount = new JLabel("    ₱" + balance);
         lblBalanceAmount.setForeground(Color.WHITE);
         lblBalanceAmount.setFont(new Font("Arial", Font.PLAIN, 20));
         lblBalanceAmount.setBounds(25, 65, 250, 50);
@@ -49,15 +47,16 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         pnlProcess.setLayout(null);
         add(pnlProcess);
 
-        lblAmount = new JLabel("Deposit Amount");
+        lblAmount = new JLabel("Withdraw Amount");
         lblAmount.setFont(new Font("Arial", Font.PLAIN, 18));
         lblAmount.setBounds(25, 25, 325, 35);
         pnlProcess.add(lblAmount);
 
         txtAmount = new JTextField();
         txtAmount.setBounds(25, 70, 325, 35);
-        txtAmount.setOpaque(false);
-        txtAmount.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        txtAmount.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY), 
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlProcess.add(txtAmount);
 
         lblModeOfTransac = new JLabel("Mode of Transaction");
@@ -65,15 +64,15 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         lblModeOfTransac.setBounds(25, 115, 325, 35);
         pnlProcess.add(lblModeOfTransac);
 
-        cmbModeOfTransac = new JComboBox();
+        cmbModeOfTransac = new JComboBox<>();
         cmbModeOfTransac.setBounds(25, 160, 325, 35);
-        cmbModeOfTransac.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbModeOfTransac.setOpaque(false);
-        cmbModeOfTransac.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        cmbModeOfTransac.addItem("Select Mode");
+        cmbModeOfTransac.addItem("Over the Counter");
+        cmbModeOfTransac.addItem("Local Banks");
+        cmbModeOfTransac.addItem("Global Banks & Partners");
         pnlProcess.add(cmbModeOfTransac);
 
         btnCancel = new JButton("Cancel");
-        btnCancel.setHorizontalAlignment(JButton.CENTER);
         btnCancel.setBounds(265, 325, 85, 35);
         btnCancel.setBackground(Color.GRAY);
         btnCancel.setForeground(Color.WHITE);
@@ -82,7 +81,6 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         pnlProcess.add(btnCancel);
 
         btnWithdraw = new JButton("Withdraw");
-        btnWithdraw.setHorizontalAlignment(JButton.CENTER);
         btnWithdraw.setBounds(155, 325, 90, 35);
         btnWithdraw.setBackground(new Color(82, 124, 174));
         btnWithdraw.setForeground(Color.WHITE);
@@ -107,5 +105,73 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
+        if (e.getSource() == btnWithdraw) {
+            try {
+                String amountText = txtAmount.getText();
+                String mode = (String) cmbModeOfTransac.getSelectedItem();
+
+                if (amountText.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Enter amount!");
+                    return;
+                }
+
+                if (mode.equals("Select Mode")) {
+                    JOptionPane.showMessageDialog(this, "Select transaction mode!");
+                    return;
+                }
+
+                double amount = Double.parseDouble(amountText);
+
+                if (amount <= 0) {
+                    JOptionPane.showMessageDialog(this, "Invalid amount!");
+                    return;
+                }
+
+                if (amount > balance) {
+                    JOptionPane.showMessageDialog(this, "Insufficient balance!");
+                    return;
+                }
+
+                double fee = 0;
+
+                if (mode.equals("Local Banks")) {
+                    fee = 10;
+                } else if (mode.equals("Global Banks & Partners")) {
+                    fee = 25;
+                }
+
+                double total = amount + fee;
+
+                if (total > balance) {
+                    JOptionPane.showMessageDialog(this, "Not enough balance (including fees)!");
+                    return;
+                }
+
+                balance -= total;
+
+                lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
+
+                String receipt =
+                        "----- WITHDRAW RECEIPT -----\n\n" +
+                        "Amount:  ₱" + amount + "\n" +
+                        "Mode:  " + mode + "\n" +
+                        "Fee:  ₱" + fee + "\n" +
+                        "Total Deducted:  ₱" + total + "\n\n" +
+                        "Remaining Balance:  ₱" + String.format("%.2f", balance) + "\n" +
+                        "\nTransaction Successful";
+
+                txtReceipt.setText(receipt);
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid input!");
+            }
+        }
+
+        if (e.getSource() == btnCancel) {
+            txtAmount.setText("");
+            cmbModeOfTransac.setSelectedIndex(0);
+            txtReceipt.setText("");
+        }
     }
 }

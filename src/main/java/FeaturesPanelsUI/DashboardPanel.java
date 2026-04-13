@@ -145,6 +145,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
         cmbFrom.setBounds(120, 70, 185, 35);
         cmbFrom.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         cmbFrom.setOpaque(false);
+        cmbFrom.setFocusable(false);
         cmbFrom.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlQuickTransfer.add(cmbFrom);
 
@@ -157,6 +158,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
         cmbTo.setBounds(120, 115, 185, 35);
         cmbTo.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         cmbTo.setOpaque(false);
+        cmbTo.setFocusable(false);
         cmbTo.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlQuickTransfer.add(cmbTo);
 
@@ -187,6 +189,10 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
         if (e.getSource() == btnDeposit) {
             dashboard.switchPanel(dashboard.sideBar.btnDeposit, "btnDeposit", "Deposit", new DepositPanel());
+        }
+        
+        else if (e.getSource() == btnWithdraw) {
+            dashboard.switchPanel(dashboard.sideBar.btnWithdraw, "btnWithdraw", "Withdraw", new WithdrawPanel());
         }
     }
 }

@@ -20,12 +20,12 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
     private JPanel pnlAutoPayment, pnlScheduledPayment, pnlAutoPayListContent;
     private JScrollPane pnlAutoPayList;
     private JTextField txtRecipient, txtAmount;
-    private int startYear = 1970, endYear = 2050, ScheduledCount = 0, y = 0;
+    private int startYear = 1970, endYear = 2050, ScheduledCount = 0, y = 15;
     private JComboBox<String> cmbFrequency, cmbDay, cmbMonth, cmbYear;
     private String[] frequency = {"every second", "Monthly", "Quarterly", "Semi-Anually", "Anually"},
             months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"},
             days = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"},
-            years = {"2026"};
+            years = {"1970",  "2026"};
 
     public AutoPaymentPanel() {
 
@@ -80,6 +80,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         cmbFrequency.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         cmbFrequency.setFont(new Font("Arial", Font.PLAIN, 18));
         cmbFrequency.setOpaque(false);
+        cmbFrequency.setFocusable(false);
         cmbFrequency.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlAutoPayment.add(cmbFrequency);
 
@@ -115,6 +116,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         cmbDay.setBounds(170, 280, 80, 35);
         cmbDay.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         cmbDay.setOpaque(false);
+        cmbDay.setFocusable(false);
         cmbDay.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlAutoPayment.add(cmbDay);
 
@@ -160,7 +162,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
 
         pnlAutoPayList = new JScrollPane();
         pnlAutoPayList.setBounds(425, 70, 395, 465);
-        pnlAutoPayList.setOpaque(false);
+        pnlAutoPayList.setOpaque(true);
         pnlAutoPayList.setBorder(null);
         add(pnlAutoPayList);
 
@@ -173,6 +175,8 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         pnlAutoPayList.setViewportView(pnlAutoPayListContent);
     }
 
+    // RECEIPT
+    
     public void createScheduledPayment(String RecipientName, int Amount, String Frequency, String DueDate) {
         ScheduledCount++;
 
@@ -211,6 +215,8 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
 
         y += 115;
     }
+    
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {

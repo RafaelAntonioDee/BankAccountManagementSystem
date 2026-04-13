@@ -13,7 +13,20 @@ import javax.swing.*;
  */
 public class SettingsPanel extends JPanel implements ActionListener{
 
+    private JLabel lblAccountInfo, lblFirstName, lblLastName, lblEmail, lblPassword, lblPhoneNumber, lblBirthday, lblMonth, lblDay, lblYear;
+    private JButton btnChangeEmail, btnChangePassword, btnChangePhoneNumber;
+    
+    
     public SettingsPanel(){
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
     }
     @Override

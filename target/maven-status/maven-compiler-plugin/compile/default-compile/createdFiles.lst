@@ -2,8 +2,10 @@ FeaturesPanelsUI\AutoPaymentPanel.class
 DashboardUIDefault\MainDashboard.class
 FeaturesPanelsUI\SettingsPanel.class
 AppService\BalanceFunctions.class
+FeaturesPanelsUI\ChangePassword.class
 AppService\AutoPaymentFunctions.class
 AppService\DepositFunctions.class
+FeaturesPanelsUI\ChangePhoneNumber.class
 FeaturesPanelsUI\WithdrawPanel.class
 DataService\AccountTransactionsService.class
 AppService\TransactHistoryFunctions.class
@@ -13,6 +15,7 @@ FeaturesPanelsUI\TransactionsPanel.class
 DataService\AccountService.class
 DashboardUIDefault\Icons.class
 DashboardUIDefault\TopPanel.class
+FeaturesPanelsUI\ChangeEmail.class
 Objects\AccountTransactHistory.class
 com\mycompany\bankaccountmanagementsystem\BankAccountManagementSystem.class
 DashboardUIDefault\BottomPanel.class

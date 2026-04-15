@@ -38,11 +38,11 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         lblAutoPayment = new JLabel("Auto Payment Setup");
         lblAutoPayment.setForeground(Color.GRAY);
         lblAutoPayment.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblAutoPayment.setBounds(25, 25, 250, 35);
+        lblAutoPayment.setBounds(25, 15, 250, 35);
         add(lblAutoPayment);
 
         pnlAutoPayment = new JPanel();
-        pnlAutoPayment.setBounds(25, 70, 375, 465);
+        pnlAutoPayment.setBounds(25, 60, 375, 475);
         pnlAutoPayment.setBackground(new Color(243, 243, 243));
         pnlAutoPayment.setBorder(new LineBorder(Color.LIGHT_GRAY));
         pnlAutoPayment.setLayout(null);
@@ -157,11 +157,11 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         lblReceipt = new JLabel("Enabled Auto Payments");
         lblReceipt.setForeground(Color.GRAY);
         lblReceipt.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblReceipt.setBounds(425, 25, 325, 35);
+        lblReceipt.setBounds(425, 15, 325, 35);
         add(lblReceipt);
 
         pnlAutoPayList = new JScrollPane();
-        pnlAutoPayList.setBounds(425, 70, 395, 465);
+        pnlAutoPayList.setBounds(425, 60, 395, 475);
         pnlAutoPayList.setOpaque(true);
         pnlAutoPayList.setBorder(null);
         add(pnlAutoPayList);

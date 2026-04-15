@@ -5,6 +5,7 @@
 package FeaturesPanelsUI;
 
 import DashboardUIDefault.MainDashboard;
+import static FeaturesPanelsUI.SettingsPanel.lblNameField;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -13,43 +14,58 @@ import javax.swing.*;
  *
  * @author rafra
  */
-public class ChangeEmail extends JFrame implements ActionListener {
+public class ChangeName extends JFrame implements ActionListener {
 
-    private JLabel lblEmail, lblLogo;
-    private JTextField txtEmail;
+    private JLabel lblLogin, lblTitle, lblFirst, lblLast, lblLogo, lblLine, lblOr;
+    private JTextField txtFirst, txtLast;
     private JButton btnConfirm, btnCancel;
 
-    public ChangeEmail() {
+    public ChangeName() {
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         ImageIcon ResizedBankIcon = new ImageIcon(BankIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 
         setIconImage(BankIcon.getImage());
-        setTitle("Address Change");
-        setSize(375, 250);
+        setTitle("Name Change");
+        setSize(375, 310);
         setLayout(null);
         setLocationRelativeTo(null);
         getContentPane().setBackground(new Color(243, 243, 243));
 
-        // NEW ADDRESS
-        lblEmail = new JLabel("New Address");
-        lblEmail.setBounds(38, 25, 65, 10);
-        lblEmail.setOpaque(true);
-        lblEmail.setBackground(new Color(243, 243, 243));
-        lblEmail.setFont(new Font("Arial", Font.PLAIN, 10));
-        lblEmail.setHorizontalAlignment(JLabel.CENTER);
-        add(lblEmail);
+        // NEW FIRST NAME
+        lblFirst = new JLabel("New First Name");
+        lblFirst.setBounds(38, 25, 85, 10);
+        lblFirst.setOpaque(true);
+        lblFirst.setBackground(new Color(243, 243, 243));
+        lblFirst.setFont(new Font("Arial", Font.PLAIN, 10));
+        lblFirst.setHorizontalAlignment(JLabel.CENTER);
+        add(lblFirst);
 
-        txtEmail = new JTextField();
-        txtEmail.setBounds(32, 30, 295, 35);
-        txtEmail.setOpaque(false);
-        txtEmail.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        add(txtEmail);
+        txtFirst = new JTextField();
+        txtFirst.setBounds(32, 30, 295, 35);
+        txtFirst.setOpaque(false);
+        txtFirst.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        add(txtFirst);
+
+        // NEW LAST NAME
+        lblLast = new JLabel("New Last Name");
+        lblLast.setBounds(38, 85, 85, 10);
+        lblLast.setOpaque(true);
+        lblLast.setBackground(new Color(243, 243, 243));
+        lblLast.setFont(new Font("Arial", Font.PLAIN, 10));
+        lblLast.setHorizontalAlignment(JLabel.CENTER);
+        add(lblLast);
+
+        txtLast = new JTextField();
+        txtLast.setBounds(32, 90, 295, 35);
+        txtLast.setOpaque(false);
+        txtLast.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        add(txtLast);
 
         // BUTTONS
         btnConfirm = new JButton("Confirm");
         btnConfirm.setHorizontalAlignment(JButton.CENTER);
-        btnConfirm.setBounds(32, 90, 295, 35);
+        btnConfirm.setBounds(32, 150, 295, 35);
         btnConfirm.setBackground(new Color(82, 124, 174));
         btnConfirm.setForeground(Color.WHITE);
         btnConfirm.setFocusPainted(false);
@@ -58,7 +74,7 @@ public class ChangeEmail extends JFrame implements ActionListener {
 
         btnCancel = new JButton("Cancel");
         btnCancel.setHorizontalAlignment(JButton.CENTER);
-        btnCancel.setBounds(32, 150, 295, 35);
+        btnCancel.setBounds(32, 210, 295, 35);
         btnCancel.setBackground(new Color(243, 243, 243));
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
@@ -70,18 +86,17 @@ public class ChangeEmail extends JFrame implements ActionListener {
 
         if (e.getSource() == btnConfirm) {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
-            String currentEmail = SettingsPanel.lblEmailField.getText();
-            String newEmailInput = txtEmail.getText();
+            String newFirst = txtFirst.getText();
+            String newLast = txtLast.getText();
 
-            if (newEmailInput.isEmpty()) {
+            if (newFirst.isEmpty() || newLast.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
-            } else if (currentEmail.equals(newEmailInput)) {
-                JOptionPane.showMessageDialog(this, "New email cannot be the same as the old email!", "", JOptionPane.ERROR_MESSAGE);
             } else {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
-
+                
                 if (choice == 0) {
-                    SettingsPanel.lblEmailField.setText(newEmailInput);
+                    String newName = newFirst + " " + newLast;
+                    SettingsPanel.lblNameField.setText(newName);
                     dispose();
                     JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -90,4 +105,5 @@ public class ChangeEmail extends JFrame implements ActionListener {
             dispose();
         }
     }
+
 }

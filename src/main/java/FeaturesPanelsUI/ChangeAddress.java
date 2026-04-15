@@ -13,13 +13,13 @@ import javax.swing.*;
  *
  * @author rafra
  */
-public class ChangeEmail extends JFrame implements ActionListener {
+public class ChangeAddress extends JFrame implements ActionListener {
 
-    private JLabel lblEmail, lblLogo;
-    private JTextField txtEmail;
+    private JLabel lblAddress, lblLogo;
+    private JTextField txtAddress;
     private JButton btnConfirm, btnCancel;
 
-    public ChangeEmail() {
+    public ChangeAddress() {
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         ImageIcon ResizedBankIcon = new ImageIcon(BankIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
@@ -32,19 +32,19 @@ public class ChangeEmail extends JFrame implements ActionListener {
         getContentPane().setBackground(new Color(243, 243, 243));
 
         // NEW ADDRESS
-        lblEmail = new JLabel("New Address");
-        lblEmail.setBounds(38, 25, 65, 10);
-        lblEmail.setOpaque(true);
-        lblEmail.setBackground(new Color(243, 243, 243));
-        lblEmail.setFont(new Font("Arial", Font.PLAIN, 10));
-        lblEmail.setHorizontalAlignment(JLabel.CENTER);
-        add(lblEmail);
+        lblAddress = new JLabel("New Address");
+        lblAddress.setBounds(38, 25, 65, 10);
+        lblAddress.setOpaque(true);
+        lblAddress.setBackground(new Color(243, 243, 243));
+        lblAddress.setFont(new Font("Arial", Font.PLAIN, 10));
+        lblAddress.setHorizontalAlignment(JLabel.CENTER);
+        add(lblAddress);
 
-        txtEmail = new JTextField();
-        txtEmail.setBounds(32, 30, 295, 35);
-        txtEmail.setOpaque(false);
-        txtEmail.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        add(txtEmail);
+        txtAddress = new JTextField();
+        txtAddress.setBounds(32, 30, 295, 35);
+        txtAddress.setOpaque(false);
+        txtAddress.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        add(txtAddress);
 
         // BUTTONS
         btnConfirm = new JButton("Confirm");
@@ -70,21 +70,17 @@ public class ChangeEmail extends JFrame implements ActionListener {
 
         if (e.getSource() == btnConfirm) {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
-            String currentEmail = SettingsPanel.lblEmailField.getText();
-            String newEmailInput = txtEmail.getText();
+            String newAddress = txtAddress.getText();
 
-            if (newEmailInput.isEmpty()) {
+            if (newAddress.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
-            } else if (currentEmail.equals(newEmailInput)) {
-                JOptionPane.showMessageDialog(this, "New email cannot be the same as the old email!", "", JOptionPane.ERROR_MESSAGE);
             } else {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
-
                 if (choice == 0) {
-                    SettingsPanel.lblEmailField.setText(newEmailInput);
-                    dispose();
-                    JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
-                }
+                SettingsPanel.lblAddressField.setText(newAddress);
+                dispose();
+                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
+                }   
             }
         } else if (e.getSource() == btnCancel) {
             dispose();

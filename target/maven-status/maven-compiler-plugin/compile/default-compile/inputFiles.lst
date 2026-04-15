@@ -16,7 +16,10 @@ C:\Users\schmuck\Documents\GitHub\BankAccountManagementSystem\src\main\java\Dash
 C:\Users\schmuck\Documents\GitHub\BankAccountManagementSystem\src\main\java\DataService\AccountService.java
 C:\Users\schmuck\Documents\GitHub\BankAccountManagementSystem\src\main\java\DataService\AccountTransactionsService.java
 C:\Users\schmuck\Documents\GitHub\BankAccountManagementSystem\src\main\java\FeaturesPanelsUI\AutoPaymentPanel.java
+C:\Users\schmuck\Documents\GitHub\BankAccountManagementSystem\src\main\java\FeaturesPanelsUI\ChangeAddress.java
+C:\Users\schmuck\Documents\GitHub\BankAccountManagementSystem\src\main\java\FeaturesPanelsUI\ChangeBirthday.java
 C:\Users\schmuck\Documents\GitHub\BankAccountManagementSystem\src\main\java\FeaturesPanelsUI\ChangeEmail.java
+C:\Users\schmuck\Documents\GitHub\BankAccountManagementSystem\src\main\java\FeaturesPanelsUI\ChangeName.java
 C:\Users\schmuck\Documents\GitHub\BankAccountManagementSystem\src\main\java\FeaturesPanelsUI\ChangePassword.java
 C:\Users\schmuck\Documents\GitHub\BankAccountManagementSystem\src\main\java\FeaturesPanelsUI\ChangePhoneNumber.java
 C:\Users\schmuck\Documents\GitHub\BankAccountManagementSystem\src\main\java\FeaturesPanelsUI\DashboardPanel.java

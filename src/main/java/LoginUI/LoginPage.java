@@ -4,7 +4,9 @@
  */
 package LoginUI;
 
+import AppService.AccountFunctions;
 import DashboardUIDefault.MainDashboard;
+import Objects.UserAccount;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -107,20 +109,27 @@ public class LoginPage extends JFrame implements ActionListener {
         btnSignup.setFocusPainted(false);
         btnSignup.addActionListener(this);
         add(btnSignup);
-
+      
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnLogin) {
-            dispose();
-            MainDashboard page = new MainDashboard();
-            page.setVisible(true);
-        } else if (e.getSource() == btnSignup) {
-            dispose();
-            RegisterPage page = new RegisterPage();
-            page.setVisible(true);
-        }
-    }
+    String email = txtEmail.getText();
+    String pass = new String(txtPass.getPassword()); 
+   
+    UserAccount loggedUser = AccountFunctions.getAuthenticatedUser(email, pass);
 
+    if (loggedUser != null) {
+        
+        new MainDashboard(loggedUser).setVisible(true);
+        this.dispose();
+    } else {
+        JOptionPane.showMessageDialog(this, "Invalid Email or Password!", "Login Error", JOptionPane.ERROR_MESSAGE);
+    }
 }
+    if (e.getSource() == btnSignup) {
+    new RegisterPage().setVisible(true); 
+    this.dispose(); 
+}
+    }}

@@ -4,6 +4,7 @@
  */
 package DashboardUIDefault;
 
+import Objects.UserAccount;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -16,7 +17,7 @@ import javax.swing.border.LineBorder;
 public class SidePanel extends JPanel implements MouseListener {
 
     public JPanel pnlSideBar, pnlSideBar_Header, pnlAccount;
-    public JLabel lblBank, lblAccName, lblLine, lblSelectIndicator;
+    public JLabel lblBank, lblAccName, lblAccEmail, lblLine, lblSelectIndicator;
     public JButton btnDashboard, btnDeposit, btnWithdraw, btnTransfer, btnTransactions, btnAutoPayments, btnSettings, btnLogout;
     public String SelectedButton = "btnDashboard";
 
@@ -135,11 +136,11 @@ public class SidePanel extends JPanel implements MouseListener {
         lblAccName.setBounds(20, 8, 135, 30);
         pnlAccount.add(lblAccName);
 
-        lblAccName = new JLabel("hatdog@gmail.com");
-        lblAccName.setFont(new Font("Arial", Font.PLAIN, 10));
-        lblAccName.setBounds(20, 28, 135, 30);
-        lblAccName.setForeground(Color.GRAY);
-        pnlAccount.add(lblAccName);
+        lblAccEmail = new JLabel("hatdog@gmail.com");
+        lblAccEmail.setFont(new Font("Arial", Font.PLAIN, 10));
+        lblAccEmail.setBounds(20, 28, 135, 30);
+        lblAccEmail.setForeground(Color.GRAY);
+        pnlAccount.add(lblAccEmail);
 
         lblLine = new JLabel("_______________________");
         lblLine.setBounds(5, 37, 165, 30);
@@ -250,6 +251,11 @@ public class SidePanel extends JPanel implements MouseListener {
                 break;
         }
     }
+    
+    public void setUserDetails(UserAccount user) {
+    lblAccName.setText(user.getFullName()); 
+    lblAccEmail.setText(user.getEmail());   
+}
 
     @Override
     public void mouseClicked(MouseEvent e) {

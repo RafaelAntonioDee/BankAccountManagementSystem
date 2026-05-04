@@ -17,6 +17,7 @@ FeaturesPanelsUI\TransactionsPanel.class
 DataService\AccountService.class
 DashboardUIDefault\Icons.class
 DashboardUIDefault\TopPanel.class
+Objects\UserAccount.class
 FeaturesPanelsUI\ChangeEmail.class
 Objects\AccountTransactHistory.class
 com\mycompany\bankaccountmanagementsystem\BankAccountManagementSystem.class

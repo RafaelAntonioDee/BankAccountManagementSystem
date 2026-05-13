@@ -171,21 +171,9 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         pnlAutoPayListContent = new JPanel();
         pnlAutoPayListContent.setLayout(null);
         pnlAutoPayListContent.setOpaque(false);
-        
-        pnlAutoPayList.setViewportView(pnlAutoPayListContent);
-        
-        
-
-//        lblTemp = new JLabel("DI PA TAPOS TO :))))");
-//        lblTemp.setBounds(25,25,787,30);
-//        add(lblTemp);
-        
-        //b
-        
-//practice push
-    }
+          
     
-
+    }
     // RECEIPT
     
     public void createScheduledPayment(String RecipientName, int Amount, String Frequency, String DueDate) {

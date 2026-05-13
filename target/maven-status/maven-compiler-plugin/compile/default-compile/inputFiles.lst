@@ -1,11 +1,8 @@
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\AppService\AccountFunctions.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\AppService\AutoPaymentFunctions.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\AppService\BalanceFunctions.java
-C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\AppService\DepositFunctions.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\AppService\SettingsFunctions.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\AppService\TransactHistoryFunctions.java
-C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\AppService\TransferFunctions.java
-C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\AppService\WithdrawFunctions.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\com\mycompany\bankaccountmanagementsystem\BankAccountManagementSystem.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\DashboardUIDefault\BottomPanel.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\DashboardUIDefault\Icons.java
@@ -13,6 +10,7 @@ C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\j
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\DashboardUIDefault\MainPanel.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\DashboardUIDefault\SidePanel.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\DashboardUIDefault\TopPanel.java
+C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\DataService\AccountBalanceService.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\DataService\AccountService.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\DataService\AccountTransactionsService.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\FeaturesPanelsUI\AutoPaymentPanel.java
@@ -33,3 +31,4 @@ C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\j
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\Objects\Account.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\Objects\AccountPersonalInformation.java
 C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\Objects\AccountTransactHistory.java
+C:\Users\rafra\Documents\NetBeansProjects\BankAccountManagementSystem\src\main\java\Objects\AutoPayments.java

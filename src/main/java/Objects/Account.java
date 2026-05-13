@@ -9,11 +9,11 @@ package Objects;
  * @author rafra
  */
 public class Account {
-    public String Email;
-    public String Password;
-    public String Role;
-    public double Balance;
-    
+    private String Email;
+    private String Password;
+    private String Role;
+    private double Balance;
+        
     public String getEmail(){
         return Email;
     }

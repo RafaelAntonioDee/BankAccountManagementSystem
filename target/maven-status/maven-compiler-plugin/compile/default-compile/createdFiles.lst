@@ -2,11 +2,11 @@ FeaturesPanelsUI\AutoPaymentPanel.class
 FeaturesPanelsUI\ChangeBirthday.class
 FeaturesPanelsUI\ChangeName.class
 DashboardUIDefault\MainDashboard.class
+DataService\AccountBalanceService.class
 FeaturesPanelsUI\SettingsPanel.class
 AppService\BalanceFunctions.class
 FeaturesPanelsUI\ChangePassword.class
 AppService\AutoPaymentFunctions.class
-AppService\DepositFunctions.class
 FeaturesPanelsUI\ChangePhoneNumber.class
 FeaturesPanelsUI\WithdrawPanel.class
 DataService\AccountTransactionsService.class
@@ -17,6 +17,7 @@ FeaturesPanelsUI\TransactionsPanel.class
 DataService\AccountService.class
 DashboardUIDefault\Icons.class
 DashboardUIDefault\TopPanel.class
+Objects\AutoPayments.class
 FeaturesPanelsUI\ChangeEmail.class
 Objects\AccountTransactHistory.class
 com\mycompany\bankaccountmanagementsystem\BankAccountManagementSystem.class
@@ -26,10 +27,8 @@ DashboardUIDefault\MainPanel.class
 Objects\AccountPersonalInformation.class
 FeaturesPanelsUI\DepositPanel.class
 FeaturesPanelsUI\DashboardPanel.class
-AppService\WithdrawFunctions.class
 FeaturesPanelsUI\TransferPanel.class
 LoginUI\RegisterPage.class
-AppService\TransferFunctions.class
 LoginUI\LoginPage.class
 AppService\SettingsFunctions.class
 Objects\Account.class

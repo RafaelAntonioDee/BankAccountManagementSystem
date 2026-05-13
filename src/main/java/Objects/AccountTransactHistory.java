@@ -9,11 +9,11 @@ package Objects;
  * @author rafra
  */
 public class AccountTransactHistory {
-    public int TransactionID;
-    public String Email;
-    public String Transaction;
-    public String Date;
-    public String BalanceChange;
+    private int TransactionID;
+    private String Email;
+    private String Transaction;
+    private String Date;
+    private String BalanceChange;
     
     public int getTransactionID(){
         return TransactionID;

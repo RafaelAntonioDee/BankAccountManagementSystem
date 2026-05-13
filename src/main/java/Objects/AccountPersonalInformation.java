@@ -9,12 +9,12 @@ package Objects;
  * @author rafra
  */
 public class AccountPersonalInformation {
-    public String Email;
-    public String FirstName;
-    public String LastName;
-    public String Address;
-    public String PhoneNum;
-    public String Birthdate;
+    private String Email;
+    private String FirstName;
+    private String LastName;
+    private String Address;
+    private String PhoneNum;
+    private String Birthdate;
     
     public String getEmail(){
         return Email;

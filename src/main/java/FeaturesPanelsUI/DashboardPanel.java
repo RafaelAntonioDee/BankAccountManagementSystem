@@ -4,6 +4,8 @@
  */
 package FeaturesPanelsUI;
 
+import AppService.AccountFunctions;
+import AppService.BalanceFunctions;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,18 +21,17 @@ import Objects.Account;
  */
 public class DashboardPanel extends JPanel implements ActionListener {
 
-    private JLabel lblBalance, lblAmount, lblTransactions, lblQuickTransfer, lblFrom, lblTo, lblTransferAmount, lblScheduledPayments, lblTemporaryScheduled;
+    private JLabel lblBalance, lblAmount, lblTransactions, lblQuickTransfer, lblTo, lblTransferAmount, lblScheduledPayments, lblTemporaryScheduled;
     private JPanel pnlBalance, pnlTransactions, pnlScheduledPay, pnlQuickTransfer;
     private JButton btnDeposit, btnWithdraw, btnQuickTransfer, btnManagePayments;
     private JTable TransactionsTable;
     private JScrollPane scroll;
-    private JTextField txtAmount;
-    private JComboBox cmbFrom, cmbTo;
+    private JTextField txtAmount, txtEmail;
     private MainDashboard dashboard;
-    private Account user;
+    private Account currentUser;
 
     public DashboardPanel(MainDashboard dashboard, Account user) {
-        this.user = user;
+        this.currentUser = user;
         this.dashboard = dashboard;
 
         setBounds(0, 0, 837, 560);
@@ -52,7 +53,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblBalance.setBounds(25, 20, 250, 35);
         pnlBalance.add(lblBalance);
 
-        lblAmount = new JLabel("    ₱"+ String.format("%.2f",user.getBalance()));
+        lblAmount = new JLabel("    ₱" + String.format("%.2f", user.getBalance()));
         lblAmount.setForeground(Color.WHITE);
         lblAmount.setFont(new Font("Arial", Font.PLAIN, 20));
         lblAmount.setBounds(25, 60, 250, 50);
@@ -134,39 +135,24 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblQuickTransfer.setBounds(25, 10, 250, 35);
         pnlQuickTransfer.add(lblQuickTransfer);
 
-        lblFrom = new JLabel("From: ");
-        lblFrom.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblFrom.setBounds(25, 70, 100, 35);
-        pnlQuickTransfer.add(lblFrom);
-
-        cmbFrom = new JComboBox<String>();
-        cmbFrom.setBounds(120, 70, 185, 35);
-        cmbFrom.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbFrom.setOpaque(false);
-        cmbFrom.setFocusable(false);
-        cmbFrom.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlQuickTransfer.add(cmbFrom);
-
         lblTo = new JLabel("To: ");
         lblTo.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblTo.setBounds(25, 115, 50, 35);
+        lblTo.setBounds(25, 85, 50, 35);
         pnlQuickTransfer.add(lblTo);
 
-        cmbTo = new JComboBox<String>();
-        cmbTo.setBounds(120, 115, 185, 35);
-        cmbTo.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbTo.setOpaque(false);
-        cmbTo.setFocusable(false);
-        cmbTo.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlQuickTransfer.add(cmbTo);
+        txtEmail = new JTextField();
+        txtEmail.setBounds(120, 85, 185, 35);
+        txtEmail.setOpaque(false);
+        txtEmail.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        pnlQuickTransfer.add(txtEmail);
 
         lblTransferAmount = new JLabel("Amount: ");
         lblTransferAmount.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblTransferAmount.setBounds(25, 160, 100, 35);
+        lblTransferAmount.setBounds(25, 145, 100, 35);
         pnlQuickTransfer.add(lblTransferAmount);
 
         txtAmount = new JTextField();
-        txtAmount.setBounds(120, 160, 185, 35);
+        txtAmount.setBounds(120, 145, 185, 35);
         txtAmount.setOpaque(false);
         txtAmount.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlQuickTransfer.add(txtAmount);
@@ -186,11 +172,46 @@ public class DashboardPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btnDeposit) {
-            dashboard.switchPanel(dashboard.sideBar.btnDeposit, "btnDeposit", "Deposit", new DepositPanel(user));
-        }
-        
+            dashboard.switchPanel(dashboard.sideBar.btnDeposit, "btnDeposit", "Deposit", new DepositPanel(currentUser));
+        } 
         else if (e.getSource() == btnWithdraw) {
-            dashboard.switchPanel(dashboard.sideBar.btnWithdraw, "btnWithdraw", "Withdraw", new WithdrawPanel(user));
+            dashboard.switchPanel(dashboard.sideBar.btnWithdraw, "btnWithdraw", "Withdraw", new WithdrawPanel(currentUser));
+        } 
+        else if (e.getSource() == btnManagePayments) {
+            dashboard.switchPanel(dashboard.sideBar.btnAutoPayments, "btnAutoPayments", "Auto Payments", new AutoPaymentPanel());
+        } 
+        else if (e.getSource() == btnQuickTransfer) {
+            String email = txtEmail.getText();
+            String amountText = txtAmount.getText();
+
+            try {
+                double amount = Double.parseDouble(amountText);
+
+                Account receiver = AccountFunctions.getUser(email);
+
+                if (receiver == null) {
+                    JOptionPane.showMessageDialog(this, "Account not found!");
+                    return;
+                }
+
+                if (amount <= 0) {
+                    JOptionPane.showMessageDialog(this, "Invalid amount!");
+                    return;
+                }
+
+                if (currentUser.getBalance() < amount) {
+                    JOptionPane.showMessageDialog(this, "Insufficient balance!");
+                    return;
+                }
+
+                BalanceFunctions.transfer(currentUser, receiver, amount);
+
+                lblAmount.setText("    ₱" + String.format("%.2f", currentUser.getBalance()));
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Enter valid amount!");
+            }
         }
     }
+
 }

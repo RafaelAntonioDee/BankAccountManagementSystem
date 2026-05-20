@@ -198,7 +198,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         add(lblPersonalInfo);
 
         pnlAppPreference = new JPanel();
-        pnlAppPreference.setBounds(25, 425, 785, 100);
+        pnlAppPreference.setBounds(25, 425, 785, 50);
         pnlAppPreference.setBackground(new Color(243, 243, 243));
         pnlAppPreference.setBorder(new LineBorder(Color.LIGHT_GRAY));
         pnlAppPreference.setLayout(null);
@@ -217,11 +217,6 @@ public class SettingsPanel extends JPanel implements ActionListener {
         cmbTheme.setFocusable(false);
         cmbTheme.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlAppPreference.add(cmbTheme);
-
-        lblTemp = new JLabel("MORE FEATURES TO BE ADDED!");
-        lblTemp.setBounds(25, 55, 250, 35);
-        lblTemp.setFont(new Font("Calibri", Font.BOLD, 15));
-        pnlAppPreference.add(lblTemp);
 
     }
 

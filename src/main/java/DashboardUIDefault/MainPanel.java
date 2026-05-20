@@ -18,5 +18,6 @@ public class MainPanel extends JPanel{
         setBackground(new Color(243, 243, 243));
         setBorder(new LineBorder(Color.LIGHT_GRAY));
         setLayout(null);
+        
     }
 }

@@ -4,6 +4,7 @@
  */
 package FeaturesPanelsUI;
 
+import Objects.UserAccount;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
@@ -227,6 +228,8 @@ public class SettingsPanel extends JPanel implements ActionListener{
         lblTemp.setFont(new Font("Calibri", Font.BOLD, 15));
         pnlAppPreference.add(lblTemp);
         
+        
+        
    
     }
     @Override
@@ -256,5 +259,17 @@ public class SettingsPanel extends JPanel implements ActionListener{
             ChangeBirthday birth = new ChangeBirthday();
             birth.setVisible(true); 
         }
+        
+        
     }
+        public void setUserSettings(UserAccount user) {
+    
+       lblNameField.setText(user.getFullName()); 
+       lblEmailField.setText(user.getEmail());
+       lblPhoneField.setText(user.getPhone());
+       lblPasswordField.setText("********"); 
+       lblBirthdayField.setText(user.getBirthday());
+       lblAddressField.setText(user.getAddress());
+} 
+
 }

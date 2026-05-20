@@ -6,6 +6,7 @@ package DashboardUIDefault;
 
 import FeaturesPanelsUI.*;
 import LoginUI.LoginPage;
+import Objects.UserAccount;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -32,8 +33,16 @@ public class MainDashboard extends JFrame implements ActionListener {
     private TransactionsPanel pnlTransactions;
     private TransferPanel pnlTransfer;
     private WithdrawPanel pnlWithdraw;
+    private UserAccount currentUser;
 
-    public MainDashboard() {
+    /**
+     *
+     * @param user
+     */
+    public MainDashboard(UserAccount user) {
+        this.currentUser = user; 
+  
+        
         setIconImage(Icons.BankIcon.getImage());
         setTitle("Bank Account Management System");
         setSize(1025, 700);
@@ -46,6 +55,7 @@ public class MainDashboard extends JFrame implements ActionListener {
         sideBar = new SidePanel();
         sideBar.setName("sideBar");
         add(sideBar);
+        sideBar.setUserDetails(currentUser);
 
         sideBar.btnLogout.addActionListener(this);
         sideBar.btnDashboard.addActionListener(this);
@@ -114,7 +124,11 @@ public class MainDashboard extends JFrame implements ActionListener {
             switchPanel(sideBar.btnAutoPayments, "btnAutoPayments", "Auto Payments", new AutoPaymentPanel());
 
         } else if (e.getSource() == sideBar.btnSettings) {
-            switchPanel(sideBar.btnSettings, "btnSettings", "Settings", new SettingsPanel());
+            if (pnlSettings == null) {
+        pnlSettings = new SettingsPanel();
+        }
+            pnlSettings.setUserSettings(currentUser);
+            switchPanel(sideBar.btnSettings, "Settings", "Settings", pnlSettings);
         }
         mainPanel.revalidate();
         mainPanel.repaint();

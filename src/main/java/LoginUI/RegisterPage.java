@@ -4,7 +4,9 @@
  */
 package LoginUI;
 
+import AppService.AccountFunctions;
 import LoginUI.LoginPage;
+import Objects.UserAccount;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -16,11 +18,16 @@ import javax.swing.*;
 public class RegisterPage extends JFrame implements ActionListener {
 
     private JLabel lblTitle, lblLine, lblFName, lblLName, lblEmail, lblPhoneNo, lblAddress, lblPersonal, lblNewPass, lblBirthday, lblDay, lblMonth, lblYear;
-    private JTextField txtFName, txtLName, txtEmail, txtPhoneNo, txtAddress, txtNewPass;
+    private JTextField txtFName, txtLName, txtEmail, txtPhoneNo, txtAddress;
     private JComboBox cmbBirthDay, cmbBirthMonth, cmbBirthYear;
     private JButton btnSignup, btnLogin;
+    private final JPasswordField txtNewPass;
 
-    RegisterPage() {
+    private String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "June", 
+                       "July", "Aug", "Sept", "Oct", "Nov", "Dec"};
+ 
+    
+    RegisterPage() {    
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
 
@@ -79,7 +86,7 @@ public class RegisterPage extends JFrame implements ActionListener {
         lblNewPass.setHorizontalAlignment(JLabel.CENTER);
         add(lblNewPass);
 
-        txtNewPass = new JTextField();
+        txtNewPass = new JPasswordField();
         txtNewPass.setBounds(32, 135, 295, 35);
         txtNewPass.setOpaque(false);
         txtNewPass.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
@@ -174,13 +181,13 @@ public class RegisterPage extends JFrame implements ActionListener {
         lblMonth.setHorizontalAlignment(JLabel.CENTER);
         add(lblMonth);
 
-        cmbBirthMonth = new JComboBox();
+        cmbBirthMonth = new JComboBox(months);
         cmbBirthMonth.setBounds(32, 380, 85, 35);
         cmbBirthMonth.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         cmbBirthMonth.setOpaque(false);
         cmbBirthMonth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         add(cmbBirthMonth);
-
+ 
         lblDay = new JLabel("Day");
         lblDay.setBounds(143, 375, 25, 10);
         lblDay.setOpaque(true);
@@ -219,22 +226,55 @@ public class RegisterPage extends JFrame implements ActionListener {
         btnSignup.setFocusPainted(false);
         btnSignup.addActionListener(this);
         add(btnSignup);
-
-    }
+ 
+        //Days Array
+        String[] days = new String[31];
+        for (int i = 0; i < 31; i++) {
+        days[i] = String.valueOf(i + 1);
+        }for (String day : days) {
+        cmbBirthDay.addItem(day);}
+        
+        //Years Array
+        int startYear = 2026;
+        int endYear = 1950;
+        String[] years = new String[startYear - endYear + 1];
+        for (int i = 0; i < years.length; i++) {
+        years[i] = String.valueOf(startYear - i);
+        }for (String year : years) {
+        cmbBirthYear.addItem(year);}}
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnLogin) {
-            dispose();
-            LoginPage page = new LoginPage();
-            page.setVisible(true);
-        } else if (e.getSource() == btnSignup) {
-            /*lagyan niyo dito ng code na if complete yung
-            details then save data then balik sa login page*/
-            dispose();
-            LoginPage page = new LoginPage();
-            page.setVisible(true);
-        }
-    }
+public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == btnSignup) {
+      
+        String fName = txtFName.getText();
+        String lName = txtLName.getText();
+        String email = txtEmail.getText();
+        String addr = txtAddress.getText();
+        String phone = txtPhoneNo.getText();
+        String pass = new String(txtNewPass.getPassword());
+        String bday = cmbBirthMonth.getSelectedItem() + " " + cmbBirthDay.getSelectedItem() + ", " + cmbBirthYear.getSelectedItem();
 
-}
+        // Validate Email
+        if (!AccountFunctions.validateEmail(email)) {
+            JOptionPane.showMessageDialog(this, "Valid @gmail.com address required.");
+            return;
+        }
+        // Validate Phone
+        if (!AccountFunctions.validatePhoneNumber(phone)) {
+            JOptionPane.showMessageDialog(this, "Phone number must be digits only (max 11).");
+            return;
+        }
+        // Register
+        AccountFunctions.registerUser(fName, lName, email, addr, phone, pass, bday);
+        JOptionPane.showMessageDialog(this, "Account Created Successfully!");
+
+        // Navigate back to Login
+        new LoginPage().setVisible(true);
+        this.dispose();
+    }
+    if (e.getSource()==btnLogin){
+        new LoginPage().setVisible(true);
+        this.dispose(); 
+    }
+}}

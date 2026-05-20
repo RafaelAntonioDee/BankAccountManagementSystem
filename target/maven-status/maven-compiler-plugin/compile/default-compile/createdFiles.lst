@@ -21,6 +21,8 @@ FeaturesPanelsUI\TransactionsPanel.class
 DataService\AccountService.class
 DashboardUIDefault\TopPanel.class
 Objects\AutoPayments.class
+Objects\UserAccount.class
+FeaturesPanelsUI\ChangeEmail.class
 Objects\AccountTransactHistory.class
 com\mycompany\bankaccountmanagementsystem\BankAccountManagementSystem.class
 DashboardUIDefault\BottomPanel.class

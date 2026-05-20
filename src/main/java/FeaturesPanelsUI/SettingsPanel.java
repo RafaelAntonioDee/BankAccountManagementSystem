@@ -198,7 +198,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         add(lblPersonalInfo);
 
         pnlAppPreference = new JPanel();
-        pnlAppPreference.setBounds(25, 425, 785, 50);
+        pnlAppPreference.setBounds(25, 425, 785, 60);
         pnlAppPreference.setBackground(new Color(243, 243, 243));
         pnlAppPreference.setBorder(new LineBorder(Color.LIGHT_GRAY));
         pnlAppPreference.setLayout(null);

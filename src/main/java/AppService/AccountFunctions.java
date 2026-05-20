@@ -55,5 +55,10 @@ public class AccountFunctions {
     public static AccountPersonalInformation getUserInfo(String email) {
         return AccountService.getUserInfo(email);
     }
+    
+    public static Account getUser(String email) {
+        return AccountService.getUser(email);
+    }
+
 
 }

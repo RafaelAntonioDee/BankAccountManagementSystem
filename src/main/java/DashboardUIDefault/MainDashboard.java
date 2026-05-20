@@ -121,7 +121,7 @@ public class MainDashboard extends JFrame implements ActionListener {
             switchPanel(sideBar.btnTransfer, "btnTransfer", "Transfer", new TransferPanel(currentUser));
 
         } else if (e.getSource() == sideBar.btnTransactions) {
-            switchPanel(sideBar.btnTransactions, "btnTransactions", "Transaction History", new TransactionsPanel());
+            switchPanel(sideBar.btnTransactions, "btnTransactions", "Transaction History", new TransactionsPanel(currentUser));
 
         } else if (e.getSource() == sideBar.btnAutoPayments) {
             switchPanel(sideBar.btnAutoPayments, "btnAutoPayments", "Auto Payments", new AutoPaymentPanel());

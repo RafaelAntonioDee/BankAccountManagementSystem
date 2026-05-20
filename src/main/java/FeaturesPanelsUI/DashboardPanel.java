@@ -112,11 +112,6 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblScheduledPayments.setBounds(25, 10, 250, 35);
         pnlScheduledPay.add(lblScheduledPayments);
 
-        lblTemporaryScheduled = new JLabel("DITO 'YON, BASTA");
-        lblTemporaryScheduled.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblTemporaryScheduled.setBounds(25, 82, 250, 35);
-        pnlScheduledPay.add(lblTemporaryScheduled);
-
         btnManagePayments = new JButton("Manage Payments");
         btnManagePayments.setHorizontalAlignment(JButton.CENTER);
         btnManagePayments.setBounds(25, 140, 280, 35);

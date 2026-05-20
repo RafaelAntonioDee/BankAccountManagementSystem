@@ -1,6 +1,8 @@
 package FeaturesPanelsUI;
 
 import Objects.Account;
+import AppService.BalanceFunctions;
+import AppService.AccountFunctions;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -18,44 +20,20 @@ public class TransferPanel extends JPanel implements ActionListener {
     private ArrayList<Account> accounts = new ArrayList<>();
     private Account currentUser;
 
-    public TransferPanel() {
+    public TransferPanel(Account user) {
+        this.currentUser = user;
         setBounds(0, 0, 837, 560);
         setBackground(new Color(243, 243, 243));
         setBorder(new LineBorder(Color.LIGHT_GRAY));
         setLayout(null);
 
-        // SAMPLE CURRENT USER
-        currentUser = new Account();
-        currentUser.setEmail("myemail@gmail.com");
-        currentUser.setPassword("123");
-        currentUser.setRole("User");
-        currentUser.setBalance(1000.00);
-
-        accounts.add(currentUser);
-
-        // SAMPLE RECEIVERS
-        Account acc1 = new Account();
-        acc1.setEmail("neil@gmail.com");
-        acc1.setPassword("123");
-        acc1.setRole("User");
-        acc1.setBalance(500.00);
-        accounts.add(acc1);
-
-        Account acc2 = new Account();
-        acc2.setEmail("jurt@gmail.com");
-        acc2.setPassword("123");
-        acc2.setRole("User");
-        acc2.setBalance(300.00);
-        accounts.add(acc2);
-
-        // UI COMPONENTS
         lblBalance = new JLabel("Balance");
         lblBalance.setForeground(Color.GRAY);
         lblBalance.setFont(new Font("Arial", Font.PLAIN, 18));
         lblBalance.setBounds(25, 25, 250, 35);
         add(lblBalance);
 
-        lblBalanceAmount = new JLabel("    ₱" + currentUser.getBalance());
+        lblBalanceAmount = new JLabel("    ₱" + String.format("%.2f",currentUser.getBalance()));
         lblBalanceAmount.setForeground(Color.WHITE);
         lblBalanceAmount.setFont(new Font("Arial", Font.PLAIN, 20));
         lblBalanceAmount.setBounds(25, 65, 250, 50);
@@ -120,16 +98,6 @@ public class TransferPanel extends JPanel implements ActionListener {
         add(txtReceipt);
     }
 
-    // FIND ACCOUNT
-    private Account findAccount(String email) {
-        for (Account acc : accounts) {
-            if (acc.getEmail().equalsIgnoreCase(email)) {
-                return acc;
-            }
-        }
-        return null;
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -141,7 +109,7 @@ public class TransferPanel extends JPanel implements ActionListener {
             try {
                 double amount = Double.parseDouble(amountText);
 
-                Account receiver = findAccount(email);
+                Account receiver = AccountFunctions.getUser(email);
 
                 if (receiver == null) {
                     JOptionPane.showMessageDialog(this, "Account not found!");
@@ -158,12 +126,9 @@ public class TransferPanel extends JPanel implements ActionListener {
                     return;
                 }
 
-                // TRANSFER
-                currentUser.setBalance(currentUser.getBalance() - amount);
-                receiver.setBalance(receiver.getBalance() + amount);
+                BalanceFunctions.transfer(currentUser, receiver, amount);
 
-                // UPDATE UI
-                lblBalanceAmount.setText("    ₱" + currentUser.getBalance());
+                lblBalanceAmount.setText("    ₱" + String.format("%.2f",currentUser.getBalance()));
                 lblName.setText("Name: " + receiver.getEmail());
 
                 txtReceipt.setText(

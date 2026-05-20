@@ -22,8 +22,8 @@ public class AccountService {
         acc1.setEmail("test@gmail.com");
         acc1.setPassword("test123");
         acc1.setRole("User");
-        acc1.setBalance(50.00);
-        
+        acc1.setBalance(0.00);
+
         AccountPersonalInformation newUserInfo = new AccountPersonalInformation();
         newUserInfo.setEmail("test@gmail.com");
         newUserInfo.setFirstName("hot");
@@ -31,13 +31,12 @@ public class AccountService {
         newUserInfo.setAddress("San Antonio, San Pedro, Laguna");
         newUserInfo.setPhoneNum("123123123");
         newUserInfo.setBirthdate("May 20, 2026");
-        
+
         AccountsPersonalInfo.add(newUserInfo);
         Accounts.add(acc1);
     }
 
     //Account Functions
-    
     public static boolean validateEmail(String email) {
         if (email == null || email.isEmpty()) {
             return false;
@@ -75,7 +74,7 @@ public class AccountService {
         }
         return null;
     }
-    
+
     public static Account getUser(String email) {
         for (Account user : Accounts) {
             if (user.getEmail().equalsIgnoreCase(email)) {
@@ -84,18 +83,19 @@ public class AccountService {
         }
         return null;
     }
-    
+
     //Balance Functions
-    
-    public static double deposit(String email, double amount){
+    public static double deposit(String email, double amount) {
         Account user = getUser(email);
         user.setBalance(user.getBalance() + amount);
         return user.getBalance();
     }
-    
-    public static double withdraw(String email, double amount){
+
+    public static double withdraw(String email, double amount) {
         Account user = getUser(email);
         user.setBalance(user.getBalance() - amount);
         return user.getBalance();
     }
+
+
 }

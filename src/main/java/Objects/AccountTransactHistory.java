@@ -3,22 +3,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Objects;
+import java.time.LocalDate;
 
 /**
  *
  * @author rafra
  */
 public class AccountTransactHistory {
-    private int TransactionID;
+    private String TransactionID;
     private String Email;
     private String Transaction;
-    private String Date;
+    private LocalDate Date;
     private String BalanceChange;
     
-    public int getTransactionID(){
+    public String getTransactionID(){
         return TransactionID;
     }
-    public void setTransactionID(int newTransactionID){
+    public void setTransactionID(String newTransactionID){
         TransactionID = newTransactionID;
     }
     
@@ -36,10 +37,10 @@ public class AccountTransactHistory {
         Transaction = newTransaction;
     }
     
-    public String getDate(){
+    public LocalDate getDate(){
         return Date;
     }
-    public void setDate(String newDate){
+    public void setDate(LocalDate newDate){
         Date = newDate;
     }
     

@@ -1,11 +1,15 @@
 package FeaturesPanelsUI;
 
+import Objects.AccountTransactHistory;
+import AppService.BalanceFunctions;
+import Objects.Account;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class TransactionsPanel extends JPanel implements ActionListener {
 
@@ -17,15 +21,10 @@ public class TransactionsPanel extends JPanel implements ActionListener {
     private JScrollPane scroll;
     private DefaultTableModel model;
     private JPanel pnlProcess;
+    private Account currentUser;
 
-    private String[][] transactions = {
-        {"T001", "user1@gmail.com", "Deposit", "Cash Deposit", "2026-05-06", "5000.0"},
-        {"T002", "user2@gmail.com", "Withdraw", "ATM Withdraw", "2026-05-01", "4200.0"},
-        {"T003", "user1@gmail.com", "Transfer", "Bank Transfer", "2026-04-22", "3000.0"},
-        {"T004", "user3@gmail.com", "Payment", "Bills Payment", "2026-03-15", "2500.0"}
-    };
-
-    public TransactionsPanel() {
+    public TransactionsPanel(Account user) {
+        this.currentUser = user;
         setBounds(0, 0, 837, 560);
         setBackground(new Color(243, 243, 243));
         setBorder(new LineBorder(Color.LIGHT_GRAY));
@@ -102,7 +101,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         lblTransactions.setBounds(25, 120, 737, 35);
         pnlProcess.add(lblTransactions);
 
-        String[] columns = {"Transaction ID", "Email", "Transaction Type", "Transaction", "Date", "Balance"};
+        String[] columns = {"Transaction ID", "Transaction Type", "Date", "Balance"};
         model = new DefaultTableModel(columns, 0);
 
         TransactionsTable = new JTable(model);
@@ -116,6 +115,8 @@ public class TransactionsPanel extends JPanel implements ActionListener {
     }
 
     public void showTransactions() {
+        
+        ArrayList<AccountTransactHistory> userHistory = BalanceFunctions.getTransactions(currentUser.getEmail());
         model.setRowCount(0);
 
         String search = txtSearch.getText().trim().toLowerCase();
@@ -124,23 +125,19 @@ public class TransactionsPanel extends JPanel implements ActionListener {
 
         LocalDate today = LocalDate.now();
 
-        for (int i = 0; i < transactions.length; i++) {
-            String id = transactions[i][0];
-            String email = transactions[i][1];
-            String type = transactions[i][2];
-            String transaction = transactions[i][3];
-            String date = transactions[i][4];
-            String balance = transactions[i][5];
+        for (AccountTransactHistory transaction : userHistory) {
 
-            boolean searchOk = search.equals("")
-                || id.toLowerCase().contains(search)
-                || email.equalsIgnoreCase(search)
-                || transaction.toLowerCase().contains(search);
+            String id = transaction.getTransactionID();
+            String type = transaction.getTransaction();
+            LocalDate date = transaction.getDate();
+            String balance = String.valueOf(transaction.getBalanceChange());
+
+            boolean searchOk = search.equals("") || id.toLowerCase().contains(search) || type.toLowerCase().contains(search);
 
             boolean typeOk = selectedType.equals("All") || type.equals(selectedType);
 
             boolean dateOk = true;
-            LocalDate transDate = LocalDate.parse(date);
+            LocalDate transDate = date;
 
             if (selectedDate.equals("Past Day")) {
                 dateOk = !transDate.isBefore(today.minusDays(1));
@@ -153,7 +150,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
             }
 
             if (searchOk && typeOk && dateOk) {
-                model.addRow(new Object[]{id, email, type, transaction, date, balance});
+                model.addRow(new Object[]{id, type, date, balance});
             }
         }
     }
@@ -163,68 +160,3 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         showTransactions();
     }
 }
-
-
-/*
-
-package FeaturesPanelsUI;
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
-
-public class TransactionsPanel extends JPanel implements ActionListener {
-
-    private JLabel lblDateRange, lblTransactions;
-    private JPanel pnlProcess;
-    private JComboBox cmbDateRange;
-    private JTable TransactionsTable;
-    private JScrollPane scroll;
-
-    public TransactionsPanel() {
-        setBounds(0, 0, 837, 560);
-        setBackground(new Color(243, 243, 243));
-        setBorder(new LineBorder(Color.LIGHT_GRAY));
-        setLayout(null);
-
-        pnlProcess = new JPanel();
-        pnlProcess.setBounds(25, 25, 787, 510);
-        pnlProcess.setBackground(new Color(243, 243, 243));
-        pnlProcess.setBorder(new LineBorder(Color.LIGHT_GRAY));
-        pnlProcess.setLayout(null);
-        add(pnlProcess);
-
-        lblDateRange = new JLabel("Date Range");
-        lblDateRange.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblDateRange.setBounds(25, 25, 737, 35);
-        pnlProcess.add(lblDateRange);
-
-        cmbDateRange = new JComboBox();
-        cmbDateRange.setBounds(25, 65, 300, 35);
-        cmbDateRange.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbDateRange.setOpaque(false);
-        cmbDateRange.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlProcess.add(cmbDateRange);
-
-        lblTransactions = new JLabel("Transactions");
-        lblTransactions.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblTransactions.setBounds(25, 125, 737, 35);
-        pnlProcess.add(lblTransactions);
-
-        String[] columns = {"Transaction ID", "Transaction", "Date", "Balance"};
-        DefaultTableModel model = new DefaultTableModel(columns, 0);
-        TransactionsTable = new JTable(model);
-        TransactionsTable.getTableHeader().setReorderingAllowed(false);
-        scroll = new JScrollPane(TransactionsTable);
-        scroll.setBounds(25, 165, 737, 320);
-        pnlProcess.add(scroll);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-    }
-
-}
-*/

@@ -171,9 +171,11 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         pnlAutoPayListContent = new JPanel();
         pnlAutoPayListContent.setLayout(null);
         pnlAutoPayListContent.setOpaque(false);
-          
-    
+        
+        pnlAutoPayList.setViewportView(pnlAutoPayListContent);
     }
+
+    // RECEIPT
     
     public void createScheduledPayment(String RecipientName, double Amount, String Frequency, String DueDate) {
         ScheduledCount++;

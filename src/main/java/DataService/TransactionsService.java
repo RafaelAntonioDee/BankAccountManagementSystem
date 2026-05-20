@@ -8,6 +8,6 @@ package DataService;
  *
  * @author rafra
  */
-public class AccountBalanceService {
+public class TransactionsService {
     
 }

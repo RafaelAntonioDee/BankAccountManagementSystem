@@ -174,9 +174,8 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
           
     
     }
-    // RECEIPT
     
-    public void createScheduledPayment(String RecipientName, int Amount, String Frequency, String DueDate) {
+    public void createScheduledPayment(String RecipientName, double Amount, String Frequency, String DueDate) {
         ScheduledCount++;
 
         pnlScheduledPayment = new JPanel();
@@ -195,7 +194,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
 
         lblAmount = new JLabel();
         lblAmount.setBounds(10, 30, 337, 25);
-        lblAmount.setText("Amount: " + Amount);
+        lblAmount.setText("Amount: " + String.format("%.2f",Amount));
         pnlScheduledPayment.add(lblAmount);
 
         lblFrequency = new JLabel();
@@ -221,7 +220,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btnEnableAuto) {
-            createScheduledPayment(txtRecipient.getText(), Integer.parseInt(txtAmount.getText()), cmbFrequency.getSelectedItem().toString(), cmbMonth.getSelectedItem() + " " + cmbDay.getSelectedItem() + " " + cmbYear.getSelectedItem());
+            createScheduledPayment(txtRecipient.getText(), Double.parseDouble(txtAmount.getText()), cmbFrequency.getSelectedItem().toString(), cmbMonth.getSelectedItem() + " " + cmbDay.getSelectedItem() + " " + cmbYear.getSelectedItem());
         }
 
     }

@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import DashboardUIDefault.MainDashboard;
+import Objects.Account;
 
 /**
  *
@@ -26,8 +27,10 @@ public class DashboardPanel extends JPanel implements ActionListener {
     private JTextField txtAmount;
     private JComboBox cmbFrom, cmbTo;
     private MainDashboard dashboard;
+    private Account user;
 
-    public DashboardPanel(MainDashboard dashboard) {
+    public DashboardPanel(MainDashboard dashboard, Account user) {
+        this.user = user;
         this.dashboard = dashboard;
 
         setBounds(0, 0, 837, 560);
@@ -49,7 +52,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblBalance.setBounds(25, 20, 250, 35);
         pnlBalance.add(lblBalance);
 
-        lblAmount = new JLabel("    ₱0.00");
+        lblAmount = new JLabel("    ₱"+ String.format("%.2f",user.getBalance()));
         lblAmount.setForeground(Color.WHITE);
         lblAmount.setFont(new Font("Arial", Font.PLAIN, 20));
         lblAmount.setBounds(25, 60, 250, 50);
@@ -188,11 +191,11 @@ public class DashboardPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btnDeposit) {
-            dashboard.switchPanel(dashboard.sideBar.btnDeposit, "btnDeposit", "Deposit", new DepositPanel());
+            dashboard.switchPanel(dashboard.sideBar.btnDeposit, "btnDeposit", "Deposit", new DepositPanel(user));
         }
         
         else if (e.getSource() == btnWithdraw) {
-            dashboard.switchPanel(dashboard.sideBar.btnWithdraw, "btnWithdraw", "Withdraw", new WithdrawPanel());
+            dashboard.switchPanel(dashboard.sideBar.btnWithdraw, "btnWithdraw", "Withdraw", new WithdrawPanel(user));
         }
     }
 }

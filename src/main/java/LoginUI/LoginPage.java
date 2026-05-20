@@ -6,7 +6,8 @@ package LoginUI;
 
 import AppService.AccountFunctions;
 import DashboardUIDefault.MainDashboard;
-import Objects.UserAccount;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -109,27 +110,31 @@ public class LoginPage extends JFrame implements ActionListener {
         btnSignup.setFocusPainted(false);
         btnSignup.addActionListener(this);
         add(btnSignup);
-      
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnLogin) {
-    String email = txtEmail.getText();
-    String pass = new String(txtPass.getPassword()); 
-   
-    UserAccount loggedUser = AccountFunctions.getAuthenticatedUser(email, pass);
+            String email = txtEmail.getText();
+            String pass = new String(txtPass.getPassword());
 
-    if (loggedUser != null) {
-        
-        new MainDashboard(loggedUser).setVisible(true);
-        this.dispose();
-    } else {
-        JOptionPane.showMessageDialog(this, "Invalid Email or Password!", "Login Error", JOptionPane.ERROR_MESSAGE);
+            Account loggedUser = AccountFunctions.getAuthenticatedUser(email, pass);
+            AccountPersonalInformation loggedUserInfo = AccountFunctions.getUserInfo(email);
+
+            
+            if (loggedUser != null) {
+                MainDashboard md = new MainDashboard(loggedUser, loggedUserInfo);
+                md.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid Email or Password!", "Login Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        if (e.getSource() == btnSignup) {
+            RegisterPage rp = new RegisterPage();
+            rp.setVisible(true);
+            this.dispose();
+        }
     }
 }
-    if (e.getSource() == btnSignup) {
-    new RegisterPage().setVisible(true); 
-    this.dispose(); 
-}
-    }}

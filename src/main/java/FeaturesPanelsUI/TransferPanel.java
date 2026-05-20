@@ -4,6 +4,7 @@
  */
 package FeaturesPanelsUI;
 
+import Objects.Account;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class TransferPanel extends JPanel implements ActionListener{
     private JPanel pnlProcess;
     private JTextArea txtReceipt;
 
-    public TransferPanel() {
+    public TransferPanel(Account user) {
         setBounds(0, 0, 837, 560);
         setBackground(new Color(243, 243, 243));
         setBorder(new LineBorder(Color.LIGHT_GRAY));

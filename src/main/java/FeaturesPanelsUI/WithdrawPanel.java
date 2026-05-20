@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import Objects.Account;
+import AppService.BalanceFunctions;
 
 public class WithdrawPanel extends JPanel implements ActionListener {
 
@@ -17,10 +19,14 @@ public class WithdrawPanel extends JPanel implements ActionListener {
     private JComboBox<String> cmbModeOfTransac;
     private JPanel pnlProcess;
     private JTextArea txtReceipt;
+    private Account user;
 
     double balance = 5000;
 
-    public WithdrawPanel() {
+    public WithdrawPanel(Account user) {
+        this.user = user;
+        balance = user.getBalance();
+        
         setBounds(0, 0, 837, 560);
         setBackground(new Color(243, 243, 243));
         setBorder(new LineBorder(Color.LIGHT_GRAY));
@@ -32,7 +38,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         lblBalance.setBounds(25, 25, 250, 35);
         add(lblBalance);
 
-        lblBalanceAmount = new JLabel("    ₱" + balance);
+        lblBalanceAmount = new JLabel("    ₱" + String.format("%.2f",balance));
         lblBalanceAmount.setForeground(Color.WHITE);
         lblBalanceAmount.setFont(new Font("Arial", Font.PLAIN, 20));
         lblBalanceAmount.setBounds(25, 65, 250, 50);
@@ -148,7 +154,8 @@ public class WithdrawPanel extends JPanel implements ActionListener {
                     return;
                 }
 
-                balance -= total;
+                
+                balance = BalanceFunctions.withdraw(user.getEmail(), total);
 
                 lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
 

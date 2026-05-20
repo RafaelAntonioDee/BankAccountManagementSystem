@@ -5,6 +5,7 @@
 package com.mycompany.bankaccountmanagementsystem;
 
 import LoginUI.LoginPage;
+import DataService.AccountService;
 
 /**
  *
@@ -15,5 +16,7 @@ public class BankAccountManagementSystem {
     public static void main(String[] args) {
         LoginPage page = new LoginPage();
         page.setVisible(true);
+        
+        AccountService service = new AccountService();
     }
 }

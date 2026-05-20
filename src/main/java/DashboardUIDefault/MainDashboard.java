@@ -5,8 +5,10 @@
 package DashboardUIDefault;
 
 import FeaturesPanelsUI.*;
+import AppService.AccountFunctions;
 import LoginUI.LoginPage;
-import Objects.UserAccount;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -33,15 +35,16 @@ public class MainDashboard extends JFrame implements ActionListener {
     private TransactionsPanel pnlTransactions;
     private TransferPanel pnlTransfer;
     private WithdrawPanel pnlWithdraw;
-    private UserAccount currentUser;
-
+    private Account currentUser;
+    private AccountPersonalInformation currentuserinfo;
+    
     /**
      *
      * @param user
      */
-    public MainDashboard(UserAccount user) {
+    public MainDashboard(Account user, AccountPersonalInformation userinfo) {
         this.currentUser = user; 
-  
+        this.currentuserinfo = userinfo; 
         
         setIconImage(Icons.BankIcon.getImage());
         setTitle("Bank Account Management System");
@@ -55,7 +58,7 @@ public class MainDashboard extends JFrame implements ActionListener {
         sideBar = new SidePanel();
         sideBar.setName("sideBar");
         add(sideBar);
-        sideBar.setUserDetails(currentUser);
+        sideBar.setUserDetails(currentuserinfo);
 
         sideBar.btnLogout.addActionListener(this);
         sideBar.btnDashboard.addActionListener(this);
@@ -67,7 +70,7 @@ public class MainDashboard extends JFrame implements ActionListener {
         sideBar.btnAutoPayments.addActionListener(this);
 
         //TOP BAR
-        topBar = new TopPanel();
+        topBar = new TopPanel(AccountFunctions.getFullName(userinfo));
         add(topBar);
 
         //BOTTOM BAR
@@ -78,7 +81,7 @@ public class MainDashboard extends JFrame implements ActionListener {
         mainPanel = new MainPanel();
         add(mainPanel);
 
-        pnlDashboard = new DashboardPanel(this);
+        pnlDashboard = new DashboardPanel(this, user);
         mainPanel.add(pnlDashboard);
     }
 
@@ -106,16 +109,16 @@ public class MainDashboard extends JFrame implements ActionListener {
             LoginPage page = new LoginPage();
             page.setVisible(true);
         } else if (e.getSource() == sideBar.btnDashboard) {
-            switchPanel(sideBar.btnDashboard, "btnDashboard", "Dashboard", new DashboardPanel(this));
+            switchPanel(sideBar.btnDashboard, "btnDashboard", "Dashboard", new DashboardPanel(this, currentUser));
 
         } else if (e.getSource() == sideBar.btnDeposit) {
-            switchPanel(sideBar.btnDeposit, "btnDeposit", "Deposit", new DepositPanel());
+            switchPanel(sideBar.btnDeposit, "btnDeposit", "Deposit", new DepositPanel(currentUser));
 
         } else if (e.getSource() == sideBar.btnWithdraw) {
-            switchPanel(sideBar.btnWithdraw, "btnWithdraw", "Withdraw", new WithdrawPanel());
+            switchPanel(sideBar.btnWithdraw, "btnWithdraw", "Withdraw", new WithdrawPanel(currentUser));
 
         } else if (e.getSource() == sideBar.btnTransfer) {
-            switchPanel(sideBar.btnTransfer, "btnTransfer", "Transfer", new TransferPanel());
+            switchPanel(sideBar.btnTransfer, "btnTransfer", "Transfer", new TransferPanel(currentUser));
 
         } else if (e.getSource() == sideBar.btnTransactions) {
             switchPanel(sideBar.btnTransactions, "btnTransactions", "Transaction History", new TransactionsPanel());
@@ -127,7 +130,7 @@ public class MainDashboard extends JFrame implements ActionListener {
             if (pnlSettings == null) {
         pnlSettings = new SettingsPanel();
         }
-            pnlSettings.setUserSettings(currentUser);
+            pnlSettings.setUserSettings(currentUser, currentuserinfo);
             switchPanel(sideBar.btnSettings, "Settings", "Settings", pnlSettings);
         }
         mainPanel.revalidate();

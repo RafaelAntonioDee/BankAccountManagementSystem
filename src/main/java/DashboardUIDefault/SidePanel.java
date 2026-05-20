@@ -4,7 +4,9 @@
  */
 package DashboardUIDefault;
 
-import Objects.UserAccount;
+import AppService.AccountFunctions;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -252,9 +254,9 @@ public class SidePanel extends JPanel implements MouseListener {
         }
     }
     
-    public void setUserDetails(UserAccount user) {
-    lblAccName.setText(user.getFullName()); 
-    lblAccEmail.setText(user.getEmail());   
+    public void setUserDetails(AccountPersonalInformation userinfo) {
+    lblAccName.setText(AccountFunctions.getFullName(userinfo)); 
+    lblAccEmail.setText(userinfo.getEmail());   
 }
 
     @Override

@@ -7,6 +7,7 @@ package DashboardUIDefault;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import AppService.AccountFunctions;
 
 /**
  *
@@ -16,13 +17,13 @@ public class TopPanel extends JPanel {
 
     public static JLabel lblTopBar;
 
-    TopPanel() {
+    TopPanel(String Name) {
         setBounds(175, 0, 837, 60);
         setBackground(new Color(240, 240, 240));
         setBorder(new LineBorder(Color.LIGHT_GRAY));
         setLayout(null);
 
-        lblTopBar = new JLabel("Welcome back, Rafael!");
+        lblTopBar = new JLabel("Welcome back, "+ Name);
         lblTopBar.setFont(new Font("Arial", Font.PLAIN, 25));
         lblTopBar.setBounds(20, 5, 500, 50);
         add(lblTopBar);

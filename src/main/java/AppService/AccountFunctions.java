@@ -3,40 +3,57 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package AppService;
-import Objects.UserAccount;
+
+import Objects.Account;
+import DataService.AccountService;
+import Objects.AccountPersonalInformation;
 import java.util.ArrayList;
+
 /**
  *
  * @author rafra
  */
 public class AccountFunctions {
-    
-    private static ArrayList <UserAccount> registeredUser = new ArrayList<>();
-    
+
     public static boolean validateEmail(String email) {
-        if (email == null || email.isEmpty()) return false;
-        return email.endsWith("@gmail.com") || email.contains("@");
+        return AccountService.validateEmail(email);
     }
-    
+
     public static boolean validatePhoneNumber(String phone) {
-        if (phone == null || phone.isEmpty()) return false;
-        return phone.matches("\\d+") && phone.length() <= 11;
+        if (phone == null || phone.isEmpty()) {
+            return false;
+        }
+        return AccountService.validatePhoneNumber(phone);
     }
 
     public static void registerUser(String fName, String lName, String email, String addr, String phone, String pass, String bday) {
-    UserAccount newUser = new UserAccount(fName, lName, email, addr, phone, pass, bday);
-    registeredUser.add(newUser);
+        Account newUser = new Account();
+        newUser.setEmail(email);
+        newUser.setPassword(pass);
+        newUser.setRole("User");
+        newUser.setBalance(0.00);
+
+        AccountPersonalInformation newUserInfo = new AccountPersonalInformation();
+        newUserInfo.setEmail(email);
+        newUserInfo.setFirstName(fName);
+        newUserInfo.setLastName(lName);
+        newUserInfo.setAddress(addr);
+        newUserInfo.setPhoneNum(phone);
+        newUserInfo.setBirthdate(bday);
+
+        AccountService.registerUser(newUser, newUserInfo);
     }
 
-    public static UserAccount getAuthenticatedUser(String email, String password) {
-    for (UserAccount user : registeredUser) {
-        if (user.getEmail().equalsIgnoreCase(email) && user.getPassword().equals(password)) {
-            return user; 
-        }
+    public static Account getAuthenticatedUser(String email, String password) {
+        return AccountService.getAuthenticatedUser(email, password);
     }
-    return null; 
-    }
-        
-    }
-   
 
+    public static String getFullName(AccountPersonalInformation acc) {
+        return acc.getFirstName() + " " + acc.getLastName();
+    }
+
+    public static AccountPersonalInformation getUserInfo(String email) {
+        return AccountService.getUserInfo(email);
+    }
+
+}

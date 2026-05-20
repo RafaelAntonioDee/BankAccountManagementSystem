@@ -6,6 +6,7 @@ package DataService;
 
 import java.util.ArrayList;
 import Objects.Account;
+import Objects.AccountPersonalInformation;
 
 /**
  *
@@ -13,35 +14,88 @@ import Objects.Account;
  */
 public class AccountService {
 
-    private ArrayList<Account> Accounts = new ArrayList<>();
+    private static ArrayList<Account> Accounts = new ArrayList<>();
+    private static ArrayList<AccountPersonalInformation> AccountsPersonalInfo = new ArrayList<>();
 
     public AccountService() {
-        //sample data lang to
         Account acc1 = new Account();
-        acc1.setEmail("dee@gmail.com");
-        acc1.setPassword("dee123");
+        acc1.setEmail("test@gmail.com");
+        acc1.setPassword("test123");
         acc1.setRole("User");
-        acc1.setBalance(5000);
-
+        acc1.setBalance(50.00);
+        
+        AccountPersonalInformation newUserInfo = new AccountPersonalInformation();
+        newUserInfo.setEmail("test@gmail.com");
+        newUserInfo.setFirstName("hot");
+        newUserInfo.setLastName("dog");
+        newUserInfo.setAddress("San Antonio, San Pedro, Laguna");
+        newUserInfo.setPhoneNum("123123123");
+        newUserInfo.setBirthdate("May 20, 2026");
+        
+        AccountsPersonalInfo.add(newUserInfo);
         Accounts.add(acc1);
     }
 
-    public void UpdateBalance(String email, double newBalance) {
-        Account acc = GetAccount(email);
-        acc.setBalance(newBalance);
+    //Account Functions
+    
+    public static boolean validateEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            return false;
+        }
+        return email.endsWith("@gmail.com") || email.contains("@");
     }
 
-    public double GetBalance(String email) {
-        Account acc = GetAccount(email);
-        return acc.getBalance();
+    public static boolean validatePhoneNumber(String phone) {
+        return phone.matches("\\d+") && phone.length() <= 11;
     }
 
-    public Account GetAccount(String email) {
-        for (Account acc : Accounts) {
-            if (acc.getEmail().equals(email)) {
-                return acc;
+    public static void registerUser(Account newUser, AccountPersonalInformation newUserInfo) {
+        AccountsPersonalInfo.add(newUserInfo);
+        Accounts.add(newUser);
+    }
+
+    public static Account getAuthenticatedUser(String email, String password) {
+        for (Account user : Accounts) {
+            if (user.getEmail().equalsIgnoreCase(email) && user.getPassword().equals(password)) {
+                return user;
             }
         }
         return null;
+    }
+
+    public static String getFullName(AccountPersonalInformation acc) {
+        return acc.getFirstName() + " " + acc.getLastName();
+    }
+
+    public static AccountPersonalInformation getUserInfo(String email) {
+        for (AccountPersonalInformation userinfo : AccountsPersonalInfo) {
+            if (userinfo.getEmail().equalsIgnoreCase(email)) {
+                return userinfo;
+            }
+        }
+        return null;
+    }
+    
+    public static Account getUser(String email) {
+        for (Account user : Accounts) {
+            if (user.getEmail().equalsIgnoreCase(email)) {
+                return user;
+            }
+        }
+        return null;
+    }
+    
+    //Balance Functions
+    
+    public static double deposit(String email, double amount){
+        Account user = getUser(email);
+        user.setBalance(user.getBalance() + amount);
+        return user.getBalance();
+    }
+    
+    public static double withdraw(String email, double amount){
+        Account user = getUser(email);
+        user.setBalance(user.getBalance() - amount);
+        return user.getBalance();
     }
 }

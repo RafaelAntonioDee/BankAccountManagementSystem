@@ -8,7 +8,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-
+import java.util.ArrayList;
+import DataService.AutoPaymentService;
+import Objects.AutoPayments;
 /**
  *
  * @author rafra
@@ -20,12 +22,13 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
     private JPanel pnlAutoPayment, pnlScheduledPayment, pnlAutoPayListContent;
     private JScrollPane pnlAutoPayList;
     private JTextField txtRecipient, txtAmount;
+    private String currentEmail;
     private int startYear = 1970, endYear = 2050, ScheduledCount = 0, y = 15;
     private JComboBox<String> cmbFrequency, cmbDay, cmbMonth, cmbYear;
-    private String[] frequency = {"every second", "Monthly", "Quarterly", "Semi-Anually", "Anually"},
+    private String[] frequency = {"Monthly", "Quarterly", "Semi-Anually", "Anually"},
             months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"},
             days = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"},
-            years = {"1970",  "2026"};
+            years = {"67"};
 
     public AutoPaymentPanel() {
 
@@ -171,13 +174,38 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         pnlAutoPayListContent = new JPanel();
         pnlAutoPayListContent.setLayout(null);
         pnlAutoPayListContent.setOpaque(false);
-        
+
         pnlAutoPayList.setViewportView(pnlAutoPayListContent);
     }
 
+    public AutoPaymentPanel(String email) {
+        this();
+        this.currentEmail = email;
+        loadExistingAutoPayments();
+    }
+
+    public void loadExistingAutoPayments() {
+
+        ArrayList<AutoPayments> list
+                = DataService.AutoPaymentService.getAllAutoPayments(currentEmail);
+
+        if (list == null) {
+            return;
+        }
+
+        for (AutoPayments p : list) {
+
+            displayScheduledPayment(
+                    p.getPayee(),
+                    p.getAmount(),
+                    p.getFrequency(),
+                    p.getDate() != null ? p.getDate().toString() : "No Date"
+            );
+        }
+    }
+
     // RECEIPT
-    
-    public void createScheduledPayment(String RecipientName, double Amount, String Frequency, String DueDate) {
+    public void displayScheduledPayment(String RecipientName, double Amount, String Frequency, String DueDate) {
         ScheduledCount++;
 
         pnlScheduledPayment = new JPanel();
@@ -196,7 +224,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
 
         lblAmount = new JLabel();
         lblAmount.setBounds(10, 30, 337, 25);
-        lblAmount.setText("Amount: " + String.format("%.2f",Amount));
+        lblAmount.setText("Amount: " + String.format("%.2f", Amount));
         pnlScheduledPayment.add(lblAmount);
 
         lblFrequency = new JLabel();
@@ -215,15 +243,40 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
 
         y += 115;
     }
-    
-    
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btnEnableAuto) {
-            createScheduledPayment(txtRecipient.getText(), Double.parseDouble(txtAmount.getText()), cmbFrequency.getSelectedItem().toString(), cmbMonth.getSelectedItem() + " " + cmbDay.getSelectedItem() + " " + cmbYear.getSelectedItem());
-        }
 
+            String payee = txtRecipient.getText();
+            double amount = Double.parseDouble(txtAmount.getText());
+            String frequency = String.valueOf(cmbFrequency.getSelectedItem());
+            String date = cmbMonth.getSelectedItem() + " " + cmbDay.getSelectedItem() + " " + cmbYear.getSelectedItem();
+
+            AppService.AutoPaymentFunctions.createAutoPayment(
+                    currentEmail,
+                    payee,
+                    amount,
+                    frequency,
+                    date
+            );
+
+//            DataService.AutoPaymentService.debugPrint(currentEmail);
+
+            displayScheduledPayment(
+                    payee,
+                    amount,
+                    frequency,
+                    date
+            );
+
+            txtRecipient.setText("");
+            txtAmount.setText("");
+
+        } else if (e.getSource() == btnCancel) {
+            txtRecipient.setText("");
+            txtAmount.setText("");
+        }
     }
 }

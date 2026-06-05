@@ -124,7 +124,7 @@ public class MainDashboard extends JFrame implements ActionListener {
             switchPanel(sideBar.btnTransactions, "btnTransactions", "Transaction History", new TransactionsPanel(currentUser));
 
         } else if (e.getSource() == sideBar.btnAutoPayments) {
-            switchPanel(sideBar.btnAutoPayments, "btnAutoPayments", "Auto Payments", new AutoPaymentPanel());
+            switchPanel(sideBar.btnAutoPayments, "btnAutoPayments", "Auto Payments", new AutoPaymentPanel(currentUser.getEmail()));
 
         } else if (e.getSource() == sideBar.btnSettings) {
             if (pnlSettings == null) {

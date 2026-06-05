@@ -8,6 +8,7 @@ AppService\TransactHistoryFunctions.class
 DashboardUIDefault\Icons.class
 Objects\UserAccount.class
 FeaturesPanelsUI\ChangeEmail.class
+DataService\AutoPaymentService.class
 FeaturesPanelsUI\TransferPanel.class
 AppService\SettingsFunctions.class
 FeaturesPanelsUI\AutoPaymentPanel.class

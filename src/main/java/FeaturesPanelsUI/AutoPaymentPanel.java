@@ -37,7 +37,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         setBorder(new LineBorder(Color.LIGHT_GRAY));
         setLayout(null);
 
-        //---------------------------------AUTOPAYMENT
+        //---------------------------------AUTOPAYMENTd
         lblAutoPayment = new JLabel("Auto Payment Setup");
         lblAutoPayment.setForeground(Color.GRAY);
         lblAutoPayment.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -199,8 +199,13 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         btnUnsub.setFocusPainted(false);
         pnlScheduledPayment.add(btnUnsub);
         btnUnsub.addActionListener(this);
-
-        pnlAutoPayListContent.setPreferredSize(new Dimension(357, y));
+        
+        // FOR SCROLLPANE'S SPACING
+        int itemHeight = 115;
+        int padding = 25;
+        int height = (ScheduledCount * itemHeight) + padding;
+        
+        pnlAutoPayListContent.setPreferredSize(new Dimension(357, height));
         pnlAutoPayListContent.revalidate();
         pnlAutoPayListContent.repaint();
 
@@ -278,7 +283,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
             AppService.AutoPaymentFunctions.removeAutoPay(id);
 
             loadExistingAutoPayments();
-            
+
             System.out.println(id);
         }
     }

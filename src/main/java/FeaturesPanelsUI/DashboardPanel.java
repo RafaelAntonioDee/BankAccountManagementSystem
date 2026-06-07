@@ -28,7 +28,7 @@ import javax.swing.table.JTableHeader;
  */
 public class DashboardPanel extends JPanel implements ActionListener {
 
-    private JLabel lblRecipient, lblFrequency, lblDate, lblBalance, lblAmount, lblTransactions, lblQuickTransfer, lblTo, lblTransferAmount, lblScheduledPayments, lblTemporaryScheduled;
+    private JLabel lblAutoAmount, lblRecipient, lblFrequency, lblDate, lblBalance, lblAmount, lblTransactions, lblQuickTransfer, lblTo, lblTransferAmount, lblScheduledPayments, lblTemporaryScheduled;
     private JPanel pnlBalance, pnlTransactions, pnlScheduledPay, pnlQuickTransfer, pnlAutoPay;
     private JButton btnDeposit, btnWithdraw, btnQuickTransfer, btnManagePayments;
     private JTable TransactionsTable;
@@ -160,10 +160,10 @@ public class DashboardPanel extends JPanel implements ActionListener {
             lblRecipient.setText(autopaydata.getPayee());
             pnlAutoPay.add(lblRecipient);
 
-            lblAmount = new JLabel();
-            lblAmount.setBounds(10, 30, 337, 25);
-            lblAmount.setText("Amount: " + String.format("%.2f", autopaydata.getAmount()));
-            pnlAutoPay.add(lblAmount);
+            lblAutoAmount = new JLabel();
+            lblAutoAmount.setBounds(10, 30, 337, 25);
+            lblAutoAmount.setText("Amount: " + String.format("%.2f", autopaydata.getAmount()));
+            pnlAutoPay.add(lblAutoAmount);
 
             lblFrequency = new JLabel();
             lblFrequency.setBounds(10, 55, 337, 25);

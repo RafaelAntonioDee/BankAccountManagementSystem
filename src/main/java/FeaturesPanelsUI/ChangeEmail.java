@@ -4,7 +4,11 @@
  */
 package FeaturesPanelsUI;
 
+import AppService.AccountFunctions;
+import AppService.SettingsFunctions;
 import DashboardUIDefault.MainDashboard;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -18,14 +22,20 @@ public class ChangeEmail extends JFrame implements ActionListener {
     private JLabel lblEmail, lblLogo;
     private JTextField txtEmail;
     private JButton btnConfirm, btnCancel;
+    private Account user;
+    private String updatedUser;
+    private AccountPersonalInformation userInfo;
 
-    public ChangeEmail() {
+    public ChangeEmail(Account user, AccountPersonalInformation userInfo) {
+        this.user = user;
+        this.userInfo = userInfo;
+        
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         ImageIcon ResizedBankIcon = new ImageIcon(BankIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
 
         setIconImage(BankIcon.getImage());
-        setTitle("Address Change");
+        setTitle("Email Change");
         setSize(375, 250);
         setLayout(null);
         setLocationRelativeTo(null);
@@ -72,7 +82,12 @@ public class ChangeEmail extends JFrame implements ActionListener {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String currentEmail = SettingsPanel.lblEmailField.getText();
             String newEmailInput = txtEmail.getText();
-
+            
+            if (!AccountFunctions.validateEmail(newEmailInput)) {
+                JOptionPane.showMessageDialog(this, "Invalid Email Address!");
+                return;
+            }
+            
             if (newEmailInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
             } else if (currentEmail.equals(newEmailInput)) {
@@ -81,6 +96,7 @@ public class ChangeEmail extends JFrame implements ActionListener {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
 
                 if (choice == 0) {
+                    updatedUser = SettingsFunctions.changeEmail(user.getEmail(), newEmailInput);
                     SettingsPanel.lblEmailField.setText(newEmailInput);
                     dispose();
                     JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);

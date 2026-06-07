@@ -4,7 +4,10 @@
  */
 package FeaturesPanelsUI;
 
+import AppService.SettingsFunctions;
 import DashboardUIDefault.MainDashboard;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -18,8 +21,14 @@ public class ChangeAddress extends JFrame implements ActionListener {
     private JLabel lblAddress, lblLogo;
     private JTextField txtAddress;
     private JButton btnConfirm, btnCancel;
+    private String updatedAddress;
+    private Account user;
+    private AccountPersonalInformation userInfo;
 
-    public ChangeAddress() {
+    public ChangeAddress(Account user, AccountPersonalInformation userInfo) {
+        this.user = user;
+        this.userInfo = userInfo;
+
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         ImageIcon ResizedBankIcon = new ImageIcon(BankIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
@@ -71,16 +80,17 @@ public class ChangeAddress extends JFrame implements ActionListener {
         if (e.getSource() == btnConfirm) {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String newAddress = txtAddress.getText();
-
+                    
             if (newAddress.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
             } else {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
                 if (choice == 0) {
-                SettingsPanel.lblAddressField.setText(newAddress);
-                dispose();
-                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
-                }   
+                    updatedAddress = SettingsFunctions.changeAddress(user.getEmail(), newAddress);
+                    SettingsPanel.lblAddressField.setText(newAddress);
+                    dispose();
+                    JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         } else if (e.getSource() == btnCancel) {
             dispose();

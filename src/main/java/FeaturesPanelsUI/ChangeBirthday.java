@@ -4,7 +4,10 @@
  */
 package FeaturesPanelsUI;
 
+import AppService.SettingsFunctions;
 import DashboardUIDefault.MainDashboard;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -18,8 +21,16 @@ public class ChangeBirthday extends JFrame implements ActionListener {
     private JLabel lblMonth, lblDay, lblYear;
     private JComboBox cmbMonth, cmbDay, cmbYear;
     private JButton btnConfirm, btnCancel;
+    private JTextField txtYear, txtDay;
+    private Account user;
+    private AccountPersonalInformation userInfo;
+    private String selectedMonth, updateBirthday;
+    private String[] months = {"January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"};
 
-    public ChangeBirthday () {
+    public ChangeBirthday(Account user, AccountPersonalInformation userInfo) {
+        this.user = user;
+        this.userInfo = userInfo;
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         ImageIcon ResizedBankIcon = new ImageIcon(BankIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
@@ -40,12 +51,17 @@ public class ChangeBirthday extends JFrame implements ActionListener {
         lblMonth.setHorizontalAlignment(JLabel.CENTER);
         add(lblMonth);
 
-        cmbMonth = new JComboBox();
+        cmbMonth = new JComboBox(months);
         cmbMonth.setBounds(32, 30, 295, 35);
         cmbMonth.setOpaque(false);
         cmbMonth.setFocusable(false);
         cmbMonth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         add(cmbMonth);
+
+        cmbMonth.addActionListener(e -> {
+            String month = (String) cmbMonth.getSelectedItem();
+            updateDays(month);
+        });
 
         // NEW LAST NAME
         lblDay = new JLabel("Day");
@@ -62,7 +78,7 @@ public class ChangeBirthday extends JFrame implements ActionListener {
         cmbDay.setFocusable(false);
         cmbDay.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         add(cmbDay);
-        
+
         lblYear = new JLabel("Year");
         lblYear.setBounds(38, 145, 30, 10);
         lblYear.setOpaque(true);
@@ -79,7 +95,6 @@ public class ChangeBirthday extends JFrame implements ActionListener {
         add(cmbYear);
 
         // BUTTONS
-        
         btnConfirm = new JButton("Confirm");
         btnConfirm.setHorizontalAlignment(JButton.CENTER);
         btnConfirm.setBounds(32, 210, 295, 35);
@@ -96,17 +111,81 @@ public class ChangeBirthday extends JFrame implements ActionListener {
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
         add(btnCancel);
+
+        // YEAR OPTION
+        int startYear = 2026;
+        int endYear = 1950;
+        String[] years = new String[startYear - endYear + 1];
+
+        for (int i = 0; i < years.length; i++) {
+            years[i] = String.valueOf(startYear - i);
+        }
+        for (String year : years) {
+            cmbYear.addItem(year);
+        }
+
+        // FOR DAYS TO HAVE INITIAL OPTION
+        updateDays((String) cmbMonth.getSelectedItem());
+
+    }
+
+    // FOR DIFFERENT DAYS EACH MONTH
+    private void updateDays(String month) {
+        String[] initialDays = new String[31];
+        for (int i = 0; i < 31; i++) {
+            initialDays[i] = String.valueOf(i + 1);
+        }
+        for (String day : initialDays) {
+            cmbDay.addItem(day);
+        }
+        cmbDay.removeAllItems();
+
+        int days = 31;
+
+        switch (month) {
+            case "April":
+            case "June":
+            case "September":
+            case "November":
+                days = 30;
+                break;
+
+            case "February":
+                days = 28;
+                break;
+
+            default:
+                days = 31;
+                break;
+        }
+
+        for (int i = 1; i <= days; i++) {
+            cmbDay.addItem(String.valueOf(i));
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
-        if (e.getSource() == btnConfirm)    {
-            dispose();
-            // Change of Name Function
-        }
-        
-        else if (e.getSource() == btnCancel)    {
+
+        if (e.getSource() == btnConfirm) {
+
+            UIManager.put("Button.focus", new Color(0, 0, 0, 0));
+            String newMonth = String.valueOf(cmbMonth.getSelectedItem());
+            String newDay = String.valueOf(cmbDay.getSelectedItem());
+            String newYear = String.valueOf(cmbYear.getSelectedItem());
+            String newBirthday = newMonth + " " + newDay + ", " + newYear;
+
+            int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
+            if (choice == 0) {
+                updateBirthday = SettingsFunctions.changeBirthday(user.getEmail(), newBirthday);
+                SettingsPanel.lblBirthdayField.setText(newBirthday);
+                dispose();
+                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                dispose();
+            }
+
+        } else if (e.getSource() == btnCancel) {
             dispose();
         }
     }

@@ -23,8 +23,8 @@ public class RegisterPage extends JFrame implements ActionListener {
     private JButton btnSignup, btnLogin;
     private final JPasswordField txtNewPass;
 
-    private String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "June",
-        "July", "Aug", "Sept", "Oct", "Nov", "Dec"};
+    private String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Noob", "Dec"};
 
     RegisterPage() {
         //------------------------------- Frame Initialization -------------------------------
@@ -226,14 +226,7 @@ public class RegisterPage extends JFrame implements ActionListener {
         btnSignup.addActionListener(this);
         add(btnSignup);
 
-        String[] days = new String[31];
-        for (int i = 0; i < 31; i++) {
-            days[i] = String.valueOf(i + 1);
-        }
-        for (String day : days) {
-            cmbBirthDay.addItem(day);
-        }
-
+        // YEAR OPTION
         int startYear = 2026;
         int endYear = 1950;
         String[] years = new String[startYear - endYear + 1];
@@ -243,10 +236,49 @@ public class RegisterPage extends JFrame implements ActionListener {
         for (String year : years) {
             cmbBirthYear.addItem(year);
         }
+
+        // FOR DAYS TO HAVE INITIAL OPTION
+        updateDays((String) cmbBirthMonth.getSelectedItem());
+    }
+
+    // FOR DIFFERENT DAYS EACH MONTH
+    private void updateDays(String month) {
+        String[] initialDays = new String[31];
+        for (int i = 0; i < 31; i++) {
+            initialDays[i] = String.valueOf(i + 1);
+        }
+        for (String day : initialDays) {
+            cmbBirthDay.addItem(day);
+        }
+        cmbBirthDay.removeAllItems();
+
+        int days = 31;
+
+        switch (month) {
+            case "Apr":
+            case "Jun":
+            case "Sep":
+            case "Nov":
+                days = 30;
+                break;
+
+            case "Feb":
+                days = 28;
+                break;
+
+            default:
+                days = 31;
+                break;
+        }
+
+        for (int i = 1; i <= days; i++) {
+            cmbBirthDay.addItem(String.valueOf(i));
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         if (e.getSource() == btnSignup) {
 
             String fName = txtFName.getText();
@@ -257,13 +289,28 @@ public class RegisterPage extends JFrame implements ActionListener {
             String pass = new String(txtNewPass.getPassword());
             String bday = cmbBirthMonth.getSelectedItem() + " " + cmbBirthDay.getSelectedItem() + ", " + cmbBirthYear.getSelectedItem();
 
+            if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || addr.isEmpty() || phone.isEmpty() || pass.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Fields can't be empty!");
+                return;
+            }
+
             if (!AccountFunctions.validateEmail(email)) {
-                JOptionPane.showMessageDialog(this, "Invalid email address.");
+                JOptionPane.showMessageDialog(this, "Invalid Email Address!");
+                return;
+            }
+
+            if (!AccountFunctions.validateFirstName(fName)) {
+                JOptionPane.showMessageDialog(this, "Invalid First Name!");
+                return;
+            }
+
+            if (!AccountFunctions.validateLastName(lName)) {
+                JOptionPane.showMessageDialog(this, "Invalid Last Name!");
                 return;
             }
 
             if (!AccountFunctions.validatePhoneNumber(phone)) {
-                JOptionPane.showMessageDialog(this, "Invalid phone number.");
+                JOptionPane.showMessageDialog(this, "Invalid Phone Number!");
                 return;
             }
 

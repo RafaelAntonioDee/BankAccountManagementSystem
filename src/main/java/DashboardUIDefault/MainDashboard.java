@@ -36,16 +36,16 @@ public class MainDashboard extends JFrame implements ActionListener {
     private TransferPanel pnlTransfer;
     private WithdrawPanel pnlWithdraw;
     private Account currentUser;
-    private AccountPersonalInformation currentuserinfo;
-    
+    private AccountPersonalInformation currentUserInfo;
+
     /**
      *
      * @param user
      */
     public MainDashboard(Account user, AccountPersonalInformation userinfo) {
-        this.currentUser = user; 
-        this.currentuserinfo = userinfo; 
-        
+        this.currentUser = user;
+        this.currentUserInfo = userinfo;
+
         setIconImage(Icons.BankIcon.getImage());
         setTitle("Bank Account Management System");
         setSize(1025, 700);
@@ -58,7 +58,7 @@ public class MainDashboard extends JFrame implements ActionListener {
         sideBar = new SidePanel();
         sideBar.setName("sideBar");
         add(sideBar);
-        sideBar.setUserDetails(currentuserinfo);
+        sideBar.setUserDetails(currentUserInfo);
 
         sideBar.btnLogout.addActionListener(this);
         sideBar.btnDashboard.addActionListener(this);
@@ -128,11 +128,12 @@ public class MainDashboard extends JFrame implements ActionListener {
 
         } else if (e.getSource() == sideBar.btnSettings) {
             if (pnlSettings == null) {
-        pnlSettings = new SettingsPanel();
-        }
-            pnlSettings.setUserSettings(currentUser, currentuserinfo);
+                pnlSettings = new SettingsPanel(currentUser, currentUserInfo);
+            }
+            pnlSettings.setUserSettings(currentUser, currentUserInfo);
             switchPanel(sideBar.btnSettings, "Settings", "Settings", pnlSettings);
         }
+        
         mainPanel.revalidate();
         mainPanel.repaint();
     }

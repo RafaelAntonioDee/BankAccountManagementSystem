@@ -14,15 +14,20 @@ import java.util.ArrayList;
  * @author rafra
  */
 public class AccountFunctions {
-
+    
+    public static boolean validateFirstName(String fName) {
+        return AccountService.validateFirstName(fName);
+    }
+    
+    public static boolean validateLastName(String lName) {
+        return AccountService.validateLastName(lName);
+    }
+    
     public static boolean validateEmail(String email) {
         return AccountService.validateEmail(email);
     }
 
     public static boolean validatePhoneNumber(String phone) {
-        if (phone == null || phone.isEmpty()) {
-            return false;
-        }
         return AccountService.validatePhoneNumber(phone);
     }
 
@@ -55,10 +60,9 @@ public class AccountFunctions {
     public static AccountPersonalInformation getUserInfo(String email) {
         return AccountService.getUserInfo(email);
     }
-    
+
     public static Account getUser(String email) {
         return AccountService.getUser(email);
     }
-
 
 }

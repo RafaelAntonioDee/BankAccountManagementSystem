@@ -4,8 +4,12 @@
  */
 package FeaturesPanelsUI;
 
+import AppService.AccountFunctions;
+import AppService.SettingsFunctions;
 import DashboardUIDefault.MainDashboard;
 import static FeaturesPanelsUI.SettingsPanel.lblNameField;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -19,8 +23,14 @@ public class ChangeName extends JFrame implements ActionListener {
     private JLabel lblLogin, lblTitle, lblFirst, lblLast, lblLogo, lblLine, lblOr;
     private JTextField txtFirst, txtLast;
     private JButton btnConfirm, btnCancel;
+    private String updateFirst, updatedLast;
+    private Account user;
+    private AccountPersonalInformation userInfo;
 
-    public ChangeName() {
+    public ChangeName(Account user, AccountPersonalInformation userInfo) {
+        this.user = user;
+        this.userInfo = userInfo;
+
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         ImageIcon ResizedBankIcon = new ImageIcon(BankIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
@@ -88,15 +98,25 @@ public class ChangeName extends JFrame implements ActionListener {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String newFirst = txtFirst.getText();
             String newLast = txtLast.getText();
+            
+            if (!AccountFunctions.validateFirstName(newFirst)) {
+                JOptionPane.showMessageDialog(this, "Invalid First Name!");
+                return;
+            }
 
+            if (!AccountFunctions.validateLastName(newLast)) {
+                JOptionPane.showMessageDialog(this, "Invalid Last Name!");
+                return;
+            }
             if (newFirst.isEmpty() || newLast.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
             } else {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
-                
+
                 if (choice == 0) {
-                    String newName = newFirst + " " + newLast;
-                    SettingsPanel.lblNameField.setText(newName);
+                    updateFirst = SettingsFunctions.changeFirstName(user.getEmail(), newFirst);
+                    updatedLast = SettingsFunctions.changeLastName(user.getEmail(), newLast);
+                    SettingsPanel.lblNameField.setText(newFirst + " " + newLast);
                     dispose();
                     JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
                 }

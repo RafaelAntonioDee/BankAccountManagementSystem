@@ -5,6 +5,7 @@
 package FeaturesPanelsUI;
 
 import AppService.SettingsFunctions;
+import DashboardUIDefault.Colors;
 import DashboardUIDefault.MainDashboard;
 import Objects.Account;
 import Objects.AccountPersonalInformation;
@@ -24,8 +25,14 @@ public class ChangeAddress extends JFrame implements ActionListener {
     private String updatedAddress;
     private Account user;
     private AccountPersonalInformation userInfo;
+    public static Colors theme = Colors.LIGHT();
 
     public ChangeAddress(Account user, AccountPersonalInformation userInfo) {
+        if (user.getSystemTheme().equals("Light")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
         this.user = user;
         this.userInfo = userInfo;
 
@@ -38,20 +45,23 @@ public class ChangeAddress extends JFrame implements ActionListener {
         setSize(375, 250);
         setLayout(null);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(243, 243, 243));
+        getContentPane().setBackground(theme.BACKGROUND);
 
         // NEW ADDRESS
         lblAddress = new JLabel("New Address");
         lblAddress.setBounds(38, 25, 65, 10);
         lblAddress.setOpaque(true);
-        lblAddress.setBackground(new Color(243, 243, 243));
         lblAddress.setFont(new Font("Arial", Font.PLAIN, 10));
+        lblAddress.setForeground(theme.TEXT_BLACK);
+        lblAddress.setBackground(theme.BACKGROUND);
         lblAddress.setHorizontalAlignment(JLabel.CENTER);
         add(lblAddress);
 
         txtAddress = new JTextField();
         txtAddress.setBounds(32, 30, 295, 35);
         txtAddress.setOpaque(false);
+        txtAddress.setForeground(theme.TEXT_BLACK);
+        txtAddress.setBackground(theme.PANELS_BACKGROUND);
         txtAddress.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         add(txtAddress);
 
@@ -59,8 +69,8 @@ public class ChangeAddress extends JFrame implements ActionListener {
         btnConfirm = new JButton("Confirm");
         btnConfirm.setHorizontalAlignment(JButton.CENTER);
         btnConfirm.setBounds(32, 90, 295, 35);
-        btnConfirm.setBackground(new Color(82, 124, 174));
-        btnConfirm.setForeground(Color.WHITE);
+        btnConfirm.setBackground(theme.PRIMARY_BLUE);
+        btnConfirm.setForeground(theme.TEXT_WHITE);
         btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(this);
         add(btnConfirm);
@@ -68,7 +78,8 @@ public class ChangeAddress extends JFrame implements ActionListener {
         btnCancel = new JButton("Cancel");
         btnCancel.setHorizontalAlignment(JButton.CENTER);
         btnCancel.setBounds(32, 150, 295, 35);
-        btnCancel.setBackground(new Color(243, 243, 243));
+        btnCancel.setBackground(theme.CancelButton);
+        btnCancel.setForeground(theme.TEXT_WHITE);
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
         add(btnCancel);
@@ -80,7 +91,7 @@ public class ChangeAddress extends JFrame implements ActionListener {
         if (e.getSource() == btnConfirm) {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String newAddress = txtAddress.getText();
-                    
+
             if (newAddress.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
             } else {

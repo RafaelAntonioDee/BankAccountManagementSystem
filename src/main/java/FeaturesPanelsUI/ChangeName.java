@@ -6,7 +6,10 @@ package FeaturesPanelsUI;
 
 import AppService.AccountFunctions;
 import AppService.SettingsFunctions;
+import DashboardUIDefault.Colors;
 import DashboardUIDefault.MainDashboard;
+import static FeaturesPanelsUI.ChangeEmail.theme;
+import static FeaturesPanelsUI.DashboardPanel.theme;
 import static FeaturesPanelsUI.SettingsPanel.lblNameField;
 import Objects.Account;
 import Objects.AccountPersonalInformation;
@@ -26,8 +29,15 @@ public class ChangeName extends JFrame implements ActionListener {
     private String updateFirst, updatedLast;
     private Account user;
     private AccountPersonalInformation userInfo;
+    public static Colors theme = Colors.LIGHT();
 
     public ChangeName(Account user, AccountPersonalInformation userInfo) {
+        if (user.getSystemTheme().equals("Light")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
+
         this.user = user;
         this.userInfo = userInfo;
 
@@ -40,13 +50,14 @@ public class ChangeName extends JFrame implements ActionListener {
         setSize(375, 310);
         setLayout(null);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(243, 243, 243));
+        getContentPane().setBackground(theme.BACKGROUND);
 
         // NEW FIRST NAME
         lblFirst = new JLabel("New First Name");
         lblFirst.setBounds(38, 25, 85, 10);
         lblFirst.setOpaque(true);
-        lblFirst.setBackground(new Color(243, 243, 243));
+        lblFirst.setBackground(theme.BACKGROUND);
+        lblFirst.setForeground(theme.TEXT_BLACK);
         lblFirst.setFont(new Font("Arial", Font.PLAIN, 10));
         lblFirst.setHorizontalAlignment(JLabel.CENTER);
         add(lblFirst);
@@ -54,6 +65,8 @@ public class ChangeName extends JFrame implements ActionListener {
         txtFirst = new JTextField();
         txtFirst.setBounds(32, 30, 295, 35);
         txtFirst.setOpaque(false);
+        txtFirst.setBackground(theme.PANELS_BACKGROUND);
+        txtFirst.setForeground(theme.TEXT_BLACK);
         txtFirst.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         add(txtFirst);
 
@@ -62,6 +75,8 @@ public class ChangeName extends JFrame implements ActionListener {
         lblLast.setBounds(38, 85, 85, 10);
         lblLast.setOpaque(true);
         lblLast.setBackground(new Color(243, 243, 243));
+        lblLast.setBackground(theme.BACKGROUND);
+        lblLast.setForeground(theme.TEXT_BLACK);
         lblLast.setFont(new Font("Arial", Font.PLAIN, 10));
         lblLast.setHorizontalAlignment(JLabel.CENTER);
         add(lblLast);
@@ -69,6 +84,8 @@ public class ChangeName extends JFrame implements ActionListener {
         txtLast = new JTextField();
         txtLast.setBounds(32, 90, 295, 35);
         txtLast.setOpaque(false);
+        txtLast.setBackground(theme.PANELS_BACKGROUND);
+        txtLast.setForeground(theme.TEXT_BLACK);
         txtLast.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         add(txtLast);
 
@@ -76,8 +93,8 @@ public class ChangeName extends JFrame implements ActionListener {
         btnConfirm = new JButton("Confirm");
         btnConfirm.setHorizontalAlignment(JButton.CENTER);
         btnConfirm.setBounds(32, 150, 295, 35);
-        btnConfirm.setBackground(new Color(82, 124, 174));
-        btnConfirm.setForeground(Color.WHITE);
+        btnConfirm.setBackground(theme.PRIMARY_BLUE);
+        btnConfirm.setForeground(theme.TEXT_WHITE);
         btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(this);
         add(btnConfirm);
@@ -85,7 +102,8 @@ public class ChangeName extends JFrame implements ActionListener {
         btnCancel = new JButton("Cancel");
         btnCancel.setHorizontalAlignment(JButton.CENTER);
         btnCancel.setBounds(32, 210, 295, 35);
-        btnCancel.setBackground(new Color(243, 243, 243));
+        btnCancel.setBackground(theme.CancelButton);
+        btnCancel.setForeground(theme.TEXT_WHITE);
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
         add(btnCancel);
@@ -98,7 +116,7 @@ public class ChangeName extends JFrame implements ActionListener {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String newFirst = txtFirst.getText();
             String newLast = txtLast.getText();
-            
+
             if (!AccountFunctions.validateFirstName(newFirst)) {
                 JOptionPane.showMessageDialog(this, "Invalid First Name!");
                 return;

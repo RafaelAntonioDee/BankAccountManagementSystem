@@ -65,4 +65,7 @@ public class AccountFunctions {
         return AccountService.getUser(email);
     }
 
+    public static void ChangeTheme(String email, String theme){
+        AccountService.ChangeTheme(email, theme);
+    }
 }

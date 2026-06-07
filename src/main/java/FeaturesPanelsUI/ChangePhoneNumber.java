@@ -6,7 +6,9 @@ package FeaturesPanelsUI;
 
 import AppService.AccountFunctions;
 import AppService.SettingsFunctions;
+import DashboardUIDefault.Colors;
 import DashboardUIDefault.MainDashboard;
+import static FeaturesPanelsUI.DashboardPanel.theme;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -24,8 +26,15 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
     private JButton btnConfirm, btnCancel;
     private Account user;
     private AccountPersonalInformation userInfo;
+    public static Colors theme = Colors.LIGHT();
 
     public ChangePhoneNumber(Account user, AccountPersonalInformation userInfo) {
+        if (user.getSystemTheme().equals("Light")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
+
         this.user = user;
         this.userInfo = userInfo;
 
@@ -38,12 +47,13 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
         setSize(375, 250);
         setLayout(null);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(243, 243, 243));
+        getContentPane().setBackground(theme.BACKGROUND);
 
         lblNewPhone = new JLabel("New Phone Number");
         lblNewPhone.setBounds(38, 25, 100, 10);
         lblNewPhone.setOpaque(true);
-        lblNewPhone.setBackground(new Color(243, 243, 243));
+        lblNewPhone.setBackground(theme.BACKGROUND);
+        lblNewPhone.setForeground(theme.TEXT_BLACK);
         lblNewPhone.setFont(new Font("Arial", Font.PLAIN, 10));
         lblNewPhone.setHorizontalAlignment(JLabel.CENTER);
         add(lblNewPhone);
@@ -51,6 +61,8 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
         txtNewPhone = new JTextField();
         txtNewPhone.setBounds(32, 30, 295, 35);
         txtNewPhone.setOpaque(false);
+        txtNewPhone.setBackground(theme.PANELS_BACKGROUND);
+        txtNewPhone.setForeground(theme.TEXT_BLACK);
         txtNewPhone.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         add(txtNewPhone);
 
@@ -58,8 +70,8 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
         btnConfirm = new JButton("Confirm");
         btnConfirm.setHorizontalAlignment(JButton.CENTER);
         btnConfirm.setBounds(32, 90, 295, 35);
-        btnConfirm.setBackground(new Color(82, 124, 174));
-        btnConfirm.setForeground(Color.WHITE);
+        btnConfirm.setBackground(theme.PRIMARY_BLUE);
+        btnConfirm.setForeground(theme.TEXT_WHITE);
         btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(this);
         add(btnConfirm);
@@ -67,7 +79,8 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
         btnCancel = new JButton("Cancel");
         btnCancel.setHorizontalAlignment(JButton.CENTER);
         btnCancel.setBounds(32, 150, 295, 35);
-        btnCancel.setBackground(new Color(243, 243, 243));
+        btnCancel.setBackground(theme.CancelButton);
+        btnCancel.setForeground(theme.TEXT_WHITE);
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
         add(btnCancel);
@@ -80,12 +93,12 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String newPhoneInput = txtNewPhone.getText();
             String currentPhone = SettingsPanel.lblPhoneField.getText();
-            
+
             if (!AccountFunctions.validatePhoneNumber(newPhoneInput)) {
                 JOptionPane.showMessageDialog(this, "Invalid Phone Number!");
                 return;
             }
-            
+
             if (newPhoneInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
             } else if (currentPhone.equals(newPhoneInput)) {

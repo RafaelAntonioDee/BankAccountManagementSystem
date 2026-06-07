@@ -5,10 +5,13 @@ FeaturesPanelsUI\ChangePassword.class
 AppService\AutoPaymentFunctions.class
 FeaturesPanelsUI\WithdrawPanel.class
 AppService\TransactHistoryFunctions.class
+DashboardUIDefault\Colors.class
 DashboardUIDefault\Icons.class
 Objects\UserAccount.class
 FeaturesPanelsUI\ChangeEmail.class
+FeaturesPanelsUI\SettingsPanel$1.class
 DataService\AutoPaymentService.class
+FeaturesPanelsUI\TransactionsPanel$1.class
 FeaturesPanelsUI\TransferPanel.class
 AppService\SettingsFunctions.class
 FeaturesPanelsUI\AutoPaymentPanel.class
@@ -16,6 +19,7 @@ DataService\TransactionsService.class
 FeaturesPanelsUI\SettingsPanel.class
 AppService\BalanceFunctions.class
 FeaturesPanelsUI\ChangePhoneNumber.class
+FeaturesPanelsUI\TransactionsPanel$2.class
 DashboardUIDefault\SidePanel.class
 AppService\AccountFunctions.class
 Objects\AutoPayment.class

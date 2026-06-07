@@ -6,6 +6,7 @@ package DashboardUIDefault;
 
 import FeaturesPanelsUI.*;
 import AppService.AccountFunctions;
+import static FeaturesPanelsUI.DashboardPanel.theme;
 import LoginUI.LoginPage;
 import Objects.Account;
 import Objects.AccountPersonalInformation;
@@ -37,12 +38,17 @@ public class MainDashboard extends JFrame implements ActionListener {
     private WithdrawPanel pnlWithdraw;
     private Account currentUser;
     private AccountPersonalInformation currentUserInfo;
+    public static Colors theme = Colors.LIGHT();
 
-    /**
-     *
-     * @param user
-     */
+
     public MainDashboard(Account user, AccountPersonalInformation userinfo) {
+        
+        if (user.getSystemTheme().equals("Light")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
+
         this.currentUser = user;
         this.currentUserInfo = userinfo;
 
@@ -51,11 +57,12 @@ public class MainDashboard extends JFrame implements ActionListener {
         setSize(1025, 700);
         setLayout(null);
         setLocationRelativeTo(null);
+        setBackground(theme.BACKGROUND);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //------------------------------- Panels Setup -------------------------------
         //SIDE BAR
-        sideBar = new SidePanel();
+        sideBar = new SidePanel(user);
         sideBar.setName("sideBar");
         add(sideBar);
         sideBar.setUserDetails(currentUserInfo);
@@ -70,11 +77,11 @@ public class MainDashboard extends JFrame implements ActionListener {
         sideBar.btnAutoPayments.addActionListener(this);
 
         //TOP BAR
-        topBar = new TopPanel(AccountFunctions.getFullName(userinfo));
+        topBar = new TopPanel(AccountFunctions.getFullName(userinfo), user);
         add(topBar);
 
         //BOTTOM BAR
-        botBar = new BottomPanel();
+        botBar = new BottomPanel(user);
         add(botBar);
 
         //MAIN PANEL
@@ -124,14 +131,10 @@ public class MainDashboard extends JFrame implements ActionListener {
             switchPanel(sideBar.btnTransactions, "btnTransactions", "Transaction History", new TransactionsPanel(currentUser));
 
         } else if (e.getSource() == sideBar.btnAutoPayments) {
-            switchPanel(sideBar.btnAutoPayments, "btnAutoPayments", "Auto Payments", new AutoPaymentPanel(currentUser.getEmail()));
+            switchPanel(sideBar.btnAutoPayments, "btnAutoPayments", "Auto Payments", new AutoPaymentPanel(currentUser.getEmail(), currentUser));
 
         } else if (e.getSource() == sideBar.btnSettings) {
-            if (pnlSettings == null) {
-                pnlSettings = new SettingsPanel(currentUser, currentUserInfo);
-            }
-            pnlSettings.setUserSettings(currentUser, currentUserInfo);
-            switchPanel(sideBar.btnSettings, "Settings", "Settings", pnlSettings);
+            switchPanel(sideBar.btnSettings, "Settings", "Settings", new SettingsPanel(currentUser, currentUserInfo));
         }
         
         mainPanel.revalidate();

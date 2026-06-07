@@ -18,10 +18,10 @@ AppService\BalanceFunctions.class
 FeaturesPanelsUI\ChangePhoneNumber.class
 DashboardUIDefault\SidePanel.class
 AppService\AccountFunctions.class
+Objects\AutoPayment.class
 FeaturesPanelsUI\TransactionsPanel.class
 DataService\AccountService.class
 DashboardUIDefault\TopPanel.class
-Objects\AutoPayments.class
 Objects\AccountTransactHistory.class
 com\mycompany\bankaccountmanagementsystem\BankAccountManagementSystem.class
 DashboardUIDefault\BottomPanel.class

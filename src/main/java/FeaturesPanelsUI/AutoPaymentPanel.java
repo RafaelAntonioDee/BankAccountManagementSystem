@@ -10,25 +10,25 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.util.ArrayList;
 import DataService.AutoPaymentService;
-import Objects.AutoPayments;
+import Objects.AutoPayment;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author rafra
  */
 public class AutoPaymentPanel extends JPanel implements ActionListener {
 
-    private JLabel lblAutoPayment, lblRecipient, lblAmount, lblFrequency, lblDate, lblEnable, lblBirthday, lblMonth, lblDay, lblYear, lblReceipt;
-    private JButton btnEnableAuto, btnCancel;
+    private JLabel lblAutoPayment, lblRecipient, lblAmount, lblFrequency, lblDate, lblReceipt;
+    private JButton btnEnableAuto, btnCancel, btnUnsub;
     private JPanel pnlAutoPayment, pnlScheduledPayment, pnlAutoPayListContent;
     private JScrollPane pnlAutoPayList;
     private JTextField txtRecipient, txtAmount;
     private String currentEmail;
-    private int startYear = 1970, endYear = 2050, ScheduledCount = 0, y = 15;
+    private int ScheduledCount = 0, y = 15;
     private JComboBox<String> cmbFrequency, cmbDay, cmbMonth, cmbYear;
-    private String[] frequency = {"Monthly", "Quarterly", "Semi-Anually", "Anually"},
-            months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"},
-            days = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"},
-            years = {"67"};
+    private String[] frequency = {"Monthly", "Quarterly", "Semi-Annually", "Annually"};
 
     public AutoPaymentPanel() {
 
@@ -87,57 +87,6 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         cmbFrequency.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlAutoPayment.add(cmbFrequency);
 
-        lblBirthday = new JLabel("Starting Date: ");
-        lblBirthday.setBounds(25, 245, 150, 20);
-        lblBirthday.setFont(new Font("Arial", Font.PLAIN, 18));
-        pnlAutoPayment.add(lblBirthday);
-
-        lblMonth = new JLabel("Month");
-        lblMonth.setBounds(30, 275, 35, 10);
-        lblMonth.setOpaque(true);
-        lblMonth.setBackground(new Color(243, 243, 243));
-        lblMonth.setFont(new Font("Arial", Font.PLAIN, 10));
-        lblMonth.setHorizontalAlignment(JLabel.CENTER);
-        pnlAutoPayment.add(lblMonth);
-
-        cmbMonth = new JComboBox<String>(months);
-        cmbMonth.setBounds(25, 280, 130, 35);
-        cmbMonth.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbMonth.setOpaque(false);
-        cmbMonth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlAutoPayment.add(cmbMonth);
-
-        lblDay = new JLabel("Day");
-        lblDay.setBounds(175, 275, 25, 10);
-        lblDay.setOpaque(true);
-        lblDay.setBackground(new Color(243, 243, 243));
-        lblDay.setFont(new Font("Arial", Font.PLAIN, 10));
-        lblDay.setHorizontalAlignment(JLabel.CENTER);
-        pnlAutoPayment.add(lblDay);
-
-        cmbDay = new JComboBox<String>(days);
-        cmbDay.setBounds(170, 280, 80, 35);
-        cmbDay.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbDay.setOpaque(false);
-        cmbDay.setFocusable(false);
-        cmbDay.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlAutoPayment.add(cmbDay);
-
-        lblYear = new JLabel("Year");
-        lblYear.setBounds(268, 275, 30, 10);
-        lblYear.setOpaque(true);
-        lblYear.setBackground(new Color(243, 243, 243));
-        lblYear.setFont(new Font("Arial", Font.PLAIN, 10));
-        lblYear.setHorizontalAlignment(JLabel.CENTER);
-        pnlAutoPayment.add(lblYear);
-
-        cmbYear = new JComboBox<String>(years);
-        cmbYear.setBounds(265, 280, 85, 35);
-        cmbYear.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbYear.setOpaque(false);
-        cmbYear.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlAutoPayment.add(cmbYear);
-
         btnEnableAuto = new JButton("Set Up Payment");
         btnEnableAuto.setHorizontalAlignment(JButton.CENTER);
         btnEnableAuto.setBounds(120, 395, 125, 35);
@@ -186,33 +135,35 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
 
     public void loadExistingAutoPayments() {
 
-        ArrayList<AutoPayments> list
-                = DataService.AutoPaymentService.getAllAutoPayments(currentEmail);
+        resetList();
+
+        ArrayList<AutoPayment> list = AppService.AutoPaymentFunctions.getAllUserPayments(currentEmail);
 
         if (list == null) {
             return;
         }
 
-        for (AutoPayments p : list) {
+        for (AutoPayment p : list) {
 
             displayScheduledPayment(
+                    p.getAutoPayID(),
                     p.getPayee(),
                     p.getAmount(),
                     p.getFrequency(),
-                    p.getDate() != null ? p.getDate().toString() : "No Date"
+                    p.getDate()
             );
         }
     }
 
     // RECEIPT
-    public void displayScheduledPayment(String RecipientName, double Amount, String Frequency, String DueDate) {
+    public void displayScheduledPayment(String ID, String RecipientName, double Amount, String Frequency, LocalDate DueDate) {
         ScheduledCount++;
 
         pnlScheduledPayment = new JPanel();
         pnlScheduledPayment.setName(RecipientName);
         pnlScheduledPayment.setBounds(15, y, 357, 110);
         pnlScheduledPayment.setBackground(new Color(243, 243, 243));
-        pnlScheduledPayment.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        pnlScheduledPayment.setBorder(new LineBorder(new Color(82, 124, 174)));
         pnlScheduledPayment.setLayout(null);
         pnlAutoPayListContent.add(pnlScheduledPayment);
 
@@ -232,10 +183,22 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         lblFrequency.setText("Frequency: " + Frequency);
         pnlScheduledPayment.add(lblFrequency);
 
+        String dueDateFormatted = DueDate.format(DateTimeFormatter.ofPattern("MMMM dd, yyyy"));
+
         lblDate = new JLabel();
         lblDate.setBounds(10, 80, 337, 25);
-        lblDate.setText("Due Date: " + DueDate);
+        lblDate.setText("Due Date: " + dueDateFormatted);
         pnlScheduledPayment.add(lblDate);
+
+        btnUnsub = new JButton("Unsubscribe");
+        btnUnsub.setBounds(240, 75, 107, 25);
+        btnUnsub.putClientProperty("ID", ID);
+        btnUnsub.setHorizontalAlignment(JButton.CENTER);
+        btnUnsub.setBackground(Color.GRAY);
+        btnUnsub.setForeground(Color.WHITE);
+        btnUnsub.setFocusPainted(false);
+        pnlScheduledPayment.add(btnUnsub);
+        btnUnsub.addActionListener(this);
 
         pnlAutoPayListContent.setPreferredSize(new Dimension(357, y));
         pnlAutoPayListContent.revalidate();
@@ -244,39 +207,79 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         y += 115;
     }
 
+    public void resetList() {
+        ScheduledCount = 0;
+        y = 15;
+        pnlAutoPayListContent.removeAll();
+        pnlAutoPayListContent.revalidate();
+        pnlAutoPayListContent.repaint();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btnEnableAuto) {
+            String payee = txtRecipient.getText().trim();
+            if (!payee.isEmpty()) {
+                try {
+                    double amount = Double.parseDouble(txtAmount.getText().trim());
 
-            String payee = txtRecipient.getText();
-            double amount = Double.parseDouble(txtAmount.getText());
-            String frequency = String.valueOf(cmbFrequency.getSelectedItem());
-            String date = cmbMonth.getSelectedItem() + " " + cmbDay.getSelectedItem() + " " + cmbYear.getSelectedItem();
+                    String frequency = String.valueOf(cmbFrequency.getSelectedItem());
+                    LocalDate dueDate = LocalDate.now();
 
-            AppService.AutoPaymentFunctions.createAutoPayment(
-                    currentEmail,
-                    payee,
-                    amount,
-                    frequency,
-                    date
-            );
+                    switch (frequency.toLowerCase()) {
+                        case "monthly":
+                            dueDate = dueDate.plusMonths(1);
+                            break;
 
-//            DataService.AutoPaymentService.debugPrint(currentEmail);
+                        case "quarterly":
+                            dueDate = dueDate.plusMonths(3);
+                            break;
 
-            displayScheduledPayment(
-                    payee,
-                    amount,
-                    frequency,
-                    date
-            );
+                        case "semi-annually":
+                            dueDate = dueDate.plusMonths(6);
+                            break;
 
-            txtRecipient.setText("");
-            txtAmount.setText("");
+                        case "annually":
+                            dueDate = dueDate.plusYears(1);
+                            break;
 
+                        default:
+                            break;
+                    }
+
+                    String dueDateFormatted = dueDate.format(DateTimeFormatter.ofPattern("MMMM dd, yyyy"));
+                    DateTimeFormatter format = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+
+                    AppService.AutoPaymentFunctions.createAutoPayment(
+                            currentEmail,
+                            payee,
+                            amount,
+                            frequency,
+                            LocalDate.parse(dueDateFormatted, format)
+                    );
+
+                    loadExistingAutoPayments();
+
+                    txtRecipient.setText("");
+                    txtAmount.setText("");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Invalid amount!");
+                }
+            }
         } else if (e.getSource() == btnCancel) {
             txtRecipient.setText("");
             txtAmount.setText("");
+        } else {
+            JButton btn = (JButton) e.getSource();
+
+            String id = (String) btn.getClientProperty("ID");
+
+            AppService.AutoPaymentFunctions.removeAutoPay(id);
+
+            loadExistingAutoPayments();
+            
+            System.out.println(id);
         }
     }
 }

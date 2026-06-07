@@ -32,8 +32,8 @@ public class BalanceFunctions {
     public static void transfer(Account user, Account receiver, double amount) {
         addTransaction(user.getEmail(), "Transfer", LocalDate.now(), "- " + amount);
 
-        user.setBalance(user.getBalance() - amount);
-        receiver.setBalance(receiver.getBalance() + amount);
+        AccountService.withdraw(user.getEmail(),  amount);
+        AccountService.deposit(receiver.getEmail(),  amount);
     }
 
     public static ArrayList getTransactions(String email) {

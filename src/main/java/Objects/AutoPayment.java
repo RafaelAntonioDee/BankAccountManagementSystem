@@ -4,18 +4,33 @@
  */
 package Objects;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
  *
  * @author rafra
  */
-public class AutoPayments {
-    private String Payee, Frequency;
-    private LocalDateTime Date;
+public class AutoPayment {
+    private String AutoPayID, Payee, Frequency, Email;
+    private LocalDate Date;
     private double Amount;
     private boolean isActive;
         
+    public String getAutoPayID(){
+        return AutoPayID;
+    }
+    public void setAutoPayID(String newAutoPayID){
+        AutoPayID = newAutoPayID;
+    }
+    
+    public String getEmail(){
+        return Email;
+    }
+    public void setEmail(String newEmail){
+        Email = newEmail;
+    }
+    
     public String getPayee(){
         return Payee;
     }
@@ -30,10 +45,10 @@ public class AutoPayments {
         Frequency = newFrequency;
     }
     
-    public LocalDateTime getDate(){
+    public LocalDate getDate(){
         return Date;
     }
-    public void setPaymentDate(LocalDateTime newPaymentDate){
+    public void setPaymentDate(LocalDate newPaymentDate){
         Date = newPaymentDate;
     }
     

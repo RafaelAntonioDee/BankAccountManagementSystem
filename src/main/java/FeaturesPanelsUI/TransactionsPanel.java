@@ -9,7 +9,10 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 public class TransactionsPanel extends JPanel implements ActionListener {
 
@@ -30,17 +33,11 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         setBorder(new LineBorder(Color.LIGHT_GRAY));
         setLayout(null);
 
-        pnlProcess = new JPanel();
-        pnlProcess.setBounds(25, 25, 787, 510);
-        pnlProcess.setBackground(new Color(243, 243, 243));
-        pnlProcess.setBorder(new LineBorder(Color.LIGHT_GRAY));
-        pnlProcess.setLayout(null);
-        add(pnlProcess);
-
         lblSearch = new JLabel("Search");
-        lblSearch.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblSearch.setBounds(25, 20, 200, 25);
-        pnlProcess.add(lblSearch);
+        lblSearch.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblSearch.setForeground(Color.GRAY);
+        lblSearch.setBounds(25, 25, 250, 35);
+        add(lblSearch);
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/search.png"));
 
@@ -50,28 +47,20 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         ImageIcon searchIcon = new ImageIcon(resizedImg);
 
         btnSearch = new JButton(searchIcon);
-        btnSearch.setBounds(25, 50, 40, 35);
-
-        btnSearch.setFocusPainted(false);
-
-        btnSearch.addActionListener(this);
-
-        pnlProcess.add(btnSearch);
-
-        btnSearch = new JButton(searchIcon);
-        btnSearch.setBounds(25, 50, 40, 35);
+        btnSearch.setBounds(25, 60, 40, 35);
         btnSearch.setFocusPainted(false);
         btnSearch.addActionListener(this);
-        pnlProcess.add(btnSearch);
+        add(btnSearch);
 
         txtSearch = new JTextField();
-        txtSearch.setBounds(70, 50, 360, 35);
-        pnlProcess.add(txtSearch);
+        txtSearch.setBounds(70, 60, 360, 35);
+        add(txtSearch);
 
         lblDate = new JLabel("Date");
-        lblDate.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblDate.setBounds(485, 20, 100, 25);
-        pnlProcess.add(lblDate);
+        lblDate.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblDate.setForeground(Color.GRAY);
+        lblDate.setBounds(485, 25, 100, 25);
+        add(lblDate);
 
         cmbDateRange = new JComboBox();
         cmbDateRange.addItem("All");
@@ -79,13 +68,14 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         cmbDateRange.addItem("Past Week");
         cmbDateRange.addItem("Past Month");
         cmbDateRange.addItem("Past 3 Months");
-        cmbDateRange.setBounds(485, 50, 150, 35);
-        pnlProcess.add(cmbDateRange);
+        cmbDateRange.setBounds(485, 60, 150, 35);
+        add(cmbDateRange);
 
         lblType = new JLabel("Type");
-        lblType.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblType.setBounds(665, 20, 100, 25);
-        pnlProcess.add(lblType);
+        lblType.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblType.setForeground(Color.GRAY);
+        lblType.setBounds(665, 25, 100, 25);
+        add(lblType);
 
         cmbTransactionType = new JComboBox();
         cmbTransactionType.addItem("All");
@@ -93,29 +83,43 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         cmbTransactionType.addItem("Withdraw");
         cmbTransactionType.addItem("Transfer");
         cmbTransactionType.addItem("Payment");
-        cmbTransactionType.setBounds(665, 50, 100, 35);
-        pnlProcess.add(cmbTransactionType);
+        cmbTransactionType.setBounds(665, 60, 147, 35);
+        add(cmbTransactionType);
 
+        //------------------------------- Transactions List -------------------------------
         lblTransactions = new JLabel("Transactions");
         lblTransactions.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblTransactions.setBounds(25, 120, 737, 35);
-        pnlProcess.add(lblTransactions);
+        lblTransactions.setForeground(Color.GRAY);
+        lblTransactions.setBounds(25, 110, 737, 35);
+        add(lblTransactions);
 
         String[] columns = {"Transaction ID", "Transaction Type", "Date", "Balance"};
         model = new DefaultTableModel(columns, 0);
 
         TransactionsTable = new JTable(model);
         TransactionsTable.getTableHeader().setReorderingAllowed(false);
+        TransactionsTable.setRowHeight(28);
+        TransactionsTable.setIntercellSpacing(new Dimension(10, 6));
+        TransactionsTable.getTableHeader().setResizingAllowed(false);
+        TransactionsTable.setRowSelectionAllowed(false);
+
+        JTableHeader header = TransactionsTable.getTableHeader();
+        header.setReorderingAllowed(false);
+        header.setFont(new Font("Arial", Font.BOLD, 12));
+        header.setBackground(new Color(82, 124, 174));
+        header.setForeground(Color.WHITE);
+        header.setPreferredSize(new Dimension(header.getWidth(), 35));
+        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
 
         scroll = new JScrollPane(TransactionsTable);
-        scroll.setBounds(25, 160, 737, 320);
-        pnlProcess.add(scroll);
+        scroll.setBounds(25, 145, 787, 390);
+        add(scroll);
 
         showTransactions();
     }
 
     public void showTransactions() {
-        
+
         ArrayList<AccountTransactHistory> userHistory = BalanceFunctions.getTransactions(currentUser.getEmail());
         model.setRowCount(0);
 
@@ -130,6 +134,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
             String id = transaction.getTransactionID();
             String type = transaction.getTransaction();
             LocalDate date = transaction.getDate();
+            String dueDateFormatted = date.format(DateTimeFormatter.ofPattern("MMMM dd, yyyy"));
             String balance = String.valueOf(transaction.getBalanceChange());
 
             boolean searchOk = search.equals("") || id.toLowerCase().contains(search) || type.toLowerCase().contains(search);
@@ -150,7 +155,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
             }
 
             if (searchOk && typeOk && dateOk) {
-                model.addRow(new Object[]{id, type, date, balance});
+                model.addRow(new Object[]{id, type, dueDateFormatted, balance});
             }
         }
     }

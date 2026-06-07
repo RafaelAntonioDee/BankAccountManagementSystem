@@ -1,7 +1,8 @@
 package AppService;
 
 import DataService.AutoPaymentService;
-import Objects.AutoPayments;
+import Objects.AutoPayment;
+import java.time.LocalDate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,32 +10,60 @@ import java.util.ArrayList;
 
 public class AutoPaymentFunctions {
 
-    public static void createAutoPayment(
-            String email,
-            String payee,
-            double amount,
-            String frequency,
-            String date
-    ) {
+    public static void createAutoPayment(String email, String payee, double amount, String frequency, LocalDate date) {
 
-        AutoPayments payment = new AutoPayments();
+        AutoPayment payment = new AutoPayment();
+        payment.setEmail(email);
         payment.setPayee(payee);
         payment.setAmount(amount);
         payment.setFrequency(frequency);
         payment.setActive(true);
+        payment.setPaymentDate(date);
 
-        try {
-            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime newDate = LocalDateTime.parse(date, dateFormat);
-            payment.setPaymentDate(newDate);
-        } catch (Exception e) {
-            payment.setPaymentDate(LocalDateTime.now());
-        }
+        String newId = generateNextAutoPayID();
+        payment.setAutoPayID(newId);
 
-        AutoPaymentService.addAutoPayment(email, payment);
+        AutoPaymentService.addAutoPayment(payment);
     }
 
-    public static ArrayList<AutoPayments> getAllPayments(String email) {
-        return AutoPaymentService.getAllAutoPayments(email);
+    private static String generateNextAutoPayID() {
+
+        int max = 0;
+
+        for (AutoPayment p : AutoPaymentService.getAllAutoPayments()) {
+
+            String id = p.getAutoPayID();
+
+            if (id != null && id.startsWith("T")) {
+                try {
+                    int num = Integer.parseInt(id.substring(1));
+                    if (num > max) {
+                        max = num;
+                    }
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        }
+
+        int next = max + 1;
+        return String.format("T%04d", next);
+    }
+
+    public static ArrayList<AutoPayment> getAllUserPayments(String email) {
+        return AutoPaymentService.getAllUserAutoPay(email);
+    }
+    
+    public static void removeAutoPay(String id){
+        AutoPaymentService.removeAutoPayment(id);
+    }
+    
+    public static AutoPayment getFirstAutoPay(String email) {
+        ArrayList<AutoPayment> list = getAllUserPayments(email);
+
+        if (list.isEmpty()) {
+            return null;
+        }
+
+        return list.get(0);
     }
 }

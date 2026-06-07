@@ -14,6 +14,13 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import DashboardUIDefault.MainDashboard;
 import Objects.Account;
+import Objects.AccountTransactHistory;
+import Objects.AutoPayment;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -21,16 +28,17 @@ import Objects.Account;
  */
 public class DashboardPanel extends JPanel implements ActionListener {
 
-    private JLabel lblBalance, lblAmount, lblTransactions, lblQuickTransfer, lblTo, lblTransferAmount, lblScheduledPayments, lblTemporaryScheduled;
-    private JPanel pnlBalance, pnlTransactions, pnlScheduledPay, pnlQuickTransfer;
+    private JLabel lblRecipient, lblFrequency, lblDate, lblBalance, lblAmount, lblTransactions, lblQuickTransfer, lblTo, lblTransferAmount, lblScheduledPayments, lblTemporaryScheduled;
+    private JPanel pnlBalance, pnlTransactions, pnlScheduledPay, pnlQuickTransfer, pnlAutoPay;
     private JButton btnDeposit, btnWithdraw, btnQuickTransfer, btnManagePayments;
     private JTable TransactionsTable;
     private JScrollPane scroll;
     private JTextField txtAmount, txtEmail;
     private MainDashboard dashboard;
     private Account currentUser;
+    private DefaultTableModel model;
 
-    public DashboardPanel(MainDashboard dashboard, Account user) {
+    public DashboardPanel(MainDashboard dashboard, Account user) {                
         this.currentUser = user;
         this.dashboard = dashboard;
 
@@ -92,10 +100,24 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblTransactions.setBounds(25, 10, 250, 35);
         pnlTransactions.add(lblTransactions);
 
-        String[] columns = {"Transaction ID", "Transaction", "Date", "Balance"};
-        DefaultTableModel model = new DefaultTableModel(columns, 0);
+        String[] columns = {"Transaction ID", "Type", "Date", "Balance"};
+        model = new DefaultTableModel(columns, 0);
+
         TransactionsTable = new JTable(model);
         TransactionsTable.getTableHeader().setReorderingAllowed(false);
+        TransactionsTable.setRowHeight(28);
+        TransactionsTable.setIntercellSpacing(new Dimension(10, 6));
+        TransactionsTable.getTableHeader().setResizingAllowed(false);
+        TransactionsTable.setRowSelectionAllowed(false);
+
+        JTableHeader header = TransactionsTable.getTableHeader();
+        header.setReorderingAllowed(false);
+        header.setFont(new Font("Arial", Font.BOLD, 12));
+        header.setBackground(new Color(82, 124, 174));
+        header.setForeground(Color.WHITE);
+        header.setPreferredSize(new Dimension(header.getWidth(), 35));
+        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+
         scroll = new JScrollPane(TransactionsTable);
         scroll.setBounds(25, 45, 375, 220);
         pnlTransactions.add(scroll);
@@ -121,6 +143,40 @@ public class DashboardPanel extends JPanel implements ActionListener {
         btnManagePayments.setFocusPainted(false);
         btnManagePayments.addActionListener(this);
         pnlScheduledPay.add(btnManagePayments);
+
+        AutoPayment autopaydata = AppService.AutoPaymentFunctions.getFirstAutoPay(user.getEmail());
+
+        if (autopaydata != null) {
+            pnlAutoPay = new JPanel();
+            pnlAutoPay.setBounds(25, 45, 280, 85);
+            pnlAutoPay.setBackground(new Color(243, 243, 243));
+            pnlAutoPay.setBorder(new LineBorder(new Color(82, 124, 174)));
+            pnlAutoPay.setLayout(null);
+            pnlScheduledPay.add(pnlAutoPay);
+
+            lblRecipient = new JLabel();
+            lblRecipient.setFont(new Font("Arial", Font.PLAIN, 16));
+            lblRecipient.setBounds(10, 5, 337, 25);
+            lblRecipient.setText(autopaydata.getPayee());
+            pnlAutoPay.add(lblRecipient);
+
+            lblAmount = new JLabel();
+            lblAmount.setBounds(10, 30, 337, 25);
+            lblAmount.setText("Amount: " + String.format("%.2f", autopaydata.getAmount()));
+            pnlAutoPay.add(lblAmount);
+
+            lblFrequency = new JLabel();
+            lblFrequency.setBounds(10, 55, 337, 25);
+            lblFrequency.setText("Frequency: " + autopaydata.getFrequency());
+            pnlAutoPay.add(lblFrequency);
+
+            String dueDateFormatted = autopaydata.getDate().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy"));
+
+            lblDate = new JLabel();
+            lblDate.setBounds(135, 30, 337, 25);
+            lblDate.setText("Due Date: " + dueDateFormatted);
+            pnlAutoPay.add(lblDate);
+        }
 
         // Quick Transfer
         pnlQuickTransfer = new JPanel();
@@ -166,6 +222,27 @@ public class DashboardPanel extends JPanel implements ActionListener {
         btnQuickTransfer.addActionListener(this);
         pnlQuickTransfer.add(btnQuickTransfer);
 
+        showTransactions();
+    }
+
+    public void showTransactions() {
+
+        ArrayList<AccountTransactHistory> userHistory = BalanceFunctions.getTransactions(currentUser.getEmail());
+        model.setRowCount(0);
+
+        LocalDate today = LocalDate.now();
+
+        for (AccountTransactHistory transaction : userHistory) {
+
+            String id = transaction.getTransactionID();
+            String type = transaction.getTransaction();
+            LocalDate date = transaction.getDate();
+            String dueDateFormatted = date.format(DateTimeFormatter.ofPattern("MMMM dd, yyyy"));
+            String balance = String.valueOf(transaction.getBalanceChange());
+
+            model.addRow(new Object[]{id, type, dueDateFormatted, balance});
+
+        }
     }
 
     @Override
@@ -173,14 +250,11 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
         if (e.getSource() == btnDeposit) {
             dashboard.switchPanel(dashboard.sideBar.btnDeposit, "btnDeposit", "Deposit", new DepositPanel(currentUser));
-        } 
-        else if (e.getSource() == btnWithdraw) {
+        } else if (e.getSource() == btnWithdraw) {
             dashboard.switchPanel(dashboard.sideBar.btnWithdraw, "btnWithdraw", "Withdraw", new WithdrawPanel(currentUser));
-        } 
-        else if (e.getSource() == btnManagePayments) {
-            dashboard.switchPanel(dashboard.sideBar.btnAutoPayments, "btnAutoPayments", "Auto Payments", new AutoPaymentPanel());
-        } 
-        else if (e.getSource() == btnQuickTransfer) {
+        } else if (e.getSource() == btnManagePayments) {
+            dashboard.switchPanel(dashboard.sideBar.btnAutoPayments, "btnAutoPayments", "Auto Payments", new AutoPaymentPanel(currentUser.getEmail()));
+        } else if (e.getSource() == btnQuickTransfer) {
             String email = txtEmail.getText();
             String amountText = txtAmount.getText();
 
@@ -211,6 +285,8 @@ public class DashboardPanel extends JPanel implements ActionListener {
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Enter valid amount!");
             }
+            
+            showTransactions();
         }
     }
 

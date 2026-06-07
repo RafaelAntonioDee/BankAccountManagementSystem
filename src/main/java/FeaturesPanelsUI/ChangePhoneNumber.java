@@ -4,11 +4,14 @@
  */
 package FeaturesPanelsUI;
 
+import AppService.AccountFunctions;
+import AppService.SettingsFunctions;
 import DashboardUIDefault.MainDashboard;
-import static FeaturesPanelsUI.SettingsPanel.lblPhoneField;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
 
 /**
  *
@@ -19,8 +22,12 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
     private JLabel lblLogin, lblTitle, lblNewPhone, lblLogo, lblLine, lblOr;
     private JTextField txtNewPhone;
     private JButton btnConfirm, btnCancel;
+    private Account user;
+    private AccountPersonalInformation userInfo;
 
-    public ChangePhoneNumber() {
+    public ChangePhoneNumber(Account user, AccountPersonalInformation userInfo) {
+        this.user = user;
+        this.userInfo = userInfo;
 
         // LOGO
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
@@ -73,7 +80,12 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String newPhoneInput = txtNewPhone.getText();
             String currentPhone = SettingsPanel.lblPhoneField.getText();
-
+            
+            if (!AccountFunctions.validatePhoneNumber(newPhoneInput)) {
+                JOptionPane.showMessageDialog(this, "Invalid Phone Number!");
+                return;
+            }
+            
             if (newPhoneInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
             } else if (currentPhone.equals(newPhoneInput)) {
@@ -82,6 +94,7 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
 
                 if (choice == 0) {
+                    SettingsFunctions.changePhone(user.getEmail(), newPhoneInput);
                     SettingsPanel.lblPhoneField.setText(newPhoneInput);
                     dispose();
                     JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);

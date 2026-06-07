@@ -23,10 +23,15 @@ public class SettingsPanel extends JPanel implements ActionListener {
     private JButton btnChangePhoneNumber, btnChangeName, btnChangeEmail, btnChangePassword, btnChangeAddress, btnChangeBirthday;
     private JPanel pnlPersonalInfo, pnlAccountInfo, pnlAppPreference;
     private JComboBox<String> cmbTheme, cmbGender;
-    private String[] theme = {"System", "Dark", "Light"},
-            gender = {"Male", "Female", "Croissant", "Prefer Not to Say"};
+    private String[] theme = {"System", "Dark", "Light"};
+//            gender = {"Male", "Female", "Croissant", "Prefer Not to Say"};
+    private Account user;
+    private AccountPersonalInformation userInfo;
 
-    public SettingsPanel() {
+    public SettingsPanel(Account user, AccountPersonalInformation userInfo) {
+        this.user = user;
+        this.userInfo = userInfo;
+
         setBounds(0, 0, 837, 560);
         setBackground(new Color(243, 243, 243));
         setBorder(new LineBorder(Color.LIGHT_GRAY));
@@ -224,33 +229,36 @@ public class SettingsPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btnChangeName) {
-            ChangeName name = new ChangeName();
+            ChangeName name = new ChangeName(user, userInfo);
             name.setVisible(true);
         } else if (e.getSource() == btnChangePassword) {
-            ChangePassword pass = new ChangePassword();
+            ChangePassword pass = new ChangePassword(user, userInfo);
             pass.setVisible(true);
         } else if (e.getSource() == btnChangePhoneNumber) {
-            ChangePhoneNumber phone = new ChangePhoneNumber();
+            ChangePhoneNumber phone = new ChangePhoneNumber(user, userInfo);
             phone.setVisible(true);
         } else if (e.getSource() == btnChangeEmail) {
-            ChangeEmail email = new ChangeEmail();
+            ChangeEmail email = new ChangeEmail(user, userInfo);
             email.setVisible(true);
         } else if (e.getSource() == btnChangeAddress) {
-            ChangeAddress address = new ChangeAddress();
+            ChangeAddress address = new ChangeAddress(user, userInfo);
             address.setVisible(true);
         } else if (e.getSource() == btnChangeBirthday) {
-            ChangeBirthday birth = new ChangeBirthday();
+            ChangeBirthday birth = new ChangeBirthday(user, userInfo);
             birth.setVisible(true);
         }
 
     }
 
     public void setUserSettings(Account user, AccountPersonalInformation userinfo) {
+        
+        String password = user.getPassword();
+        String hiddenPassword = "*".repeat(password.length());
 
         lblNameField.setText(AccountFunctions.getFullName(userinfo));
         lblEmailField.setText(user.getEmail());
         lblPhoneField.setText(userinfo.getPhoneNum());
-        lblPasswordField.setText("********");
+        lblPasswordField.setText(hiddenPassword);
         lblBirthdayField.setText(userinfo.getBirthdate());
         lblAddressField.setText(userinfo.getAddress());
     }

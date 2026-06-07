@@ -7,6 +7,7 @@ package DataService;
 import java.util.ArrayList;
 import Objects.Account;
 import Objects.AccountPersonalInformation;
+import java.util.HashSet;
 
 /**
  *
@@ -19,13 +20,13 @@ public class AccountService {
 
     public AccountService() {
         Account acc1 = new Account();
-        acc1.setEmail("test@gmail.com");
-        acc1.setPassword("test123");
-        acc1.setRole("User");
+        acc1.setEmail("@");
+        acc1.setPassword("dsa");
+        acc1.setRole("admin");
         acc1.setBalance(0.00);
 
         AccountPersonalInformation newUserInfo = new AccountPersonalInformation();
-        newUserInfo.setEmail("test@gmail.com");
+        newUserInfo.setEmail("@");
         newUserInfo.setFirstName("hot");
         newUserInfo.setLastName("dog");
         newUserInfo.setAddress("San Antonio, San Pedro, Laguna");
@@ -37,15 +38,29 @@ public class AccountService {
     }
 
     //Account Functions
+    public static boolean validateFirstName(String fName) {
+//        if (fName == null || fName.isEmpty()) {
+//            return false;
+//        }
+        return fName.matches("[a-zA-Z ]+");
+    }
+    
+    public static boolean validateLastName(String lName) {
+//        if (lName == null || lName.isEmpty()) {
+//            return false;
+//        }
+        return lName.matches("[a-zA-Z ]+");
+    }
+
     public static boolean validateEmail(String email) {
-        if (email == null || email.isEmpty()) {
-            return false;
-        }
+//        if (email == null || email.isEmpty()) {
+//            return false;
+//        }
         return email.endsWith("@gmail.com") || email.contains("@");
     }
 
     public static boolean validatePhoneNumber(String phone) {
-        return phone.matches("\\d+") && phone.length() <= 11;
+        return phone.matches("\\d+") && phone.length() == 11 && phone.startsWith("09");
     }
 
     public static void registerUser(Account newUser, AccountPersonalInformation newUserInfo) {
@@ -97,5 +112,46 @@ public class AccountService {
         return user.getBalance();
     }
 
+    // Settings Functions
+    public static void updateEmail(String email, String newEmail) {
+        Account user = getUser(email);
+        user.setEmail(newEmail);
+
+        AccountPersonalInformation userinfo = getUserInfo(email);
+        userinfo.setEmail(newEmail);
+    }
+
+    public static void updatePassword(String email, String newPassword) {
+        Account user = getUser(email);
+        user.setPassword(newPassword);
+
+//        AccountPersonalInformation userinfo = getUserInfo(email);
+//        userinfo.setPassword(newPassword);
+    }
+
+    public static void updateFirstName(String email, String newFirstName) {
+        AccountPersonalInformation userinfo = getUserInfo(email);
+        userinfo.setFirstName(newFirstName);
+    }
+
+    public static void updateLastName(String email, String newLastName) {
+        AccountPersonalInformation userinfo = getUserInfo(email);
+        userinfo.setLastName(newLastName);
+    }
+
+    public static void updatePhone(String email, String newPhone) {
+        AccountPersonalInformation userinfo = getUserInfo(email);
+        userinfo.setPhoneNum(newPhone);
+    }
+
+    public static void updateAddress(String email, String newAdress) {
+        AccountPersonalInformation userinfo = getUserInfo(email);
+        userinfo.setAddress(newAdress);
+    }
+
+    public static void updateBirthday(String email, String newBirthday) {
+        AccountPersonalInformation userinfo = getUserInfo(email);
+        userinfo.setBirthdate(newBirthday);
+    }
 
 }

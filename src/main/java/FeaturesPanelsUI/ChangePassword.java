@@ -4,7 +4,11 @@
  */
 package FeaturesPanelsUI;
 
+import AppService.SettingsFunctions;
 import DashboardUIDefault.MainDashboard;
+import LoginUI.LoginPage;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -18,8 +22,14 @@ public class ChangePassword extends JFrame implements ActionListener {
     private JLabel lblLogin, lblTitle, lblCurrentPass, lblNewPass, lblConfirmPass, lblLogo, lblLine, lblOr;
     private JPasswordField txtCurrent, txtFirst, txtNewPass, txtConfirmPass;
     private JButton btnConfirm, btnCancel;
+    String updatedPassword;
+    private Account user;
+    private AccountPersonalInformation userInfo;
 
-    public ChangePassword() {
+    public ChangePassword(Account user, AccountPersonalInformation userInfo) {
+        this.user = user;
+        this.userInfo = userInfo;
+
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         ImageIcon ResizedBankIcon = new ImageIcon(BankIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
@@ -99,22 +109,29 @@ public class ChangePassword extends JFrame implements ActionListener {
 
         if (e.getSource() == btnConfirm) {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
-            String Current = txtCurrent.getText();
+            String currentPass = txtCurrent.getText();
             String newPassInput = txtNewPass.getText();
             String confirmPassInput = txtConfirmPass.getText();
 
-            if (Current.isEmpty() || newPassInput.isEmpty() || confirmPassInput.isEmpty()) {
+            if (currentPass.isEmpty() || newPassInput.isEmpty() || confirmPassInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
+            } else if (confirmPassInput.length() < 8) {
+                JOptionPane.showMessageDialog(this, "Password must be 8 characters long!", "Error", JOptionPane.ERROR_MESSAGE);
+            } else if (!currentPass.equals(user.getPassword())) {
+                JOptionPane.showMessageDialog(this, "Current password is incorrect!", "Error", JOptionPane.ERROR_MESSAGE);
+            } else if (currentPass.equals(newPassInput)) {
+                JOptionPane.showMessageDialog(this, "New password can't be the same as the old!", "Error", JOptionPane.ERROR_MESSAGE);
             } else if (!newPassInput.equals(confirmPassInput)) {
-                JOptionPane.showMessageDialog(this, "Password do not match", "", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Password do not match", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
 
                 if (choice == 0) {
+                    updatedPassword = SettingsFunctions.changePassword(user.getEmail(), confirmPassInput);
                     String hiddenPass = "*".repeat(confirmPassInput.length());
                     SettingsPanel.lblPasswordField.setText(hiddenPass);
                     dispose();
-                    JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Password Change", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Password Changed. You will be logged out!", "Password Change", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } else if (e.getSource() == btnCancel) {

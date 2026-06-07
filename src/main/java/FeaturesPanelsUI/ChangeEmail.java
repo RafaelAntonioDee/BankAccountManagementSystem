@@ -29,7 +29,7 @@ public class ChangeEmail extends JFrame implements ActionListener {
     public ChangeEmail(Account user, AccountPersonalInformation userInfo) {
         this.user = user;
         this.userInfo = userInfo;
-        
+
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         ImageIcon ResizedBankIcon = new ImageIcon(BankIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
@@ -83,15 +83,23 @@ public class ChangeEmail extends JFrame implements ActionListener {
             String currentEmail = SettingsPanel.lblEmailField.getText();
             String newEmailInput = txtEmail.getText();
             
-            if (!AccountFunctions.validateEmail(newEmailInput)) {
-                JOptionPane.showMessageDialog(this, "Invalid Email Address!");
+            if (currentEmail.equals(newEmailInput)) {
+                JOptionPane.showMessageDialog(this, "New email cannot be the same as the old email!", "", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
+            if (AccountFunctions.validateExistingEmail(newEmailInput)) {
+                JOptionPane.showMessageDialog(this, "Email Already Exists!", "Duplicate Email", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!AccountFunctions.validateEmail(newEmailInput)) {
+                JOptionPane.showMessageDialog(this, "Invalid Email Address!", "Try Again", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             if (newEmailInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
-            } else if (currentEmail.equals(newEmailInput)) {
-                JOptionPane.showMessageDialog(this, "New email cannot be the same as the old email!", "", JOptionPane.ERROR_MESSAGE);
             } else {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
 

@@ -191,9 +191,9 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblQuickTransfer.setBounds(25, 10, 250, 35);
         pnlQuickTransfer.add(lblQuickTransfer);
 
-        lblTo = new JLabel("To: ");
+        lblTo = new JLabel("To (email): ");
         lblTo.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblTo.setBounds(25, 85, 50, 35);
+        lblTo.setBounds(25, 85, 100, 35);
         pnlQuickTransfer.add(lblTo);
 
         txtEmail = new JTextField();

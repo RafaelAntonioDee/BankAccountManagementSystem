@@ -19,6 +19,8 @@ public class AccountService {
     private static ArrayList<AccountPersonalInformation> AccountsPersonalInfo = new ArrayList<>();
 
     public AccountService() {
+        
+        // DUMMY ACCOUNT #1
         Account acc1 = new Account();
         acc1.setEmail("@");
         acc1.setPassword("dsa");
@@ -32,19 +34,37 @@ public class AccountService {
         newUserInfo.setAddress("San Antonio, San Pedro, Laguna");
         newUserInfo.setPhoneNum("123123123");
         newUserInfo.setBirthdate("May 20, 2026");
-
+        
         AccountsPersonalInfo.add(newUserInfo);
         Accounts.add(acc1);
+        
+        // DUMMY ACCOUNT #2
+        Account acc2 = new Account();
+        acc2.setEmail("@@");
+        acc2.setPassword("dsa");
+        acc2.setRole("admin");
+        acc2.setBalance(1000.00);
+
+        AccountPersonalInformation newUserInfo2 = new AccountPersonalInformation();
+        newUserInfo2.setEmail("@@");
+        newUserInfo2.setFirstName("dog");
+        newUserInfo2.setLastName("hot");
+        newUserInfo2.setAddress("Malaban, San Pedro, Laguna");
+        newUserInfo2.setPhoneNum("123123123");
+        newUserInfo2.setBirthdate("May 20, 2026");
+        
+        AccountsPersonalInfo.add(newUserInfo2);
+        Accounts.add(acc2);
     }
 
-    //Account Functions
+    // Account Functions
     public static boolean validateFirstName(String fName) {
 //        if (fName == null || fName.isEmpty()) {
 //            return false;
 //        }
         return fName.matches("[a-zA-Z ]+");
     }
-    
+
     public static boolean validateLastName(String lName) {
 //        if (lName == null || lName.isEmpty()) {
 //            return false;
@@ -58,6 +78,15 @@ public class AccountService {
 //        }
         return email.endsWith("@gmail.com") || email.contains("@");
     }
+
+//    public static boolean emailExist(String email, ArrayList<Account> accounts) {
+//        for (Account acc : accounts) {
+//            if (acc.getEmail().equalsIgnoreCase(email)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public static boolean validatePhoneNumber(String phone) {
         return phone.matches("\\d+") && phone.length() == 11 && phone.startsWith("09");
@@ -97,6 +126,10 @@ public class AccountService {
             }
         }
         return null;
+    }
+    
+    public static ArrayList<Account> getAccounts() {
+        return Accounts;
     }
 
     //Balance Functions

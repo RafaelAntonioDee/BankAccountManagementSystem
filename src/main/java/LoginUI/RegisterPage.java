@@ -6,9 +6,11 @@ package LoginUI;
 
 import AppService.AccountFunctions;
 import LoginUI.LoginPage;
+import Objects.Account;
 import Objects.UserAccount;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -280,6 +282,7 @@ public class RegisterPage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btnSignup) {
+            
 
             String fName = txtFName.getText();
             String lName = txtLName.getText();
@@ -290,32 +293,37 @@ public class RegisterPage extends JFrame implements ActionListener {
             String bday = cmbBirthMonth.getSelectedItem() + " " + cmbBirthDay.getSelectedItem() + ", " + cmbBirthYear.getSelectedItem();
 
             if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || addr.isEmpty() || phone.isEmpty() || pass.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Fields can't be empty!");
+                JOptionPane.showMessageDialog(this, "Fields can't be empty!", "Invalid", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (AccountFunctions.validateExistingEmail(email)) {
+                JOptionPane.showMessageDialog(this, "Email Already Exists!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (!AccountFunctions.validateEmail(email)) {
-                JOptionPane.showMessageDialog(this, "Invalid Email Address!");
+                JOptionPane.showMessageDialog(this, "Invalid Email Address!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+            
             if (!AccountFunctions.validateFirstName(fName)) {
-                JOptionPane.showMessageDialog(this, "Invalid First Name!");
+                JOptionPane.showMessageDialog(this, "Invalid First Name!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (!AccountFunctions.validateLastName(lName)) {
-                JOptionPane.showMessageDialog(this, "Invalid Last Name!");
+                JOptionPane.showMessageDialog(this, "Invalid Last Name!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (!AccountFunctions.validatePhoneNumber(phone)) {
-                JOptionPane.showMessageDialog(this, "Invalid Phone Number!");
+                JOptionPane.showMessageDialog(this, "Invalid Phone Number!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             AccountFunctions.registerUser(fName, lName, email, addr, phone, pass, bday);
-            JOptionPane.showMessageDialog(this, "Account Created Successfully!");
+            JOptionPane.showMessageDialog(this, "Account Created Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
             LoginPage lp = new LoginPage();
             lp.setVisible(true);

@@ -14,7 +14,7 @@ public class Account {
     private String Password;
     private String Role;
     private double Balance;
-    private String SystemTheme = "Light2";
+    private String SystemTheme = "Light";
 
     public String getSystemTheme() {
         return SystemTheme;

@@ -6,6 +6,7 @@ package DashboardUIDefault;
 
 import AppService.AccountFunctions;
 import static DashboardUIDefault.BottomPanel.theme;
+import static DashboardUIDefault.MainDashboard.theme;
 import Objects.Account;
 import Objects.AccountPersonalInformation;
 import java.awt.*;
@@ -24,14 +25,18 @@ public class SidePanel extends JPanel implements MouseListener {
     public JButton btnDashboard, btnDeposit, btnWithdraw, btnTransfer, btnTransactions, btnAutoPayments, btnSettings, btnLogout;
     public String SelectedButton = "btnDashboard";
     public static Colors theme = Colors.LIGHT();
+    public static Icons icons = Icons.LIGHT();
 
     SidePanel(Account user) {
 
         if (user.getSystemTheme().equals("Light")) {
             theme = Colors.LIGHT();
+            icons = Icons.LIGHT();
         } else {
             theme = Colors.DARK();
+            icons = Icons.DARK();
         }
+
 
         setBounds(0, 0, 175, 620);
         setBackground(theme.SidePanel);
@@ -53,7 +58,7 @@ public class SidePanel extends JPanel implements MouseListener {
         lblBank.setIconTextGap(10);
         pnlSideBar_Header.add(lblBank);
 
-        btnDashboard = new JButton("Dashboard", Icons.DashboardIcon);
+        btnDashboard = new JButton("Dashboard", icons.DashboardIcon);
         btnDashboard.setHorizontalAlignment(JButton.LEFT);
         btnDashboard.setIconTextGap(10);
         btnDashboard.setBounds(10, 70, 155, 30);
@@ -65,7 +70,7 @@ public class SidePanel extends JPanel implements MouseListener {
         btnDashboard.addMouseListener(this);
         add(btnDashboard);
 
-        btnDeposit = new JButton("Deposit", Icons.DepositIcon);
+        btnDeposit = new JButton("Deposit", icons.DepositIcon);
         btnDeposit.setHorizontalAlignment(JButton.LEFT);
         btnDeposit.setIconTextGap(10);
         btnDeposit.setBounds(10, 110, 155, 30);
@@ -78,7 +83,7 @@ public class SidePanel extends JPanel implements MouseListener {
         btnDeposit.addMouseListener(this);
         add(btnDeposit);
 
-        btnWithdraw = new JButton("Withdraw", Icons.WithdrawIcon);
+        btnWithdraw = new JButton("Withdraw", icons.WithdrawIcon);
         btnWithdraw.setHorizontalAlignment(JButton.LEFT);
         btnWithdraw.setIconTextGap(10);
         btnWithdraw.setBounds(10, 150, 155, 30);
@@ -91,7 +96,7 @@ public class SidePanel extends JPanel implements MouseListener {
         btnWithdraw.addMouseListener(this);
         add(btnWithdraw);
 
-        btnTransfer = new JButton("Transfer", Icons.TransferIcon);
+        btnTransfer = new JButton("Transfer", icons.TransferIcon);
         btnTransfer.setHorizontalAlignment(JButton.LEFT);
         btnTransfer.setIconTextGap(10);
         btnTransfer.setBounds(10, 190, 155, 30);
@@ -104,7 +109,7 @@ public class SidePanel extends JPanel implements MouseListener {
         btnTransfer.addMouseListener(this);
         add(btnTransfer);
 
-        btnTransactions = new JButton("Transactions", Icons.TransactionsIcon);
+        btnTransactions = new JButton("Transactions", icons.TransactionsIcon);
         btnTransactions.setHorizontalAlignment(JButton.LEFT);
         btnTransactions.setIconTextGap(10);
         btnTransactions.setBounds(10, 230, 155, 30);
@@ -117,7 +122,7 @@ public class SidePanel extends JPanel implements MouseListener {
         btnTransactions.addMouseListener(this);
         add(btnTransactions);
 
-        btnAutoPayments = new JButton("Auto Payments", Icons.AutoPaymentIcon);
+        btnAutoPayments = new JButton("Auto Payments", icons.AutoPaymentIcon);
         btnAutoPayments.setHorizontalAlignment(JButton.LEFT);
         btnAutoPayments.setIconTextGap(10);
         btnAutoPayments.setBounds(10, 270, 155, 30);
@@ -130,7 +135,7 @@ public class SidePanel extends JPanel implements MouseListener {
         btnAutoPayments.setLayout(null);
         add(btnAutoPayments);
 
-        btnSettings = new JButton("Settings", Icons.SettingsIcon);
+        btnSettings = new JButton("Settings", icons.SettingsIcon);
         btnSettings.setHorizontalAlignment(JButton.LEFT);
         btnSettings.setIconTextGap(10);
         btnSettings.setBounds(10, 310, 155, 30);
@@ -167,7 +172,7 @@ public class SidePanel extends JPanel implements MouseListener {
         lblLine.setHorizontalAlignment(JLabel.CENTER);
         pnlAccount.add(lblLine);
 
-        btnLogout = new JButton("Log Out", Icons.LogoutIcon);
+        btnLogout = new JButton("Log Out", icons.LogoutIcon);
         btnLogout.setHorizontalAlignment(JButton.LEFT);
         btnLogout.setHorizontalTextPosition(JButton.RIGHT);
         btnLogout.setIconTextGap(10);

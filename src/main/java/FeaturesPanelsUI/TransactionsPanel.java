@@ -3,6 +3,8 @@ package FeaturesPanelsUI;
 import Objects.AccountTransactHistory;
 import AppService.BalanceFunctions;
 import DashboardUIDefault.Colors;
+import DashboardUIDefault.Icons;
+import static DashboardUIDefault.MainDashboard.theme;
 import Objects.Account;
 import java.awt.*;
 import java.awt.event.*;
@@ -27,13 +29,17 @@ public class TransactionsPanel extends JPanel implements ActionListener {
     private JPanel pnlProcess;
     private Account currentUser;
     public static Colors theme = Colors.LIGHT();
+    public static Icons icons = Icons.LIGHT();
 
     public TransactionsPanel(Account user) {
         if (user.getSystemTheme().equals("Light")) {
             theme = Colors.LIGHT();
+            icons = Icons.LIGHT();
         } else {
             theme = Colors.DARK();
+            icons = Icons.DARK();
         }
+
         this.currentUser = user;
         setBounds(0, 0, 837, 560);
         setBackground(theme.BACKGROUND);
@@ -46,14 +52,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         lblSearch.setBounds(25, 25, 250, 35);
         add(lblSearch);
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/images/search.png"));
-
-        Image img = icon.getImage();
-        Image resizedImg = img.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
-
-        ImageIcon searchIcon = new ImageIcon(resizedImg);
-
-        btnSearch = new JButton(searchIcon);
+        btnSearch = new JButton(icons.SearchIcon);
         btnSearch.setBounds(25, 60, 40, 35);
         btnSearch.setFocusPainted(false);
         btnSearch.setBackground(theme.BORDER_GRAY);
@@ -82,7 +81,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         cmbDateRange.setForeground(theme.TEXT_BLACK);
         cmbDateRange.setBackground(theme.PANELS_BACKGROUND);
         add(cmbDateRange);
-        
+
         cmbDateRange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,7 +105,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         cmbTransactionType.setForeground(theme.TEXT_BLACK);
         cmbTransactionType.setBackground(theme.PANELS_BACKGROUND);
         add(cmbTransactionType);
-        
+
         cmbTransactionType.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

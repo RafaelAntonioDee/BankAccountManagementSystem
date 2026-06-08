@@ -39,14 +39,16 @@ public class MainDashboard extends JFrame implements ActionListener {
     private Account currentUser;
     private AccountPersonalInformation currentUserInfo;
     public static Colors theme = Colors.LIGHT();
-
+    public static Icons icons = Icons.LIGHT();
 
     public MainDashboard(Account user, AccountPersonalInformation userinfo) {
-        
+
         if (user.getSystemTheme().equals("Light")) {
             theme = Colors.LIGHT();
+            icons = Icons.LIGHT();
         } else {
             theme = Colors.DARK();
+            icons = Icons.DARK();
         }
 
         this.currentUser = user;
@@ -136,7 +138,7 @@ public class MainDashboard extends JFrame implements ActionListener {
         } else if (e.getSource() == sideBar.btnSettings) {
             switchPanel(sideBar.btnSettings, "Settings", "Settings", new SettingsPanel(currentUser, currentUserInfo));
         }
-        
+
         mainPanel.revalidate();
         mainPanel.repaint();
     }

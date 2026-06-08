@@ -1,5 +1,6 @@
 FeaturesPanelsUI\ChangeBirthday.class
 FeaturesPanelsUI\ChangeName.class
+FeaturesPanelsUI\TransferPanel$2.class
 DashboardUIDefault\MainDashboard.class
 FeaturesPanelsUI\ChangePassword.class
 AppService\AutoPaymentFunctions.class
@@ -8,6 +9,8 @@ AppService\TransactHistoryFunctions.class
 DashboardUIDefault\Icons.class
 Objects\UserAccount.class
 FeaturesPanelsUI\ChangeEmail.class
+FeaturesPanelsUI\DepositPanel$1.class
+FeaturesPanelsUI\TransferPanel$1.class
 FeaturesPanelsUI\TransferPanel.class
 AppService\SettingsFunctions.class
 FeaturesPanelsUI\AutoPaymentPanel.class

@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import Objects.Account;
 import AppService.BalanceFunctions;
+import DashboardUIDefault.Colors;
+import static FeaturesPanelsUI.DepositPanel.theme;
 
 public class WithdrawPanel extends JPanel implements ActionListener {
 
@@ -19,10 +21,16 @@ public class WithdrawPanel extends JPanel implements ActionListener {
     private JComboBox cmbModeOfTransac;
     private JPanel pnlProcess, pnlGuidelines;
     private Account user;
+    public static Colors theme = Colors.LIGHT();
 
     double balance = 0;
 
     public WithdrawPanel(Account user) {
+        if (user.getSystemTheme().equals("Light")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
         this.user = user;
         balance = user.getBalance();
         

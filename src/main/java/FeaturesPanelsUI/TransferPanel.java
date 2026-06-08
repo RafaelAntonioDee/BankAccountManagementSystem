@@ -3,6 +3,8 @@ package FeaturesPanelsUI;
 import Objects.Account;
 import AppService.BalanceFunctions;
 import AppService.AccountFunctions;
+import DashboardUIDefault.Colors;
+import static FeaturesPanelsUI.DepositPanel.theme;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -19,13 +21,19 @@ public class TransferPanel extends JPanel implements ActionListener {
     private JTextField txtAmount, txtEmail;
     private JPanel pnlProcess, pnlGuidelines;
     private Account currentUser;
-    
+    public static Colors theme = Colors.LIGHT();
+
     private double balance = 0;
 
     public TransferPanel(Account user) {
+        if (user.getSystemTheme().equals("Light")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
         this.currentUser = user;
         this.balance = user.getBalance();
-        
+
         setBounds(0, 0, 837, 560);
         setBackground(new Color(243, 243, 243));
         setBorder(new LineBorder(Color.LIGHT_GRAY));
@@ -61,7 +69,7 @@ public class TransferPanel extends JPanel implements ActionListener {
         txtEmail.setBounds(30, 45, 360, 35);
         txtEmail.setFont(new Font("Arial", Font.PLAIN, 15));
         txtEmail.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.GRAY), 
+                BorderFactory.createLineBorder(Color.GRAY),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlProcess.add(txtEmail);
 
@@ -95,7 +103,7 @@ public class TransferPanel extends JPanel implements ActionListener {
         txtAmount.setBounds(30, 150, 360, 35);
         txtAmount.setFont(new Font("Arial", Font.PLAIN, 15));
         txtAmount.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.GRAY), 
+                BorderFactory.createLineBorder(Color.GRAY),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlProcess.add(txtAmount);
 
@@ -175,7 +183,7 @@ public class TransferPanel extends JPanel implements ActionListener {
             lblName.setText("<html><font color='red'>Cannot transfer to yourself</font></html>");
             return;
         }
-        
+
         Account receiver = AccountFunctions.getUser(email);
         if (receiver != null) {
             lblName.setText("Account Holder: " + receiver.getEmail().split("@")[0].toUpperCase());
@@ -186,13 +194,13 @@ public class TransferPanel extends JPanel implements ActionListener {
 
     private String getNextTransactionID() {
         java.util.ArrayList<Objects.AccountTransactHistory> history = BalanceFunctions.getTransactions(currentUser.getEmail());
-        int nextNum = 1; 
-        
+        int nextNum = 1;
+
         if (history != null && !history.isEmpty()) {
             try {
-                String lastID = history.get(history.size() - 1).getTransactionID(); 
+                String lastID = history.get(history.size() - 1).getTransactionID();
                 int lastNum = Integer.parseInt(lastID.replaceAll("[^0-9]", ""));
-                nextNum = lastNum + 1; 
+                nextNum = lastNum + 1;
             } catch (Exception e) {
                 nextNum = history.size() + 1;
             }
@@ -202,10 +210,15 @@ public class TransferPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnAmt500) txtAmount.setText("500");
-        else if (e.getSource() == btnAmt1000) txtAmount.setText("1000");
-        else if (e.getSource() == btnAmt2500) txtAmount.setText("2500");
-        else if (e.getSource() == btnAmt5000) txtAmount.setText("5000");
+        if (e.getSource() == btnAmt500) {
+            txtAmount.setText("500");
+        } else if (e.getSource() == btnAmt1000) {
+            txtAmount.setText("1000");
+        } else if (e.getSource() == btnAmt2500) {
+            txtAmount.setText("2500");
+        } else if (e.getSource() == btnAmt5000) {
+            txtAmount.setText("5000");
+        }
 
         if (e.getSource() == btnTransfer) {
             try {
@@ -244,10 +257,8 @@ public class TransferPanel extends JPanel implements ActionListener {
 
                 String sequentialTxnId = getNextTransactionID();
 
-                
                 BalanceFunctions.transfer(currentUser, receiver, amount);
-                
-               
+
                 balance = currentUser.getBalance();
                 lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
 
@@ -278,7 +289,7 @@ public class TransferPanel extends JPanel implements ActionListener {
         dialog.setLayout(new BorderLayout());
 
         JPanel pnlReceiptImage = new JPanel();
-        pnlReceiptImage.setBackground(new Color(82, 124, 174)); 
+        pnlReceiptImage.setBackground(new Color(82, 124, 174));
         pnlReceiptImage.setLayout(null);
 
         JPanel pnlWhiteCard = new JPanel();
@@ -365,7 +376,7 @@ public class TransferPanel extends JPanel implements ActionListener {
 
         JButton btnSave = new JButton("Save Receipt as Image");
         JButton btnClose = new JButton("Acknowledge");
-        
+
         pnlButtons.add(btnSave);
         pnlButtons.add(btnClose);
         dialog.add(pnlButtons, BorderLayout.SOUTH);

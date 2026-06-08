@@ -23,18 +23,19 @@ public class ChangeAddress extends JFrame implements ActionListener {
     private JTextField txtAddress;
     private JButton btnConfirm, btnCancel;
     private String updatedAddress;
-    private Account user;
-    private AccountPersonalInformation userInfo;
+    private Account currentuser;
+    private AccountPersonalInformation currentuserInfo;
     public static Colors theme = Colors.LIGHT();
 
     public ChangeAddress(Account user, AccountPersonalInformation userInfo) {
-        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
+        
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
         }
-        this.user = user;
-        this.userInfo = userInfo;
 
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
@@ -97,7 +98,7 @@ public class ChangeAddress extends JFrame implements ActionListener {
             } else {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
                 if (choice == 0) {
-                    updatedAddress = SettingsFunctions.changeAddress(user.getEmail(), newAddress);
+                    updatedAddress = SettingsFunctions.changeAddress(currentuser.getEmail(), newAddress);
                     SettingsPanel.lblAddressField.setText(newAddress);
                     dispose();
                     JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);

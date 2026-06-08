@@ -24,19 +24,19 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
     private JLabel lblLogin, lblTitle, lblNewPhone, lblLogo, lblLine, lblOr;
     private JTextField txtNewPhone;
     private JButton btnConfirm, btnCancel;
-    private Account user;
-    private AccountPersonalInformation userInfo;
+    private Account currentuser;
+    private AccountPersonalInformation currentuserInfo;
     public static Colors theme = Colors.LIGHT();
 
     public ChangePhoneNumber(Account user, AccountPersonalInformation userInfo) {
-        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
+
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
         }
-
-        this.user = user;
-        this.userInfo = userInfo;
 
         // LOGO
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
@@ -107,7 +107,7 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
 
                 if (choice == 0) {
-                    SettingsFunctions.changePhone(user.getEmail(), newPhoneInput);
+                    SettingsFunctions.changePhone(currentuser.getEmail(), newPhoneInput);
                     SettingsPanel.lblPhoneField.setText(newPhoneInput);
                     dispose();
                     JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import DataService.AutoPaymentService;
 import static FeaturesPanelsUI.DashboardPanel.theme;
 import Objects.Account;
+import Objects.AccountPersonalInformation;
 import Objects.AutoPayment;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -29,15 +30,19 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
     private JScrollPane pnlAutoPayList;
     private JTextField txtRecipient, txtAmount;
     private String currentEmail;
+    private Account currentuser;
+    private AccountPersonalInformation currentuserInfo;
     private int ScheduledCount = 0, y = 15;
     private JComboBox<String> cmbFrequency, cmbDay, cmbMonth, cmbYear;
     private String[] frequency = {"Monthly", "Quarterly", "Semi-Annually", "Annually"};
     public static Colors theme = Colors.LIGHT();
 
     public AutoPaymentPanel(String email, Account user) {
-
-        this.currentEmail = email;
-        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
+        
+        this.currentEmail = currentuser.getEmail();
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();

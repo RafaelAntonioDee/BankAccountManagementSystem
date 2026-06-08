@@ -17,7 +17,6 @@ public class AutoPaymentFunctions {
         payment.setPayee(payee);
         payment.setAmount(amount);
         payment.setFrequency(frequency);
-        payment.setActive(true);
         payment.setPaymentDate(date);
 
         String newId = generateNextAutoPayID();
@@ -34,29 +33,31 @@ public class AutoPaymentFunctions {
 
             String id = p.getAutoPayID();
 
-            if (id != null && id.startsWith("T")) {
+            if (id != null && id.startsWith("AP")) {
                 try {
-                    int num = Integer.parseInt(id.substring(1));
+                    int num = Integer.parseInt(id.substring(2));
+
                     if (num > max) {
                         max = num;
                     }
+
                 } catch (NumberFormatException ignored) {
                 }
             }
         }
 
         int next = max + 1;
-        return String.format("T%04d", next);
+        return String.format("AP%04d", next);
     }
 
     public static ArrayList<AutoPayment> getAllUserPayments(String email) {
         return AutoPaymentService.getAllUserAutoPay(email);
     }
-    
-    public static void removeAutoPay(String id){
+
+    public static void removeAutoPay(String id) {
         AutoPaymentService.removeAutoPayment(id);
     }
-    
+
     public static AutoPayment getFirstAutoPay(String email) {
         ArrayList<AutoPayment> list = getAllUserPayments(email);
 

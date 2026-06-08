@@ -27,15 +27,15 @@ public class SettingsPanel extends JPanel implements ActionListener {
     private JComboBox<String> cmbTheme;
     private String[] SystemTheme = {"System", "Dark", "Light"};
 //            gender = {"Male", "Female", "Croissant", "Prefer Not to Say"};
-    private Account user;
-    private AccountPersonalInformation userInfo;
+    private Account currentuser;
+    private AccountPersonalInformation currentuserInfo;
     public static Colors theme = Colors.LIGHT();
 
     public SettingsPanel(Account user, AccountPersonalInformation userInfo) {
-        this.user = user;
-        this.userInfo = userInfo;
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
 
-        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
@@ -65,7 +65,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblName.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblName);
 
-        lblNameField = new JLabel(userInfo.getFirstName() + " " + userInfo.getLastName());
+        lblNameField = new JLabel(currentuserInfo.getFirstName() + " " + currentuserInfo.getLastName());
         lblNameField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblNameField.setBounds(84, 15, 325, 35);
         lblNameField.setForeground(theme.TEXT_BLACK);
@@ -86,7 +86,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblEmail.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblEmail);
 
-        lblEmailField = new JLabel(userInfo.getEmail());
+        lblEmailField = new JLabel(currentuserInfo.getEmail());
         lblEmailField.setBounds(81, 50, 325, 35);
         lblEmailField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblEmailField.setForeground(theme.TEXT_BLACK);
@@ -107,7 +107,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblPhoneNumber.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblPhoneNumber);
 
-        lblPhoneField = new JLabel(userInfo.getPhoneNum());
+        lblPhoneField = new JLabel(currentuserInfo.getPhoneNum());
         lblPhoneField.setBounds(157, 85, 325, 35);
         lblPhoneField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblPhoneField.setForeground(theme.TEXT_BLACK);
@@ -127,8 +127,8 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblPassword.setFont(new Font("Calibri", Font.BOLD, 18));
         lblPassword.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblPassword);
-        
-        String password = user.getPassword();
+
+        String password = currentuser.getPassword();
         String hiddenPass = "*".repeat(password.length());
 
         lblPasswordField = new JLabel(hiddenPass);
@@ -166,7 +166,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblBirthday.setForeground(theme.TEXT_BLACK);
         pnlPersonalInfo.add(lblBirthday);
 
-        lblBirthdayField = new JLabel(userInfo.getBirthdate());
+        lblBirthdayField = new JLabel(currentuserInfo.getBirthdate());
         lblBirthdayField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblBirthdayField.setBounds(103, 15, 325, 35);
         lblBirthdayField.setForeground(theme.TEXT_BLACK);
@@ -187,7 +187,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblAddress.setForeground(theme.TEXT_BLACK);
         pnlPersonalInfo.add(lblAddress);
 
-        lblAddressField = new JLabel(userInfo.getAddress());
+        lblAddressField = new JLabel(currentuserInfo.getAddress());
         lblAddressField.setBounds(102, 50, 325, 35);
         lblAddressField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblAddressField.setForeground(theme.TEXT_BLACK);
@@ -232,8 +232,8 @@ public class SettingsPanel extends JPanel implements ActionListener {
         cmbTheme.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AppService.AccountFunctions.ChangeTheme(user.getEmail(), cmbTheme.getSelectedItem().toString());
-                MainDashboard md = new MainDashboard(user, userInfo);
+                AppService.AccountFunctions.ChangeTheme(currentuser.getEmail(), cmbTheme.getSelectedItem().toString());
+                MainDashboard md = new MainDashboard(currentuser, currentuserInfo);
                 md.setVisible(true);
                 JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(SettingsPanel.this);
                 frame.dispose();
@@ -245,23 +245,28 @@ public class SettingsPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        Account user = AppService.AccountFunctions.getUser(lblEmailField.getText());
+        AccountPersonalInformation userinfo = AppService.AccountFunctions.getUserInfo(lblEmailField.getText());
+
+        setUserSettings(user, userinfo);
+
         if (e.getSource() == btnChangeName) {
-            ChangeName name = new ChangeName(user, userInfo);
+            ChangeName name = new ChangeName(user, userinfo);
             name.setVisible(true);
         } else if (e.getSource() == btnChangePassword) {
-            ChangePassword pass = new ChangePassword(user, userInfo);
+            ChangePassword pass = new ChangePassword(user, userinfo);
             pass.setVisible(true);
         } else if (e.getSource() == btnChangePhoneNumber) {
-            ChangePhoneNumber phone = new ChangePhoneNumber(user, userInfo);
+            ChangePhoneNumber phone = new ChangePhoneNumber(user, userinfo);
             phone.setVisible(true);
         } else if (e.getSource() == btnChangeEmail) {
-            ChangeEmail email = new ChangeEmail(user, userInfo);
+            ChangeEmail email = new ChangeEmail(user, userinfo);
             email.setVisible(true);
         } else if (e.getSource() == btnChangeAddress) {
-            ChangeAddress address = new ChangeAddress(user, userInfo);
+            ChangeAddress address = new ChangeAddress(user, userinfo);
             address.setVisible(true);
         } else if (e.getSource() == btnChangeBirthday) {
-            ChangeBirthday birth = new ChangeBirthday(user, userInfo);
+            ChangeBirthday birth = new ChangeBirthday(user, userinfo);
             birth.setVisible(true);
         }
 

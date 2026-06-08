@@ -11,6 +11,7 @@ import Objects.Account;
 import AppService.BalanceFunctions;
 import DashboardUIDefault.Colors;
 import static FeaturesPanelsUI.DepositPanel.theme;
+import static FeaturesPanelsUI.TransferPanel.theme;
 
 public class WithdrawPanel extends JPanel implements ActionListener {
 
@@ -21,20 +22,21 @@ public class WithdrawPanel extends JPanel implements ActionListener {
     private JTextField txtAmount;
     private JComboBox cmbModeOfTransac;
     private JPanel pnlProcess, pnlGuidelines;
-    private Account user;
+    private Account currentuser;
     private String[] modeOfTransac = {"Select Mode", "Linked Bank Account", "Generate a QR Code", "Over-the-Counter Cashier"};
     public static Colors theme = Colors.LIGHT();
 
     double balance = 0;
 
     public WithdrawPanel(Account user) {
-        if (user.getSystemTheme().equals("Light")) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+        balance = currentuser.getBalance();
+        
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
         }
-        this.user = user;
-        balance = user.getBalance();
 
         setBounds(0, 0, 837, 560);
         setBackground(theme.BACKGROUND);
@@ -132,7 +134,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         pnlGuidelines = new JPanel();
         pnlGuidelines.setBounds(480, 130, 315, 395);
         pnlGuidelines.setBackground(theme.PANELS_BACKGROUND);
-        pnlGuidelines.setBorder(new LineBorder(new Color(220, 220, 220)));
+        pnlGuidelines.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlGuidelines.setLayout(null);
         add(pnlGuidelines);
 
@@ -166,7 +168,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
     }
 
     private String getNextTransactionID() {
-        java.util.ArrayList<Objects.AccountTransactHistory> history = BalanceFunctions.getTransactions(user.getEmail());
+        java.util.ArrayList<Objects.AccountTransactHistory> history = BalanceFunctions.getTransactions(currentuser.getEmail());
         int nextNum = 1;
 
         if (history != null && !history.isEmpty()) {
@@ -222,7 +224,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
                 String sequentialTxnId = getNextTransactionID();
 
-                balance = BalanceFunctions.withdraw(user.getEmail(), totalDeduction, sequentialTxnId);
+                balance = BalanceFunctions.withdraw(currentuser.getEmail(), totalDeduction, sequentialTxnId);
                 lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
 
                 showReceiptPopup(amount, fee, totalDeduction, mode, sequentialTxnId);

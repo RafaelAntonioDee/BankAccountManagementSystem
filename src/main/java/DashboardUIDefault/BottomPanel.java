@@ -20,10 +20,12 @@ public class BottomPanel extends JPanel {
 
     JLabel lblDateToday, lblSystemName;
     public static Colors theme = Colors.LIGHT();
+    public static Account currentuser;
 
     BottomPanel(Account user) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
 
-        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();

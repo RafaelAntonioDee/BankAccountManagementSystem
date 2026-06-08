@@ -24,19 +24,20 @@ public class ChangeEmail extends JFrame implements ActionListener {
     private JLabel lblEmail, lblLogo;
     private JTextField txtEmail;
     private JButton btnConfirm, btnCancel;
-    private Account user;
+    private Account currentuser;
     private String updatedUser;
-    private AccountPersonalInformation userInfo;
+    private AccountPersonalInformation currentuserInfo;
     public static Colors theme = Colors.LIGHT();
 
     public ChangeEmail(Account user, AccountPersonalInformation userInfo) {
-        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
+        
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
         }
-        this.user = user;
-        this.userInfo = userInfo;
 
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
@@ -120,7 +121,7 @@ public class ChangeEmail extends JFrame implements ActionListener {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
 
                 if (choice == 0) {
-                    updatedUser = SettingsFunctions.changeEmail(user.getEmail(), newEmailInput);
+                    updatedUser = SettingsFunctions.changeEmail(currentuser.getEmail(), newEmailInput);
                     SettingsPanel.lblEmailField.setText(newEmailInput);
                     DashboardUIDefault.SidePanel.lblAccEmail.setText(newEmailInput);
                     dispose();

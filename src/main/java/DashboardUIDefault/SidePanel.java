@@ -26,17 +26,18 @@ public class SidePanel extends JPanel implements MouseListener {
     public String SelectedButton = "btnDashboard";
     public static Colors theme = Colors.LIGHT();
     public static Icons icons = Icons.LIGHT();
+    public static Account currentuser;
 
     SidePanel(Account user) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
 
-        if (user.getSystemTheme().equals("Light")) {
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
             icons = Icons.LIGHT();
         } else {
             theme = Colors.DARK();
             icons = Icons.DARK();
         }
-
 
         setBounds(0, 0, 175, 620);
         setBackground(theme.SidePanel);

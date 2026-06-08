@@ -28,21 +28,21 @@ public class TransactionsPanel extends JPanel implements ActionListener {
     private DefaultTableModel model;
     private JPanel pnlProcess;
     private Account currentUser;
-    private String [] dateRange = {"Past Day", "Past Week", "Past Month", "Past 3 Months"},
-            transacType = {"All", "Deposit", "Withdraw", "Transfer", "Payment"}    ;
+    private String[] dateRange = {"Past Day", "Past Week", "Past Month", "Past 3 Months"},
+            transacType = {"All", "Deposit", "Withdraw", "Transfer", "Payment"};
     public static Colors theme = Colors.LIGHT();
     public static Icons icons = Icons.LIGHT();
 
     public TransactionsPanel(Account user) {
-        if (user.getSystemTheme().equals("Light")) {
+        this.currentUser = AppService.AccountFunctions.getUser(user.getEmail());
+
+        if (currentUser.getSystemTheme().equals("Light") || currentUser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
             icons = Icons.LIGHT();
         } else {
             theme = Colors.DARK();
             icons = Icons.DARK();
         }
-
-        this.currentUser = user;
         setBounds(0, 0, 837, 560);
         setBackground(theme.BACKGROUND);
         setBorder(new LineBorder(theme.BORDER_GRAY));
@@ -79,7 +79,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         cmbDateRange.setForeground(theme.TEXT_BLACK);
         cmbDateRange.setBackground(theme.PANELS_BACKGROUND);
         add(cmbDateRange);
-        
+
         cmbDateRange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -99,15 +99,14 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         lblType.setForeground(theme.TEXT_GRAY);
         lblType.setBounds(665, 25, 100, 25);
         add(lblType);
-        
-    
+
         cmbTransactionType = new JComboBox(transacType);
         cmbTransactionType.setBounds(665, 60, 147, 35);
         cmbTransactionType.setFocusable(false);
         cmbTransactionType.setForeground(theme.TEXT_BLACK);
         cmbTransactionType.setBackground(theme.PANELS_BACKGROUND);
         add(cmbTransactionType);
-        
+
         cmbTransactionType.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

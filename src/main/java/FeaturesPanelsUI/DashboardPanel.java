@@ -42,14 +42,14 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
     public DashboardPanel(MainDashboard dashboard, Account user) {
 
-        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+        this.currentUser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.dashboard = dashboard;
+        
+        if (currentUser.getSystemTheme().equals("Light") || currentUser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
         }
-
-        this.currentUser = user;
-        this.dashboard = dashboard;
 
         setBounds(0, 0, 837, 560);
         setBackground(theme.BACKGROUND);
@@ -70,7 +70,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblBalance.setBounds(25, 20, 250, 35);
         pnlBalance.add(lblBalance);
 
-        lblAmount = new JLabel("    ₱" + String.format("%.2f", user.getBalance()));
+        lblAmount = new JLabel("    ₱" + String.format("%.2f", currentUser.getBalance()));
         lblAmount.setForeground(theme.TEXT_WHITE);
         lblAmount.setFont(new Font("Arial", Font.PLAIN, 20));
         lblAmount.setBounds(25, 60, 250, 50);
@@ -162,7 +162,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
         btnManagePayments.addActionListener(this);
         pnlScheduledPay.add(btnManagePayments);
 
-        AutoPayment autopaydata = AppService.AutoPaymentFunctions.getFirstAutoPay(user.getEmail());
+        AutoPayment autopaydata = AppService.AutoPaymentFunctions.getFirstAutoPay(currentUser.getEmail());
 
         if (autopaydata != null) {
             pnlAutoPay = new JPanel();
@@ -217,7 +217,6 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblTo = new JLabel("To (email): ");
         lblTo.setFont(new Font("Arial", Font.PLAIN, 18));
         lblTo.setBounds(25, 85, 100, 35);
-        lblTo.setBounds(25, 85, 50, 35);
         lblTo.setForeground(theme.TEXT_BLACK);
         pnlQuickTransfer.add(lblTo);
 

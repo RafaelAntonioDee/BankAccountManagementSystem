@@ -19,9 +19,12 @@ public class TopPanel extends JPanel {
 
     public static JLabel lblTopBar;
     public static Colors theme = Colors.LIGHT();
+    public static Account currentuser;
 
     TopPanel(String Name, Account user) {
-        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();

@@ -21,7 +21,7 @@ public class DepositPanel extends JPanel implements ActionListener {
     private JComboBox<String> cmbModeOfTransac;
     private JComboBox<String> cmbBankList;
     private JPanel pnlProcess, pnlGuidelines;
-    private Account user;
+    private Account currentuser;
     private String[] bankList = {"Select Bank Provider", "BDO Unibank", "BPI (Bank of the Philippine Islands)", "Metrobank", "Landbank of the Philippines", "Security Bank"},
             modeOfTransaction = {"Select Mode", "Linked Bank Account", "Local Banks", "Global Banks & Partners", "Over-the-Counter Kiosk (Touchpay/Cliqq)", "Over-the-Counter Cashier"};
     public static Colors theme = Colors.LIGHT();
@@ -29,13 +29,14 @@ public class DepositPanel extends JPanel implements ActionListener {
     double balance = 0;
 
     public DepositPanel(Account user) {
-        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+        balance = currentuser.getBalance();
+
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
         }
-        this.user = user;
-        balance = user.getBalance();
 
         setBounds(0, 0, 837, 560);
         setBackground(theme.BACKGROUND);
@@ -46,7 +47,7 @@ public class DepositPanel extends JPanel implements ActionListener {
         lblBalance.setForeground(theme.TEXT_GRAY);
         lblBalance.setFont(new Font("Arial", Font.PLAIN, 18));
         lblBalance.setBounds(25, 25, 250, 35);
-        
+
         lblBalance = new JLabel("Available Balance");
         lblBalance.setFont(new Font("Arial", Font.PLAIN, 16));
         lblBalance.setForeground(theme.TEXT_GRAY);
@@ -120,7 +121,7 @@ public class DepositPanel extends JPanel implements ActionListener {
         cmbModeOfTransac.setFont(new Font("Arial", Font.PLAIN, 14));
         cmbModeOfTransac.setForeground(theme.TEXT_BLACK);
         cmbModeOfTransac.setBackground(theme.BACKGROUND);
-        
+
         pnlProcess.add(cmbModeOfTransac);
 
         cmbBankList = new JComboBox<>(bankList);
@@ -203,7 +204,7 @@ public class DepositPanel extends JPanel implements ActionListener {
     }
 
     private String getNextTransactionID() {
-        java.util.ArrayList<Objects.AccountTransactHistory> history = BalanceFunctions.getTransactions(user.getEmail());
+        java.util.ArrayList<Objects.AccountTransactHistory> history = BalanceFunctions.getTransactions(currentuser.getEmail());
         int nextNum = 1;
 
         if (history != null && !history.isEmpty()) {
@@ -268,7 +269,7 @@ public class DepositPanel extends JPanel implements ActionListener {
 
                 String sequentialTxnId = getNextTransactionID();
 
-                balance = BalanceFunctions.deposit(user.getEmail(), netAmount, sequentialTxnId);
+                balance = BalanceFunctions.deposit(currentuser.getEmail(), netAmount, sequentialTxnId);
                 lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
 
                 String displayMode = mode;

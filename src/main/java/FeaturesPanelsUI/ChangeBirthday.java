@@ -25,21 +25,23 @@ public class ChangeBirthday extends JFrame implements ActionListener {
     private JComboBox cmbMonth, cmbDay, cmbYear;
     private JButton btnConfirm, btnCancel;
     private JTextField txtYear, txtDay;
-    private Account user;
-    private AccountPersonalInformation userInfo;
+    private Account currentuser;
+    private AccountPersonalInformation currentuserInfo;
     private String selectedMonth, updateBirthday;
     private String[] months = {"January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"};
     public static Colors theme = Colors.LIGHT();
 
     public ChangeBirthday(Account user, AccountPersonalInformation userInfo) {
-        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
+        
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
         }
-        this.user = user;
-        this.userInfo = userInfo;
+
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         ImageIcon ResizedBankIcon = new ImageIcon(BankIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
@@ -193,7 +195,7 @@ public class ChangeBirthday extends JFrame implements ActionListener {
 
             int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
             if (choice == 0) {
-                updateBirthday = SettingsFunctions.changeBirthday(user.getEmail(), newBirthday);
+                updateBirthday = SettingsFunctions.changeBirthday(currentuser.getEmail(), newBirthday);
                 SettingsPanel.lblBirthdayField.setText(newBirthday);
                 dispose();
                 JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);

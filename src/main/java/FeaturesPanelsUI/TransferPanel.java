@@ -27,13 +27,15 @@ public class TransferPanel extends JPanel implements ActionListener {
     private double balance = 0;
 
     public TransferPanel(Account user) {
-        if (user.getSystemTheme().equals("Light")) {
+        this.currentUser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.balance = currentUser.getBalance();
+
+        if (currentUser.getSystemTheme().equals("Light") || currentUser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
         }
-        this.currentUser = user;
-        this.balance = user.getBalance();
+
 
         setBounds(0, 0, 837, 560);
         setBackground(theme.BACKGROUND);

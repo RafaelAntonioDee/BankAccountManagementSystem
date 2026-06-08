@@ -5,7 +5,6 @@ DashboardUIDefault\MainDashboard.class
 FeaturesPanelsUI\ChangePassword.class
 AppService\AutoPaymentFunctions.class
 FeaturesPanelsUI\WithdrawPanel.class
-AppService\TransactHistoryFunctions.class
 DashboardUIDefault\Colors.class
 DashboardUIDefault\Icons.class
 FeaturesPanelsUI\ChangeEmail.class

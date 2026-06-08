@@ -42,6 +42,8 @@ public class MainDashboard extends JFrame implements ActionListener {
     public static Icons icons = Icons.LIGHT();
 
     public MainDashboard(Account user, AccountPersonalInformation userinfo) {
+        this.currentUser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.currentUserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
 
         if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
@@ -50,9 +52,6 @@ public class MainDashboard extends JFrame implements ActionListener {
             theme = Colors.DARK();
             icons = Icons.DARK();
         }
-
-        this.currentUser = user;
-        this.currentUserInfo = userinfo;
 
         setIconImage(Icons.BankIcon.getImage());
         setTitle("Bank Account Management System");

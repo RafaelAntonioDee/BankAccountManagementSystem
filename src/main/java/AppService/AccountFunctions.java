@@ -79,4 +79,5 @@ public class AccountFunctions {
     public static void ChangeTheme(String email, String theme){
         AccountService.ChangeTheme(email, theme);
     }
+   
 }

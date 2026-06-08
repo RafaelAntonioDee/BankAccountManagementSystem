@@ -15,12 +15,14 @@ import static FeaturesPanelsUI.DepositPanel.theme;
 public class WithdrawPanel extends JPanel implements ActionListener {
 
     private JLabel lblBalance, lblBalanceAmount, lblAmount, lblModeOfTransac, lblGuideTitle;
+    private JTextArea txaGuideBody;
     private JButton btnWithdraw, btnCancel;
     private JButton btnAmt500, btnAmt1000, btnAmt2500, btnAmt5000;
     private JTextField txtAmount;
     private JComboBox cmbModeOfTransac;
     private JPanel pnlProcess, pnlGuidelines;
     private Account user;
+    private String[] modeOfTransac = {"Select Mode", "Linked Bank Account", "Generate a QR Code", "Over-the-Counter Cashier"};
     public static Colors theme = Colors.LIGHT();
 
     double balance = 0;
@@ -33,35 +35,36 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         }
         this.user = user;
         balance = user.getBalance();
-        
+
         setBounds(0, 0, 837, 560);
-        setBackground(new Color(243, 243, 243));
-        setBorder(new LineBorder(Color.LIGHT_GRAY));
+        setBackground(theme.BACKGROUND);
+        setBorder(new LineBorder(theme.BORDER_GRAY));
         setLayout(null);
 
         lblBalance = new JLabel("Available Balance");
-        lblBalance.setForeground(Color.GRAY);
+        lblBalance.setForeground(theme.TEXT_GRAY);
         lblBalance.setFont(new Font("Arial", Font.PLAIN, 16));
         lblBalance.setBounds(40, 20, 755, 25);
         add(lblBalance);
 
         lblBalanceAmount = new JLabel("    ₱" + String.format("%.2f", balance));
-        lblBalanceAmount.setForeground(Color.WHITE);
+        lblBalanceAmount.setForeground(theme.TEXT_WHITE);
         lblBalanceAmount.setFont(new Font("Arial", Font.BOLD, 22));
         lblBalanceAmount.setBounds(40, 50, 755, 55);
         lblBalanceAmount.setOpaque(true);
-        lblBalanceAmount.setBackground(new Color(82, 124, 174));
+        lblBalanceAmount.setBackground(theme.PRIMARY_BLUE);
         add(lblBalanceAmount);
 
         pnlProcess = new JPanel();
         pnlProcess.setBounds(40, 130, 420, 395);
-        pnlProcess.setBackground(Color.WHITE);
-        pnlProcess.setBorder(new LineBorder(new Color(220, 220, 220)));
+        pnlProcess.setBackground(theme.PANELS_BACKGROUND);
+        pnlProcess.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlProcess.setLayout(null);
         add(pnlProcess);
 
         lblAmount = new JLabel("Withdraw Amount");
         lblAmount.setFont(new Font("Arial", Font.BOLD, 15));
+        lblAmount.setForeground(theme.TEXT_BLACK);
         lblAmount.setBounds(30, 20, 360, 25);
         pnlProcess.add(lblAmount);
 
@@ -69,8 +72,10 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         txtAmount.setBounds(30, 50, 360, 35);
         txtAmount.setFont(new Font("Arial", Font.PLAIN, 15));
         txtAmount.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.GRAY), 
+                BorderFactory.createLineBorder(theme.BORDER_GRAY),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        txtAmount.setForeground(theme.TEXT_BLACK);
+        txtAmount.setBackground(theme.BACKGROUND);
         pnlProcess.add(txtAmount);
 
         btnAmt500 = new JButton("₱500");
@@ -84,9 +89,9 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
         JButton[] quickButtons = {btnAmt500, btnAmt1000, btnAmt2500, btnAmt5000};
         for (JButton btn : quickButtons) {
-            btn.setBackground(Color.WHITE);
-            btn.setForeground(new Color(82, 124, 174));
-            btn.setBorder(BorderFactory.createLineBorder(new Color(82, 124, 174)));
+            btn.setBackground(theme.PRIMARY_BLUE);
+            btn.setForeground(theme.TEXT_WHITE);
+            btn.setBorder(BorderFactory.createLineBorder(theme.BORDER_GRAY));
             btn.setFocusPainted(false);
             btn.addActionListener(this);
             pnlProcess.add(btn);
@@ -94,22 +99,22 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
         lblModeOfTransac = new JLabel("Mode of Transaction");
         lblModeOfTransac.setFont(new Font("Arial", Font.BOLD, 15));
+        lblModeOfTransac.setForeground(theme.TEXT_BLACK);
         lblModeOfTransac.setBounds(30, 150, 360, 25);
         pnlProcess.add(lblModeOfTransac);
 
-        cmbModeOfTransac = new JComboBox();
+        cmbModeOfTransac = new JComboBox(modeOfTransac);
         cmbModeOfTransac.setBounds(30, 180, 360, 35);
+        cmbModeOfTransac.setBackground(theme.BACKGROUND);
+        cmbModeOfTransac.setForeground(theme.TEXT_BLACK);
+        cmbModeOfTransac.setFocusable(false);
         cmbModeOfTransac.setFont(new Font("Arial", Font.PLAIN, 14));
-        cmbModeOfTransac.addItem("Select Mode");
-        cmbModeOfTransac.addItem("Linked Bank Account");
-        cmbModeOfTransac.addItem("Generate a QR Code");
-        cmbModeOfTransac.addItem("Over-the-Counter Cashier");
         pnlProcess.add(cmbModeOfTransac);
 
         btnWithdraw = new JButton("Withdraw");
         btnWithdraw.setBounds(160, 330, 110, 35);
-        btnWithdraw.setBackground(new Color(82, 124, 174));
-        btnWithdraw.setForeground(Color.WHITE);
+        btnWithdraw.setBackground(theme.PRIMARY_BLUE);
+        btnWithdraw.setForeground(theme.TEXT_WHITE);
         btnWithdraw.setFont(new Font("Arial", Font.BOLD, 13));
         btnWithdraw.setFocusPainted(false);
         btnWithdraw.addActionListener(this);
@@ -117,8 +122,8 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
         btnCancel = new JButton("Cancel");
         btnCancel.setBounds(280, 330, 110, 35);
-        btnCancel.setBackground(Color.GRAY);
-        btnCancel.setForeground(Color.WHITE);
+        btnCancel.setBackground(theme.CancelButton);
+        btnCancel.setForeground(theme.TEXT_BLACK);
         btnCancel.setFont(new Font("Arial", Font.BOLD, 13));
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
@@ -126,45 +131,49 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
         pnlGuidelines = new JPanel();
         pnlGuidelines.setBounds(480, 130, 315, 395);
-        pnlGuidelines.setBackground(Color.WHITE);
+        pnlGuidelines.setBackground(theme.PANELS_BACKGROUND);
         pnlGuidelines.setBorder(new LineBorder(new Color(220, 220, 220)));
         pnlGuidelines.setLayout(null);
         add(pnlGuidelines);
 
         lblGuideTitle = new JLabel("Withdrawal Guidelines");
-        lblGuideTitle.setFont(new Font("Arial", Font.BOLD, 15));
-        lblGuideTitle.setForeground(new Color(82, 124, 174));
-        lblGuideTitle.setBounds(20, 20, 275, 25);
+        lblGuideTitle.setFont(new Font("Arial", Font.BOLD, 25));
+        lblGuideTitle.setForeground(theme.PRIMARY_BLUE);
+        lblGuideTitle.setBounds(20, 30, 275, 25);
         pnlGuidelines.add(lblGuideTitle);
 
-        String guideText = "<html>"
-                + "<body style='font-family:Arial; font-size:11px; color:#555555;'>"
-                + "<b>Withdrawal Charges:</b><br>"
-                + "• Linked Bank Account: Free<br>"
-                + "• Generate a QR Code: Free<br>"
-                + "• Over-the-Counter Cashier: ₱20.00 processing fee added to total deduction<br><br>"
-                + "<b>Processing Time:</b><br>"
-                + "• Handled immediately in real-time.<br><br>"
-                + "<b>Notice:</b><br>"
-                + "Make sure your balance can cover both the withdrawal amount and the fee before submitting.."
-                + "</body>"
-                + "</html>";
+        String guideText = "Withdrawal Charges: \n"
+                + "• Linked Bank Account: Free \n"
+                + "• Local Banks: Free  \n"
+                + "• Over-the-Counter Kiosk: ₱20.00  \n"
+                + "• Over-the-Counter Cashier: ₱20.00  \n"
+                + " \n"
+                + "Processing Time:  \n"
+                + "• Handled immediately in real-time. \n"
+                + " \n"
+                + "Notice:  \n"
+                + "Ensure your balance can cover  \n"
+                + "both the withdrawal amount and the  \n"
+                + "charge fee before submitting.  \n";
 
-        JLabel lblGuideBody = new JLabel(guideText);
-        lblGuideBody.setBounds(20, 55, 275, 300);
-        lblGuideBody.setVerticalAlignment(SwingConstants.TOP);
-        pnlGuidelines.add(lblGuideBody);
+        txaGuideBody = new JTextArea(guideText);
+        txaGuideBody.setFont(new Font("Arial", Font.BOLD, 15));
+        txaGuideBody.setBackground(theme.PANELS_BACKGROUND);
+        txaGuideBody.setForeground(theme.TEXT_BLACK);
+        txaGuideBody.setBounds(20, 80, 275, 300);
+        txaGuideBody.setEditable(false);
+        pnlGuidelines.add(txaGuideBody);
     }
 
     private String getNextTransactionID() {
         java.util.ArrayList<Objects.AccountTransactHistory> history = BalanceFunctions.getTransactions(user.getEmail());
-        int nextNum = 1; 
-        
+        int nextNum = 1;
+
         if (history != null && !history.isEmpty()) {
             try {
-                String lastID = history.get(history.size() - 1).getTransactionID(); 
+                String lastID = history.get(history.size() - 1).getTransactionID();
                 int lastNum = Integer.parseInt(lastID.replaceAll("[^0-9]", ""));
-                nextNum = lastNum + 1; 
+                nextNum = lastNum + 1;
             } catch (Exception e) {
                 nextNum = history.size() + 1;
             }
@@ -174,10 +183,15 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnAmt500) txtAmount.setText("500");
-        else if (e.getSource() == btnAmt1000) txtAmount.setText("1000");
-        else if (e.getSource() == btnAmt2500) txtAmount.setText("2500");
-        else if (e.getSource() == btnAmt5000) txtAmount.setText("5000");
+        if (e.getSource() == btnAmt500) {
+            txtAmount.setText("500");
+        } else if (e.getSource() == btnAmt1000) {
+            txtAmount.setText("1000");
+        } else if (e.getSource() == btnAmt2500) {
+            txtAmount.setText("2500");
+        } else if (e.getSource() == btnAmt5000) {
+            txtAmount.setText("5000");
+        }
 
         if (e.getSource() == btnWithdraw) {
             try {
@@ -237,7 +251,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         dialog.setLayout(new BorderLayout());
 
         JPanel pnlReceiptImage = new JPanel();
-        pnlReceiptImage.setBackground(new Color(82, 124, 174)); 
+        pnlReceiptImage.setBackground(new Color(82, 124, 174));
         pnlReceiptImage.setLayout(null);
 
         JPanel pnlWhiteCard = new JPanel();
@@ -325,7 +339,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
         JButton btnSave = new JButton("Save Receipt as Image");
         JButton btnClose = new JButton("Back");
-        
+
         pnlButtons.add(btnSave);
         pnlButtons.add(btnClose);
         dialog.add(pnlButtons, BorderLayout.SOUTH);

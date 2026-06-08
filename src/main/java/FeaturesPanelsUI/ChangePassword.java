@@ -31,7 +31,7 @@ public class ChangePassword extends JFrame implements ActionListener {
     public static Colors theme = Colors.LIGHT();
 
     public ChangePassword(Account user, AccountPersonalInformation userInfo) {
-        if (user.getSystemTheme().equals("Light")) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
@@ -151,7 +151,7 @@ public class ChangePassword extends JFrame implements ActionListener {
                     String hiddenPass = "*".repeat(confirmPassInput.length());
                     SettingsPanel.lblPasswordField.setText(hiddenPass);
                     dispose();
-                    JOptionPane.showMessageDialog(this, "Password Changed. You will be logged out!", "Password Change", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Password Changed.d!", "Password Change", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } else if (e.getSource() == btnCancel) {

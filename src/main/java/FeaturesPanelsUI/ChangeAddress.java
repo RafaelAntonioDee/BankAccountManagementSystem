@@ -28,7 +28,7 @@ public class ChangeAddress extends JFrame implements ActionListener {
     public static Colors theme = Colors.LIGHT();
 
     public ChangeAddress(Account user, AccountPersonalInformation userInfo) {
-        if (user.getSystemTheme().equals("Light")) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();

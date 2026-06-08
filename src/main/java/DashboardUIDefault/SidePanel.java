@@ -21,7 +21,7 @@ import javax.swing.border.LineBorder;
 public class SidePanel extends JPanel implements MouseListener {
 
     public JPanel pnlSideBar, pnlSideBar_Header, pnlAccount;
-    public JLabel lblBank, lblAccName, lblAccEmail, lblLine, lblSelectIndicator;
+    public static JLabel lblBank, lblAccName, lblAccEmail, lblLine, lblSelectIndicator;
     public JButton btnDashboard, btnDeposit, btnWithdraw, btnTransfer, btnTransactions, btnAutoPayments, btnSettings, btnLogout;
     public String SelectedButton = "btnDashboard";
     public static Colors theme = Colors.LIGHT();
@@ -155,12 +155,12 @@ public class SidePanel extends JPanel implements MouseListener {
         pnlAccount.setLayout(null);
         add(pnlAccount);
 
-        lblAccName = new JLabel("Rafael Antonio Dee");
+        lblAccName = new JLabel();
         lblAccName.setBounds(20, 8, 135, 30);
         lblAccName.setForeground(theme.TEXT_BLACK);
         pnlAccount.add(lblAccName);
 
-        lblAccEmail = new JLabel("hatdog@gmail.com");
+        lblAccEmail = new JLabel();
         lblAccEmail.setFont(new Font("Arial", Font.PLAIN, 10));
         lblAccEmail.setBounds(20, 28, 135, 30);
         lblAccEmail.setForeground(theme.TEXT_GRAY);

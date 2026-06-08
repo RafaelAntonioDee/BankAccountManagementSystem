@@ -35,7 +35,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         this.user = user;
         this.userInfo = userInfo;
 
-        if (user.getSystemTheme().equals("Light")) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
@@ -65,7 +65,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblName.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblName);
 
-        lblNameField = new JLabel("Kurt Paolo D. Redondo");
+        lblNameField = new JLabel(userInfo.getFirstName() + " " + userInfo.getLastName());
         lblNameField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblNameField.setBounds(84, 15, 325, 35);
         lblNameField.setForeground(theme.TEXT_BLACK);
@@ -86,7 +86,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblEmail.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblEmail);
 
-        lblEmailField = new JLabel("kurtpaolo67@gmail.com");
+        lblEmailField = new JLabel(userInfo.getEmail());
         lblEmailField.setBounds(81, 50, 325, 35);
         lblEmailField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblEmailField.setForeground(theme.TEXT_BLACK);
@@ -107,7 +107,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblPhoneNumber.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblPhoneNumber);
 
-        lblPhoneField = new JLabel("0967 123 4567");
+        lblPhoneField = new JLabel(userInfo.getPhoneNum());
         lblPhoneField.setBounds(157, 85, 325, 35);
         lblPhoneField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblPhoneField.setForeground(theme.TEXT_BLACK);
@@ -127,8 +127,11 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblPassword.setFont(new Font("Calibri", Font.BOLD, 18));
         lblPassword.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblPassword);
+        
+        String password = user.getPassword();
+        String hiddenPass = "*".repeat(password.length());
 
-        lblPasswordField = new JLabel("************");
+        lblPasswordField = new JLabel(hiddenPass);
         lblPasswordField.setBounds(116, 120, 325, 35);
         lblPasswordField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblPasswordField.setForeground(theme.TEXT_BLACK);
@@ -163,7 +166,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblBirthday.setForeground(theme.TEXT_BLACK);
         pnlPersonalInfo.add(lblBirthday);
 
-        lblBirthdayField = new JLabel("December 14, 2005");
+        lblBirthdayField = new JLabel(userInfo.getBirthdate());
         lblBirthdayField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblBirthdayField.setBounds(103, 15, 325, 35);
         lblBirthdayField.setForeground(theme.TEXT_BLACK);
@@ -184,7 +187,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblAddress.setForeground(theme.TEXT_BLACK);
         pnlPersonalInfo.add(lblAddress);
 
-        lblAddressField = new JLabel("67 Zone 2 Ilaya St. Malaban Biñan Laguna");
+        lblAddressField = new JLabel(userInfo.getAddress());
         lblAddressField.setBounds(102, 50, 325, 35);
         lblAddressField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblAddressField.setForeground(theme.TEXT_BLACK);

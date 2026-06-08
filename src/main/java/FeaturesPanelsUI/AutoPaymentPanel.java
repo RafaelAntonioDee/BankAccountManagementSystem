@@ -37,7 +37,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
     public AutoPaymentPanel(String email, Account user) {
 
         this.currentEmail = email;
-        if (user.getSystemTheme().equals("Light")) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
@@ -48,7 +48,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         setBorder(new LineBorder(theme.BORDER_GRAY));
         setLayout(null);
 
-        //---------------------------------AUTOPAYMENT
+        //---------------------------------AUTOPAYMENTd
         lblAutoPayment = new JLabel("Auto Payment Setup");
         lblAutoPayment.setForeground(theme.TEXT_GRAY);
         lblAutoPayment.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -131,6 +131,17 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         pnlAutoPayList.setBorder(null);
         pnlAutoPayList.setBackground(theme.PANELS_BACKGROUND);
         pnlAutoPayList.setBorder(new LineBorder(theme.BORDER_GRAY));
+        pnlAutoPayList.getVerticalScrollBar().setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, theme.SidePanel));
+
+        pnlAutoPayList.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
+
+            @Override
+            protected void configureScrollBarColors() {
+                thumbColor = theme.ThumbBar;
+                trackColor = theme.TrackBar;
+            }
+        });
+
         add(pnlAutoPayList);
 
         pnlAutoPayList.getViewport().setOpaque(false);
@@ -211,13 +222,18 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         btnUnsub.setBounds(240, 75, 107, 25);
         btnUnsub.putClientProperty("ID", ID);
         btnUnsub.setHorizontalAlignment(JButton.CENTER);
-        btnUnsub.setBackground(theme.BORDER_GRAY);
+        btnUnsub.setBackground(theme.CancelButton);
         btnUnsub.setForeground(theme.TEXT_WHITE);
         btnUnsub.setFocusPainted(false);
         pnlScheduledPayment.add(btnUnsub);
         btnUnsub.addActionListener(this);
 
-        pnlAutoPayListContent.setPreferredSize(new Dimension(357, y));
+        // FOR SCROLLPANE'S SPACING
+        int itemHeight = 115;
+        int padding = 25;
+        int height = (ScheduledCount * itemHeight) + padding;
+
+        pnlAutoPayListContent.setPreferredSize(new Dimension(337, height));
         pnlAutoPayListContent.revalidate();
         pnlAutoPayListContent.repaint();
 

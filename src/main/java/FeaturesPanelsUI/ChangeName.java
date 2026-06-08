@@ -7,7 +7,7 @@ package FeaturesPanelsUI;
 import AppService.AccountFunctions;
 import AppService.SettingsFunctions;
 import DashboardUIDefault.Colors;
-import DashboardUIDefault.MainDashboard;
+import DashboardUIDefault.*;
 import static FeaturesPanelsUI.ChangeEmail.theme;
 import static FeaturesPanelsUI.DashboardPanel.theme;
 import static FeaturesPanelsUI.SettingsPanel.lblNameField;
@@ -32,7 +32,7 @@ public class ChangeName extends JFrame implements ActionListener {
     public static Colors theme = Colors.LIGHT();
 
     public ChangeName(Account user, AccountPersonalInformation userInfo) {
-        if (user.getSystemTheme().equals("Light")) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
@@ -135,6 +135,7 @@ public class ChangeName extends JFrame implements ActionListener {
                     updateFirst = SettingsFunctions.changeFirstName(user.getEmail(), newFirst);
                     updatedLast = SettingsFunctions.changeLastName(user.getEmail(), newLast);
                     SettingsPanel.lblNameField.setText(newFirst + " " + newLast);
+                    DashboardUIDefault.SidePanel.lblAccName.setText(newFirst + " " + newLast);
                     dispose();
                     JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
                 }

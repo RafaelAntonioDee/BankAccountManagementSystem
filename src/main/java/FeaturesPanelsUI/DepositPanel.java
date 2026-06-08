@@ -26,7 +26,7 @@ public class DepositPanel extends JPanel implements ActionListener {
     double balance = 0;
 
     public DepositPanel(Account user) {
-        if (user.getSystemTheme().equals("Light")) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();

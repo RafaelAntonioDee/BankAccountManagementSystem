@@ -7,7 +7,6 @@ package AppService;
 import Objects.Account;
 import DataService.AccountService;
 import DataService.TransactionsService;
-import Objects.AccountPersonalInformation;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -30,10 +29,11 @@ public class BalanceFunctions {
     }
 
     public static void transfer(Account user, Account receiver, double amount) {
-        addTransaction(user.getEmail(), "Transfer", LocalDate.now(), "- " + amount);
+        addTransaction(user.getEmail(), "Transferred", LocalDate.now(), "- " + amount);
+        addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amount);
 
-        AccountService.withdraw(user.getEmail(),  amount);
-        AccountService.deposit(receiver.getEmail(),  amount);
+        AccountService.withdraw(user.getEmail(), amount);
+        AccountService.deposit(receiver.getEmail(), amount);
     }
 
     public static ArrayList getTransactions(String email) {

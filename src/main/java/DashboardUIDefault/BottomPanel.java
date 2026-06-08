@@ -23,7 +23,7 @@ public class BottomPanel extends JPanel {
 
     BottomPanel(Account user) {
 
-        if (user.getSystemTheme().equals("Light")) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();

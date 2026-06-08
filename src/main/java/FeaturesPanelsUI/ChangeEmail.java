@@ -30,7 +30,7 @@ public class ChangeEmail extends JFrame implements ActionListener {
     public static Colors theme = Colors.LIGHT();
 
     public ChangeEmail(Account user, AccountPersonalInformation userInfo) {
-        if (user.getSystemTheme().equals("Light")) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
@@ -95,21 +95,34 @@ public class ChangeEmail extends JFrame implements ActionListener {
             String currentEmail = SettingsPanel.lblEmailField.getText();
             String newEmailInput = txtEmail.getText();
 
+            if (currentEmail.equals(newEmailInput)) {
+                JOptionPane.showMessageDialog(this, "New email cannot be the same as the old email!", "", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             if (!AccountFunctions.validateEmail(newEmailInput)) {
                 JOptionPane.showMessageDialog(this, "Invalid Email Address!");
                 return;
             }
 
+            if (AccountFunctions.validateExistingEmail(newEmailInput)) {
+                JOptionPane.showMessageDialog(this, "Email Already Exists!", "Duplicate Email", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!AccountFunctions.validateEmail(newEmailInput)) {
+                JOptionPane.showMessageDialog(this, "Invalid Email Address!", "Try Again", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             if (newEmailInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
-            } else if (currentEmail.equals(newEmailInput)) {
-                JOptionPane.showMessageDialog(this, "New email cannot be the same as the old email!", "", JOptionPane.ERROR_MESSAGE);
             } else {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
 
                 if (choice == 0) {
                     updatedUser = SettingsFunctions.changeEmail(user.getEmail(), newEmailInput);
                     SettingsPanel.lblEmailField.setText(newEmailInput);
+                    DashboardUIDefault.SidePanel.lblAccEmail.setText(newEmailInput);
                     dispose();
                     JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
                 }

@@ -10,8 +10,10 @@ DashboardUIDefault\Colors.class
 DashboardUIDefault\Icons.class
 Objects\UserAccount.class
 FeaturesPanelsUI\ChangeEmail.class
+FeaturesPanelsUI\TransactionsPanel$4.class
 FeaturesPanelsUI\SettingsPanel$1.class
 DataService\AutoPaymentService.class
+FeaturesPanelsUI\AutoPaymentPanel$1.class
 FeaturesPanelsUI\DepositPanel$1.class
 FeaturesPanelsUI\TransactionsPanel$1.class
 FeaturesPanelsUI\TransferPanel$1.class
@@ -35,6 +37,7 @@ DashboardUIDefault\BottomPanel.class
 FeaturesPanelsUI\ChangeAddress.class
 DashboardUIDefault\MainPanel.class
 Objects\AccountPersonalInformation.class
+FeaturesPanelsUI\TransactionsPanel$3.class
 FeaturesPanelsUI\DepositPanel.class
 FeaturesPanelsUI\DashboardPanel.class
 LoginUI\RegisterPage.class

@@ -81,6 +81,13 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         cmbDateRange.setForeground(theme.TEXT_BLACK);
         cmbDateRange.setBackground(theme.PANELS_BACKGROUND);
         add(cmbDateRange);
+        
+        cmbDateRange.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showTransactions();
+            }
+        });
 
         cmbDateRange.addActionListener(new ActionListener() {
             @Override
@@ -105,6 +112,13 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         cmbTransactionType.setForeground(theme.TEXT_BLACK);
         cmbTransactionType.setBackground(theme.PANELS_BACKGROUND);
         add(cmbTransactionType);
+        
+        cmbTransactionType.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showTransactions();
+            }
+        });
 
         cmbTransactionType.addActionListener(new ActionListener() {
             @Override

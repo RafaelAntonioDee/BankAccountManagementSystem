@@ -41,6 +41,10 @@ public class Colors {
     public Color TEXT_GRAY;
     public Color TEXT_WHITE;
     public Color TEXT_BLACK;
+    
+    // ScrollBar
+    public Color ThumbBar;
+    public Color TrackBar;
 
     public static Colors LIGHT() {
         Colors c = new Colors();
@@ -60,6 +64,9 @@ public class Colors {
         c.TEXT_GRAY = Color.GRAY;
         c.TEXT_WHITE = Color.WHITE;
         c.TEXT_BLACK = Color.BLACK;
+        
+        c.ThumbBar = new Color(60, 64, 67);
+        c.TrackBar = new Color(30, 31, 32);
 
         return c;
     }
@@ -67,19 +74,19 @@ public class Colors {
     public static Colors DARK() {
         Colors c = new Colors();
 
-        c.PRIMARY_BLUE = new Color(100, 149, 237);
-        c.SUCCESS_GREEN = new Color(76, 175, 80);
+        c.PRIMARY_BLUE = new Color(59, 130, 246);
+        c.SUCCESS_GREEN = new Color(0, 184, 148);
 
-        c.BACKGROUND = new Color(30, 30, 30);
-        c.PANELS_BACKGROUND = new Color(45, 45, 45);
-        c.SidePanel = new Color(40, 40, 40);
-        c.ButtonHighlight = new Color(70, 70, 70);
-        c.HeaderFooterColor = new Color(45, 45, 45);
-        c.CancelButton = Color.GRAY;
+        c.BACKGROUND = new Color(17, 17, 19);
+        c.PANELS_BACKGROUND = new Color(28, 28, 31);
+        c.SidePanel = new Color(20, 23, 28);
+        c.ButtonHighlight = new Color(55, 65, 81);
+        c.HeaderFooterColor = new Color(28, 32, 38);
+        c.CancelButton = new Color(185, 70, 85);
 
-        c.BORDER_GRAY = new Color(70, 70, 70);
+        c.BORDER_GRAY = new Color(55, 65, 81);
 
-        c.TEXT_GRAY = new Color(180, 180, 180);
+        c.TEXT_GRAY = new Color(248, 250, 252);
         c.TEXT_WHITE = Color.WHITE;
         c.TEXT_BLACK = Color.WHITE;
 

@@ -42,7 +42,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
     public DashboardPanel(MainDashboard dashboard, Account user) {
 
-        if (user.getSystemTheme().equals("Light")) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
@@ -214,8 +214,9 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblQuickTransfer.setForeground(theme.TEXT_BLACK);
         pnlQuickTransfer.add(lblQuickTransfer);
 
-        lblTo = new JLabel("To: ");
+        lblTo = new JLabel("To (email): ");
         lblTo.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblTo.setBounds(25, 85, 100, 35);
         lblTo.setBounds(25, 85, 50, 35);
         lblTo.setForeground(theme.TEXT_BLACK);
         pnlQuickTransfer.add(lblTo);

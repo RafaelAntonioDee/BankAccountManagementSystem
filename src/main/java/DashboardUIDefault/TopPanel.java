@@ -21,7 +21,7 @@ public class TopPanel extends JPanel {
     public static Colors theme = Colors.LIGHT();
 
     TopPanel(String Name, Account user) {
-        if (user.getSystemTheme().equals("Light")) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();

@@ -48,7 +48,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 
         btnLogin = new JButton("<- Log In");
         btnLogin.setBounds(252, 20, 90, 20);
-        btnLogin.setForeground(new Color(82, 124, 174));
+        btnLogin.setForeground(new Color(59, 130, 246));
         btnLogin.setBorderPainted(false);
         btnLogin.setFocusPainted(false);
         btnLogin.setContentAreaFilled(false);
@@ -58,7 +58,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 
         lblLine = new JLabel("________________________________________________");
         lblLine.setBounds(22, 40, 315, 30);
-        lblLine.setForeground(new Color(82, 124, 174));
+        lblLine.setForeground(new Color(59, 130, 246));
         lblLine.setHorizontalAlignment(JLabel.CENTER);
         add(lblLine);
 
@@ -184,6 +184,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 
         cmbBirthMonth = new JComboBox(months);
         cmbBirthMonth.setBounds(32, 380, 85, 35);
+        cmbBirthMonth.setFocusable(false);
         cmbBirthMonth.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         cmbBirthMonth.setOpaque(false);
         cmbBirthMonth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
@@ -199,6 +200,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 
         cmbBirthDay = new JComboBox();
         cmbBirthDay.setBounds(137, 380, 85, 35);
+        cmbBirthDay.setFocusable(false);
         cmbBirthDay.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         cmbBirthDay.setOpaque(false);
         cmbBirthDay.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
@@ -214,6 +216,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 
         cmbBirthYear = new JComboBox();
         cmbBirthYear.setBounds(242, 380, 85, 35);
+        cmbBirthYear.setFocusable(false);
         cmbBirthYear.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         cmbBirthYear.setOpaque(false);
         cmbBirthYear.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
@@ -222,7 +225,7 @@ public class RegisterPage extends JFrame implements ActionListener {
         btnSignup = new JButton("Sign Up");
         btnSignup.setHorizontalAlignment(JButton.CENTER);
         btnSignup.setBounds(32, 430, 295, 35);
-        btnSignup.setBackground(new Color(82, 124, 174));
+        btnSignup.setBackground(new Color(59, 130, 246));
         btnSignup.setForeground(Color.WHITE);
         btnSignup.setFocusPainted(false);
         btnSignup.addActionListener(this);

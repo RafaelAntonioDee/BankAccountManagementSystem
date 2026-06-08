@@ -28,6 +28,8 @@ public class TransactionsPanel extends JPanel implements ActionListener {
     private DefaultTableModel model;
     private JPanel pnlProcess;
     private Account currentUser;
+    private String [] dateRange = {"Past Day", "Past Week", "Past Month", "Past 3 Months"},
+            transacType = {"All", "Deposit", "Withdraw", "Transfer", "Payment"}    ;
     public static Colors theme = Colors.LIGHT();
     public static Icons icons = Icons.LIGHT();
 
@@ -71,13 +73,9 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         lblDate.setBounds(485, 25, 100, 25);
         add(lblDate);
 
-        cmbDateRange = new JComboBox();
-        cmbDateRange.addItem("All");
-        cmbDateRange.addItem("Past Day");
-        cmbDateRange.addItem("Past Week");
-        cmbDateRange.addItem("Past Month");
-        cmbDateRange.addItem("Past 3 Months");
+        cmbDateRange = new JComboBox(dateRange);
         cmbDateRange.setBounds(485, 60, 150, 35);
+        cmbDateRange.setFocusable(false);
         cmbDateRange.setForeground(theme.TEXT_BLACK);
         cmbDateRange.setBackground(theme.PANELS_BACKGROUND);
         add(cmbDateRange);
@@ -101,14 +99,11 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         lblType.setForeground(theme.TEXT_GRAY);
         lblType.setBounds(665, 25, 100, 25);
         add(lblType);
-
-        cmbTransactionType = new JComboBox();
-        cmbTransactionType.addItem("All");
-        cmbTransactionType.addItem("Deposit");
-        cmbTransactionType.addItem("Withdraw");
-        cmbTransactionType.addItem("Transfer");
-        cmbTransactionType.addItem("Payment");
+        
+    
+        cmbTransactionType = new JComboBox(transacType);
         cmbTransactionType.setBounds(665, 60, 147, 35);
+        cmbTransactionType.setFocusable(false);
         cmbTransactionType.setForeground(theme.TEXT_BLACK);
         cmbTransactionType.setBackground(theme.PANELS_BACKGROUND);
         add(cmbTransactionType);

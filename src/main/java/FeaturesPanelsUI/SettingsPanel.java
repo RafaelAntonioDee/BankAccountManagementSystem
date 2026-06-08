@@ -24,7 +24,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
     static JLabel lblAccountInfo, lblPersonalInfo, lblName, lblEmail, lblAppPref, lblPassword, lblPhoneNumber, lblBirthday, lblAddress, lblNameField, lblBirthdayField, lblEmailField, lblPasswordField, lblPhoneField, lblAddressField, lblTemp;
     private JButton btnChangePhoneNumber, btnChangeName, btnChangeEmail, btnChangePassword, btnChangeAddress, btnChangeBirthday;
     private JPanel pnlPersonalInfo, pnlAccountInfo, pnlAppPreference;
-    private JComboBox<String> cmbTheme, cmbGender;
+    private JComboBox<String> cmbTheme;
     private String[] SystemTheme = {"System", "Dark", "Light"};
 //            gender = {"Male", "Female", "Croissant", "Prefer Not to Say"};
     private Account user;
@@ -224,6 +224,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
 
         cmbTheme = new JComboBox<String>(SystemTheme);
         cmbTheme.setBounds(97, 15, 120, 35);
+        cmbTheme.setFocusable(false);
         cmbTheme.setForeground(theme.TEXT_BLACK);
         cmbTheme.setBackground(theme.PANELS_BACKGROUND);
         pnlAppPreference.add(cmbTheme);

@@ -16,6 +16,7 @@ import javax.swing.border.LineBorder;
 public class TransferPanel extends JPanel implements ActionListener {
 
     private JLabel lblBalance, lblBalanceAmount, lblAmount, lblEmail, lblName, lblGuideTitle;
+    private JTextArea txaGuideBody;
     private JButton btnTransfer, btnCancel;
     private JButton btnAmt500, btnAmt1000, btnAmt2500, btnAmt5000;
     private JTextField txtAmount, txtEmail;
@@ -35,33 +36,34 @@ public class TransferPanel extends JPanel implements ActionListener {
         this.balance = user.getBalance();
 
         setBounds(0, 0, 837, 560);
-        setBackground(new Color(243, 243, 243));
-        setBorder(new LineBorder(Color.LIGHT_GRAY));
+        setBackground(theme.BACKGROUND);
+        setBorder(new LineBorder(theme.BORDER_GRAY));
         setLayout(null);
 
         lblBalance = new JLabel("Available Balance");
-        lblBalance.setForeground(Color.GRAY);
+        lblBalance.setForeground(theme.TEXT_GRAY);
         lblBalance.setFont(new Font("Arial", Font.PLAIN, 16));
         lblBalance.setBounds(40, 20, 755, 25);
         add(lblBalance);
 
         lblBalanceAmount = new JLabel("    ₱" + String.format("%.2f", balance));
-        lblBalanceAmount.setForeground(Color.WHITE);
+        lblBalanceAmount.setForeground(theme.TEXT_WHITE);
         lblBalanceAmount.setFont(new Font("Arial", Font.BOLD, 22));
         lblBalanceAmount.setBounds(40, 50, 755, 55);
         lblBalanceAmount.setOpaque(true);
-        lblBalanceAmount.setBackground(new Color(82, 124, 174));
+        lblBalanceAmount.setBackground(theme.PRIMARY_BLUE);
         add(lblBalanceAmount);
 
         pnlProcess = new JPanel();
         pnlProcess.setBounds(40, 130, 420, 395);
-        pnlProcess.setBackground(Color.WHITE);
-        pnlProcess.setBorder(new LineBorder(new Color(220, 220, 220)));
+        pnlProcess.setBackground(theme.PANELS_BACKGROUND);
+        pnlProcess.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlProcess.setLayout(null);
         add(pnlProcess);
 
         lblEmail = new JLabel("Transfer to (Recipient Email)");
         lblEmail.setFont(new Font("Arial", Font.BOLD, 15));
+        lblEmail.setForeground(theme.TEXT_BLACK);
         lblEmail.setBounds(30, 15, 360, 25);
         pnlProcess.add(lblEmail);
 
@@ -69,13 +71,15 @@ public class TransferPanel extends JPanel implements ActionListener {
         txtEmail.setBounds(30, 45, 360, 35);
         txtEmail.setFont(new Font("Arial", Font.PLAIN, 15));
         txtEmail.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.GRAY),
+                BorderFactory.createLineBorder(theme.BORDER_GRAY),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        txtEmail.setForeground(theme.TEXT_BLACK);
+        txtEmail.setBackground(theme.BACKGROUND);
         pnlProcess.add(txtEmail);
 
-        lblName = new JLabel("Account Holder Name: ---");
+        lblName = new JLabel("Transferring to (email): ---");
         lblName.setFont(new Font("Arial", Font.ITALIC, 13));
-        lblName.setForeground(new Color(82, 124, 174));
+        lblName.setForeground(theme.PRIMARY_BLUE);
         lblName.setBounds(30, 85, 360, 20);
         pnlProcess.add(lblName);
 
@@ -96,6 +100,7 @@ public class TransferPanel extends JPanel implements ActionListener {
 
         lblAmount = new JLabel("Transfer Amount");
         lblAmount.setFont(new Font("Arial", Font.BOLD, 15));
+        lblAmount.setForeground(theme.TEXT_BLACK);
         lblAmount.setBounds(30, 120, 360, 25);
         pnlProcess.add(lblAmount);
 
@@ -105,6 +110,8 @@ public class TransferPanel extends JPanel implements ActionListener {
         txtAmount.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        txtAmount.setBackground(theme.BACKGROUND);
+        txtAmount.setForeground(theme.TEXT_BLACK);
         pnlProcess.add(txtAmount);
 
         btnAmt500 = new JButton("₱500");
@@ -118,9 +125,9 @@ public class TransferPanel extends JPanel implements ActionListener {
 
         JButton[] quickButtons = {btnAmt500, btnAmt1000, btnAmt2500, btnAmt5000};
         for (JButton btn : quickButtons) {
-            btn.setBackground(Color.WHITE);
-            btn.setForeground(new Color(82, 124, 174));
-            btn.setBorder(BorderFactory.createLineBorder(new Color(82, 124, 174)));
+            btn.setBackground(theme.PRIMARY_BLUE);
+            btn.setForeground(theme.TEXT_WHITE);
+            btn.setBorder(BorderFactory.createLineBorder(theme.BORDER_GRAY));
             btn.setFocusPainted(false);
             btn.addActionListener(this);
             pnlProcess.add(btn);
@@ -128,8 +135,8 @@ public class TransferPanel extends JPanel implements ActionListener {
 
         btnTransfer = new JButton("Transfer");
         btnTransfer.setBounds(160, 330, 110, 35);
-        btnTransfer.setBackground(new Color(82, 124, 174));
-        btnTransfer.setForeground(Color.WHITE);
+        btnTransfer.setBackground(theme.PRIMARY_BLUE);
+        btnTransfer.setForeground(theme.TEXT_WHITE);
         btnTransfer.setFont(new Font("Arial", Font.BOLD, 13));
         btnTransfer.setFocusPainted(false);
         btnTransfer.addActionListener(this);
@@ -137,8 +144,8 @@ public class TransferPanel extends JPanel implements ActionListener {
 
         btnCancel = new JButton("Cancel");
         btnCancel.setBounds(280, 330, 110, 35);
-        btnCancel.setBackground(Color.GRAY);
-        btnCancel.setForeground(Color.WHITE);
+        btnCancel.setBackground(theme.CancelButton);
+        btnCancel.setForeground(theme.TEXT_WHITE);
         btnCancel.setFont(new Font("Arial", Font.BOLD, 13));
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
@@ -146,49 +153,55 @@ public class TransferPanel extends JPanel implements ActionListener {
 
         pnlGuidelines = new JPanel();
         pnlGuidelines.setBounds(480, 130, 315, 395);
-        pnlGuidelines.setBackground(Color.WHITE);
-        pnlGuidelines.setBorder(new LineBorder(new Color(220, 220, 220)));
+        pnlGuidelines.setBackground(theme.PANELS_BACKGROUND);
+        pnlGuidelines.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlGuidelines.setLayout(null);
         add(pnlGuidelines);
 
         lblGuideTitle = new JLabel("Transfer Guidelines");
-        lblGuideTitle.setFont(new Font("Arial", Font.BOLD, 15));
-        lblGuideTitle.setForeground(new Color(82, 124, 174));
-        lblGuideTitle.setBounds(20, 20, 275, 25);
+        lblGuideTitle.setFont(new Font("Arial", Font.BOLD, 25));
+        lblGuideTitle.setForeground(theme.PRIMARY_BLUE);
+        lblGuideTitle.setBounds(20, 30, 275, 25);
         pnlGuidelines.add(lblGuideTitle);
 
-        String guideText = "<html>"
-                + "<body style='font-family:Arial; font-size:11px; color:#555555;'>"
-                + "<b>Transfer Rules:</b><br>"
-                + "• Direct Peer-to-Peer Transfers: Always Free<br>"
-                + "<b>Security Notice:</b><br>"
-                + "• Double check target email credentials carefully. Peer funds cannot be dynamically recalled or adjusted once processing finishes.<br><br>"
-                + "• Verification strings will match the target data registry to display the legal name preview above."
-                + "</body>"
-                + "</html>";
+        String guideText = "Security Notice: \n"
+                + "• Direct Peer-to-Peer transfers are\n"
+                + "processed immediately and cannot \n"
+                + "be cancelled or reversed once it's\n"
+                + "submitted. Always double check the\n"
+                + "target email credential carefully.\n"
+                + " \n"
+                + "Processing Time:  \n"
+                + "• Handled immediately in real-time. \n"
+                + " \n"
+                + "Notice:  \n"
+                + "Ensure your balance can fully cover  \n"
+                + "the transfer amount prior to submitting.";
 
-        JLabel lblGuideBody = new JLabel(guideText);
-        lblGuideBody.setBounds(20, 55, 275, 300);
-        lblGuideBody.setVerticalAlignment(SwingConstants.TOP);
-        pnlGuidelines.add(lblGuideBody);
+        txaGuideBody = new JTextArea(guideText);
+        txaGuideBody.setFont(new Font("Arial", Font.BOLD, 15));
+        txaGuideBody.setBackground(theme.PANELS_BACKGROUND);
+        txaGuideBody.setForeground(theme.TEXT_BLACK);
+        txaGuideBody.setBounds(20, 80, 275, 300);
+        pnlGuidelines.add(txaGuideBody);
     }
 
     private void lookupRecipientName() {
         String email = txtEmail.getText().trim();
         if (email.isEmpty()) {
-            lblName.setText("Account Holder Name: ---");
+            lblName.setText("Transferring to (email): ---");
             return;
         }
         if (email.equalsIgnoreCase(currentUser.getEmail())) {
-            lblName.setText("<html><font color='red'>Cannot transfer to yourself</font></html>");
+            JOptionPane.showMessageDialog(this, "Cannot transfer to yourself!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         Account receiver = AccountFunctions.getUser(email);
         if (receiver != null) {
-            lblName.setText("Account Holder: " + receiver.getEmail().split("@")[0].toUpperCase());
+            lblName.setText("Transferring to (email): " + receiver.getEmail());
         } else {
-            lblName.setText("<html><font color='red'>Account not found</font></html>");
+            JOptionPane.showMessageDialog(this, "Account not found!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -251,7 +264,7 @@ public class TransferPanel extends JPanel implements ActionListener {
 
                 Account receiver = AccountFunctions.getUser(email);
                 if (receiver == null) {
-                    JOptionPane.showMessageDialog(this, "Recipient account not found!");
+                    JOptionPane.showMessageDialog(this, "Recipient account not found!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -266,7 +279,7 @@ public class TransferPanel extends JPanel implements ActionListener {
                 clearInputs();
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid entry tracking numeric inputs!");
+                JOptionPane.showMessageDialog(this, "Invalid entry tracking numeric inputs!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 

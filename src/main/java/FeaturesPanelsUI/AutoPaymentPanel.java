@@ -71,7 +71,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         txtRecipient = new JTextField();
         txtRecipient.setBounds(25, 60, 325, 35);
         txtRecipient.setOpaque(false);
-        txtRecipient.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        txtRecipient.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(theme.BORDER_GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         txtRecipient.setForeground(theme.TEXT_BLACK);
         pnlAutoPayment.add(txtRecipient);
 
@@ -98,6 +98,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         cmbFrequency.setBounds(25, 200, 325, 35);
         cmbFrequency.setForeground(theme.TEXT_BLACK);
         cmbFrequency.setBackground(theme.PANELS_BACKGROUND);
+        cmbFrequency.setFocusable(false);
         pnlAutoPayment.add(cmbFrequency);
 
         btnEnableAuto = new JButton("Set Up Payment");
@@ -187,7 +188,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         pnlScheduledPayment.setName(RecipientName);
         pnlScheduledPayment.setBounds(15, y, 357, 110);
         pnlScheduledPayment.setBackground(theme.PANELS_BACKGROUND);
-        pnlScheduledPayment.setBorder(new LineBorder(new Color(82, 124, 174)));
+        pnlScheduledPayment.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlScheduledPayment.setLayout(null);
         pnlAutoPayListContent.add(pnlScheduledPayment);
 

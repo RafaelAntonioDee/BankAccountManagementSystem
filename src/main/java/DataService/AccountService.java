@@ -19,7 +19,7 @@ public class AccountService {
     private static ArrayList<AccountPersonalInformation> AccountsPersonalInfo = new ArrayList<>();
 
     public AccountService() {
-        
+
         // DUMMY ACCOUNT #1
         Account acc1 = new Account();
         acc1.setEmail("@");
@@ -34,10 +34,10 @@ public class AccountService {
         newUserInfo.setAddress("San Antonio, San Pedro, Laguna");
         newUserInfo.setPhoneNum("123123123");
         newUserInfo.setBirthdate("May 20, 2026");
-        
+
         AccountsPersonalInfo.add(newUserInfo);
         Accounts.add(acc1);
-        
+
         // DUMMY ACCOUNT #2
         Account acc2 = new Account();
         acc2.setEmail("@@");
@@ -52,7 +52,7 @@ public class AccountService {
         newUserInfo2.setAddress("Malaban, San Pedro, Laguna");
         newUserInfo2.setPhoneNum("123123123");
         newUserInfo2.setBirthdate("May 20, 2026");
-        
+
         AccountsPersonalInfo.add(newUserInfo2);
         Accounts.add(acc2);
     }
@@ -80,7 +80,6 @@ public class AccountService {
 //        }
 //        return false;
 //    }
-
     public static boolean validatePhoneNumber(String phone) {
         return phone.matches("\\d+") && phone.length() == 11 && phone.startsWith("09");
     }
@@ -120,7 +119,7 @@ public class AccountService {
         }
         return null;
     }
-    
+
     public static ArrayList<Account> getAccounts() {
         return Accounts;
     }

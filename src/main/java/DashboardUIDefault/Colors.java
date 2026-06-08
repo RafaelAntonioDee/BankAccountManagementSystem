@@ -49,11 +49,11 @@ public class Colors {
     public static Colors LIGHT() {
         Colors c = new Colors();
 
-        c.PRIMARY_BLUE = new Color(82, 124, 174);
+        c.PRIMARY_BLUE = new Color(59, 130, 246);
         c.SUCCESS_GREEN = new Color(82, 174, 124);
 
         c.BACKGROUND = new Color(243, 243, 243);
-        c.PANELS_BACKGROUND = new Color(243, 243, 243);
+        c.PANELS_BACKGROUND = new Color(255, 255, 255);
         c.SidePanel = new Color(228, 228, 236);
         c.ButtonHighlight = new Color(201, 211, 221);
         c.HeaderFooterColor = new Color(240, 240, 240);
@@ -74,8 +74,8 @@ public class Colors {
     public static Colors DARK() {
         Colors c = new Colors();
 
-        c.PRIMARY_BLUE = new Color(59, 130, 246);
-        c.SUCCESS_GREEN = new Color(0, 184, 148);
+        c.PRIMARY_BLUE = new Color(88, 101, 242);
+        c.SUCCESS_GREEN = new Color(67, 181, 120);
 
         c.BACKGROUND = new Color(17, 17, 19);
         c.PANELS_BACKGROUND = new Color(28, 28, 31);
@@ -92,5 +92,18 @@ public class Colors {
 
         return c;
     }
+    
+    /** TEST MIC NG MGA KULAY
+     * ORIGINAL BLUE NAMIN = 82, 124, 174
+     * BRIGHTER BLUE NAMIN = 59, 130, 246
+     * DISCORD BLUE = 88, 101, 242
+     * DISCORD GREEN = 87, 242, 135
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
 
 }

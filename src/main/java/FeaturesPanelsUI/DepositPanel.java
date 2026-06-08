@@ -14,13 +14,16 @@ import DashboardUIDefault.Colors;
 public class DepositPanel extends JPanel implements ActionListener {
 
     private JLabel lblBalance, lblBalanceAmount, lblAmount, lblModeOfTransac, lblGuideTitle;
+    private JTextArea txaGuideBody;
     private JButton btnDeposit, btnCancel;
     private JButton btnAmt500, btnAmt1000, btnAmt2500, btnAmt5000;
     private JTextField txtAmount;
     private JComboBox<String> cmbModeOfTransac;
-    private JComboBox<String> cmbBankList; 
+    private JComboBox<String> cmbBankList;
     private JPanel pnlProcess, pnlGuidelines;
     private Account user;
+    private String[] bankList = {"Select Bank Provider", "BDO Unibank", "BPI (Bank of the Philippine Islands)", "Metrobank", "Landbank of the Philippines", "Security Bank"},
+            modeOfTransaction = {"Select Mode", "Linked Bank Account", "Local Banks", "Global Banks & Partners", "Over-the-Counter Kiosk (Touchpay/Cliqq)", "Over-the-Counter Cashier"};
     public static Colors theme = Colors.LIGHT();
 
     double balance = 0;
@@ -33,7 +36,7 @@ public class DepositPanel extends JPanel implements ActionListener {
         }
         this.user = user;
         balance = user.getBalance();
-        
+
         setBounds(0, 0, 837, 560);
         setBackground(theme.BACKGROUND);
         setBorder(new LineBorder(theme.BORDER_GRAY));
@@ -43,21 +46,18 @@ public class DepositPanel extends JPanel implements ActionListener {
         lblBalance.setForeground(theme.TEXT_GRAY);
         lblBalance.setFont(new Font("Arial", Font.PLAIN, 18));
         lblBalance.setBounds(25, 25, 250, 35);
+        
         lblBalance = new JLabel("Available Balance");
-        lblBalance.setForeground(Color.GRAY);
         lblBalance.setFont(new Font("Arial", Font.PLAIN, 16));
+        lblBalance.setForeground(theme.TEXT_GRAY);
         lblBalance.setBounds(40, 20, 755, 25);
         add(lblBalance);
 
-        lblBalanceAmount = new JLabel("    ₱" + String.format("%.2f",balance));
-        lblBalanceAmount.setForeground(theme.TEXT_WHITE);
-        lblBalanceAmount.setFont(new Font("Arial", Font.PLAIN, 20));
-        lblBalanceAmount.setBounds(25, 65, 250, 50);
         lblBalanceAmount = new JLabel("    ₱" + String.format("%.2f", balance));
-        lblBalanceAmount.setForeground(Color.WHITE);
         lblBalanceAmount.setFont(new Font("Arial", Font.BOLD, 22));
         lblBalanceAmount.setBounds(40, 50, 755, 55);
         lblBalanceAmount.setOpaque(true);
+        lblBalanceAmount.setForeground(theme.TEXT_WHITE);
         lblBalanceAmount.setBackground(theme.PRIMARY_BLUE);
         add(lblBalanceAmount);
 
@@ -66,8 +66,6 @@ public class DepositPanel extends JPanel implements ActionListener {
         pnlProcess.setBackground(theme.PANELS_BACKGROUND);
         pnlProcess.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlProcess.setBounds(40, 130, 420, 395);
-        pnlProcess.setBackground(Color.WHITE);
-        pnlProcess.setBorder(new LineBorder(new Color(220, 220, 220)));
         pnlProcess.setLayout(null);
         add(pnlProcess);
 
@@ -83,7 +81,7 @@ public class DepositPanel extends JPanel implements ActionListener {
         txtAmount.setBounds(30, 50, 360, 35);
         txtAmount.setFont(new Font("Arial", Font.PLAIN, 15));
         txtAmount.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(theme.BORDER_GRAY), 
+                BorderFactory.createLineBorder(theme.BORDER_GRAY),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         txtAmount.setForeground(theme.TEXT_BLACK);
         txtAmount.setBackground(theme.BACKGROUND);
@@ -100,9 +98,9 @@ public class DepositPanel extends JPanel implements ActionListener {
 
         JButton[] quickButtons = {btnAmt500, btnAmt1000, btnAmt2500, btnAmt5000};
         for (JButton btn : quickButtons) {
-            btn.setBackground(Color.WHITE);
-            btn.setForeground(new Color(82, 124, 174));
-            btn.setBorder(BorderFactory.createLineBorder(new Color(82, 124, 174)));
+            btn.setBackground(theme.PRIMARY_BLUE);
+            btn.setForeground(theme.TEXT_WHITE);
+            btn.setBorder(BorderFactory.createLineBorder(theme.BORDER_GRAY));
             btn.setFocusPainted(false);
             btn.addActionListener(this);
             pnlProcess.add(btn);
@@ -116,29 +114,22 @@ public class DepositPanel extends JPanel implements ActionListener {
         lblModeOfTransac.setBounds(30, 150, 360, 25);
         pnlProcess.add(lblModeOfTransac);
 
-        cmbModeOfTransac = new JComboBox<>();
+        cmbModeOfTransac = new JComboBox<>(modeOfTransaction);
         cmbModeOfTransac.setBounds(30, 180, 360, 35);
+        cmbModeOfTransac.setFocusable(false);
         cmbModeOfTransac.setFont(new Font("Arial", Font.PLAIN, 14));
-        cmbModeOfTransac.addItem("Select Mode");
-        cmbModeOfTransac.addItem("Linked Bank Account");
-        cmbModeOfTransac.addItem("Local Banks");
-        cmbModeOfTransac.addItem("Global Banks & Partners");
         cmbModeOfTransac.setForeground(theme.TEXT_BLACK);
         cmbModeOfTransac.setBackground(theme.BACKGROUND);
-        cmbModeOfTransac.addItem("Over-the-Counter Kiosk (Touchpay/Cliqq)");
-        cmbModeOfTransac.addItem("Over-the-Counter Cashier");
+        
         pnlProcess.add(cmbModeOfTransac);
 
-        cmbBankList = new JComboBox<>();
+        cmbBankList = new JComboBox<>(bankList);
         cmbBankList.setBounds(30, 225, 360, 35);
         cmbBankList.setFont(new Font("Arial", Font.PLAIN, 14));
-        cmbBankList.addItem("Select Bank Provider");
-        cmbBankList.addItem("BDO Unibank");
-        cmbBankList.addItem("BPI (Bank of the Philippine Islands)");
-        cmbBankList.addItem("Metrobank");
-        cmbBankList.addItem("Landbank of the Philippines");
-        cmbBankList.addItem("Security Bank");
-        cmbBankList.setVisible(false); 
+        cmbBankList.setFocusable(false);
+        cmbBankList.setForeground(theme.TEXT_BLACK);
+        cmbBankList.setBackground(theme.BACKGROUND);
+        cmbBankList.setVisible(false);
         pnlProcess.add(cmbBankList);
 
         cmbModeOfTransac.addActionListener(new ActionListener() {
@@ -151,7 +142,7 @@ public class DepositPanel extends JPanel implements ActionListener {
                     cmbBankList.setVisible(false);
                     cmbBankList.setSelectedIndex(0);
                 }
-                pnlProcess.repaint();
+//                pnlProcess.repaint();
             }
         });
 
@@ -159,17 +150,15 @@ public class DepositPanel extends JPanel implements ActionListener {
         btnDeposit.setBounds(160, 330, 110, 35);
         btnDeposit.setBackground(theme.PRIMARY_BLUE);
         btnDeposit.setForeground(theme.TEXT_WHITE);
-        btnDeposit.setBackground(new Color(82, 124, 174));
-        btnDeposit.setForeground(Color.WHITE);
         btnDeposit.setFont(new Font("Arial", Font.BOLD, 13));
         btnDeposit.setFocusPainted(false);
         btnDeposit.addActionListener(this);
         pnlProcess.add(btnDeposit);
 
         btnCancel = new JButton("Cancel");
-        btnCancel.setBounds(280, 330, 110, 35); 
-        btnCancel.setBackground(Color.GRAY);
-        btnCancel.setForeground(Color.WHITE);
+        btnCancel.setBounds(280, 330, 110, 35);
+        btnCancel.setBackground(theme.CancelButton);
+        btnCancel.setForeground(theme.TEXT_WHITE);
         btnCancel.setFont(new Font("Arial", Font.BOLD, 13));
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
@@ -177,46 +166,51 @@ public class DepositPanel extends JPanel implements ActionListener {
 
         pnlGuidelines = new JPanel();
         pnlGuidelines.setBounds(480, 130, 315, 395);
-        pnlGuidelines.setBackground(Color.WHITE);
-        pnlGuidelines.setBorder(new LineBorder(new Color(220, 220, 220)));
+        pnlGuidelines.setBackground(theme.PANELS_BACKGROUND);
+        pnlGuidelines.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlGuidelines.setLayout(null);
         add(pnlGuidelines);
 
         lblGuideTitle = new JLabel("Deposit Guidelines");
-        lblGuideTitle.setFont(new Font("Arial", Font.BOLD, 15));
-        lblGuideTitle.setForeground(new Color(82, 124, 174));
-        lblGuideTitle.setBounds(20, 20, 275, 25);
+        lblGuideTitle.setFont(new Font("Arial", Font.BOLD, 25));
+        lblGuideTitle.setForeground(theme.PRIMARY_BLUE);
+        lblGuideTitle.setBounds(20, 30, 275, 25);
         pnlGuidelines.add(lblGuideTitle);
 
-        String guideText = "<html>"
-                + "<body style='font-family:Arial; font-size:11px; color:#555555;'>"
-                + "<b>Deposit Charges:</b><br>"
-                + "• Linked Bank Account: Free<br>"
-                + "• Local Banks: Free<br>"
-                + "• Over-the-Counter Kiosk: ₱20.00 processing fee deducted<br>"
-                + "• Over-the-Counter Cashier: ₱20.00 processing fee deducted<br><br>"
-                + "<b>Processing Time:</b><br>"
-                + "• All standard deposits are posted in real-time.<br><br>"
-                + "<b>Notice:</b><br>"
-                + "Ensure your source funds are active before submitting. Deductions for processing fees are automatically handled upon deposit completion."
-                + "</body>"
-                + "</html>";
+        String guideText = "Charges: \n"
+                + "• Linked Bank Account: Free \n"
+                + "• Local Banks: Free  \n"
+                + "• Over-the-Counter Kiosk: ₱20.00  \n"
+                + "• Over-the-Counter Cashier: ₱20.00  \n"
+                + " \n"
+                + "Processing Time:  \n"
+                + "• Handled immediately in real-time. \n"
+                + " \n"
+                + "Notice:  \n"
+                + "Ensure your source funds are active  \n"
+                + "before submitting. Deductions for  \n"
+                + "processing fees are automatically  \n"
+                + "handled upon deposit completion.";
 
-        JLabel lblGuideBody = new JLabel(guideText);
-        lblGuideBody.setBounds(20, 55, 275, 300);
-        lblGuideBody.setVerticalAlignment(SwingConstants.TOP);
-        pnlGuidelines.add(lblGuideBody);
+        txaGuideBody = new JTextArea(guideText);
+        txaGuideBody.setFont(new Font("Arial", Font.BOLD, 15));
+        txaGuideBody.setBackground(theme.PANELS_BACKGROUND);
+        txaGuideBody.setForeground(theme.TEXT_BLACK);
+        txaGuideBody.setBounds(20, 80, 275, 300);
+        txaGuideBody.setEditable(false);
+//        txaGuideBody.setVerticalAlignment(SwingConstants.TOP);
+        pnlGuidelines.add(txaGuideBody);
     }
 
     private String getNextTransactionID() {
         java.util.ArrayList<Objects.AccountTransactHistory> history = BalanceFunctions.getTransactions(user.getEmail());
-        int nextNum = 1; 
-        
+        int nextNum = 1;
+
         if (history != null && !history.isEmpty()) {
             try {
-                String lastID = history.get(history.size() - 1).getTransactionID(); 
+                String lastID = history.get(history.size() - 1).getTransactionID();
                 int lastNum = Integer.parseInt(lastID.replaceAll("[^0-9]", ""));
-                nextNum = lastNum + 1; 
+                nextNum = lastNum + 1;
             } catch (Exception e) {
                 nextNum = history.size() + 1;
             }
@@ -226,10 +220,15 @@ public class DepositPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnAmt500) txtAmount.setText("500");
-        else if (e.getSource() == btnAmt1000) txtAmount.setText("1000");
-        else if (e.getSource() == btnAmt2500) txtAmount.setText("2500");
-        else if (e.getSource() == btnAmt5000) txtAmount.setText("5000");
+        if (e.getSource() == btnAmt500) {
+            txtAmount.setText("500");
+        } else if (e.getSource() == btnAmt1000) {
+            txtAmount.setText("1000");
+        } else if (e.getSource() == btnAmt2500) {
+            txtAmount.setText("2500");
+        } else if (e.getSource() == btnAmt5000) {
+            txtAmount.setText("5000");
+        }
 
         if (e.getSource() == btnDeposit) {
             try {
@@ -244,7 +243,7 @@ public class DepositPanel extends JPanel implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Select transaction mode!");
                     return;
                 }
-                
+
                 if (mode.equals("Local Banks") && cmbBankList.getSelectedIndex() == 0) {
                     JOptionPane.showMessageDialog(this, "Please choose your local bank provider!");
                     return;
@@ -305,7 +304,7 @@ public class DepositPanel extends JPanel implements ActionListener {
         dialog.setLayout(new BorderLayout());
 
         JPanel pnlReceiptImage = new JPanel();
-        pnlReceiptImage.setBackground(new Color(82, 124, 174)); 
+        pnlReceiptImage.setBackground(new Color(82, 124, 174));
         pnlReceiptImage.setLayout(null);
 
         JPanel pnlWhiteCard = new JPanel();
@@ -381,7 +380,7 @@ public class DepositPanel extends JPanel implements ActionListener {
         pnlRefTint.add(lblRefNum);
 
         JLabel lblTime = new JLabel("Channel Mode: " + mode, SwingConstants.CENTER);
-        lblTime.setFont(new Font("Arial", Font.PLAIN, 11)); 
+        lblTime.setFont(new Font("Arial", Font.PLAIN, 11));
         lblTime.setForeground(Color.GRAY);
         lblTime.setBounds(0, 50, 325, 20);
         pnlRefTint.add(lblTime);
@@ -393,7 +392,7 @@ public class DepositPanel extends JPanel implements ActionListener {
 
         JButton btnSave = new JButton("Save Receipt as Image");
         JButton btnClose = new JButton("Back");
-        
+
         pnlButtons.add(btnSave);
         pnlButtons.add(btnClose);
         dialog.add(pnlButtons, BorderLayout.SOUTH);

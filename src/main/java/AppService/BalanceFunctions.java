@@ -17,13 +17,13 @@ import java.util.ArrayList;
  */
 public class BalanceFunctions {
 
-    public static double deposit(String email, double amount) {
+    public static double deposit(String email, double amount, String transactionId) {
         addTransaction(email, "Deposit", LocalDate.now(), "+ " + amount);
 
         return AccountService.deposit(email, amount);
     }
 
-    public static double withdraw(String email, double amount) {
+    public static double withdraw(String email, double amount, String transactionId) {
         addTransaction(email, "Withdraw", LocalDate.now(), "- " + amount);
 
         return AccountService.withdraw(email, amount);

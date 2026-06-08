@@ -5,149 +5,389 @@ import AppService.BalanceFunctions;
 import AppService.AccountFunctions;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class TransferPanel extends JPanel implements ActionListener {
 
-    private JLabel lblBalance, lblBalanceAmount, lblAmount, lblEmail, lblReceipt, lblName;
+    private JLabel lblBalance, lblBalanceAmount, lblAmount, lblEmail, lblName, lblGuideTitle;
     private JButton btnTransfer, btnCancel;
+    private JButton btnAmt500, btnAmt1000, btnAmt2500, btnAmt5000;
     private JTextField txtAmount, txtEmail;
-    private JPanel pnlProcess;
-    private JTextArea txtReceipt;
-
-    private ArrayList<Account> accounts = new ArrayList<>();
+    private JPanel pnlProcess, pnlGuidelines;
     private Account currentUser;
+    
+    private double balance = 0;
 
     public TransferPanel(Account user) {
         this.currentUser = user;
+        this.balance = user.getBalance();
+        
         setBounds(0, 0, 837, 560);
         setBackground(new Color(243, 243, 243));
         setBorder(new LineBorder(Color.LIGHT_GRAY));
         setLayout(null);
 
-        lblBalance = new JLabel("Balance");
+        lblBalance = new JLabel("Available Balance");
         lblBalance.setForeground(Color.GRAY);
-        lblBalance.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblBalance.setBounds(25, 25, 250, 35);
+        lblBalance.setFont(new Font("Arial", Font.PLAIN, 16));
+        lblBalance.setBounds(40, 20, 755, 25);
         add(lblBalance);
 
-        lblBalanceAmount = new JLabel("    ₱" + String.format("%.2f",currentUser.getBalance()));
+        lblBalanceAmount = new JLabel("    ₱" + String.format("%.2f", balance));
         lblBalanceAmount.setForeground(Color.WHITE);
-        lblBalanceAmount.setFont(new Font("Arial", Font.PLAIN, 20));
-        lblBalanceAmount.setBounds(25, 65, 250, 50);
+        lblBalanceAmount.setFont(new Font("Arial", Font.BOLD, 22));
+        lblBalanceAmount.setBounds(40, 50, 755, 55);
         lblBalanceAmount.setOpaque(true);
         lblBalanceAmount.setBackground(new Color(82, 124, 174));
         add(lblBalanceAmount);
 
         pnlProcess = new JPanel();
-        pnlProcess.setBounds(25, 140, 375, 395);
-        pnlProcess.setBackground(new Color(243, 243, 243));
-        pnlProcess.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        pnlProcess.setBounds(40, 130, 420, 395);
+        pnlProcess.setBackground(Color.WHITE);
+        pnlProcess.setBorder(new LineBorder(new Color(220, 220, 220)));
         pnlProcess.setLayout(null);
         add(pnlProcess);
 
-        lblEmail = new JLabel("Transfer to (email)");
-        lblEmail.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblEmail.setBounds(25, 25, 325, 35);
+        lblEmail = new JLabel("Transfer to (Recipient Email)");
+        lblEmail.setFont(new Font("Arial", Font.BOLD, 15));
+        lblEmail.setBounds(30, 15, 360, 25);
         pnlProcess.add(lblEmail);
 
         txtEmail = new JTextField();
-        txtEmail.setBounds(25, 70, 325, 35);
+        txtEmail.setBounds(30, 45, 360, 35);
+        txtEmail.setFont(new Font("Arial", Font.PLAIN, 15));
+        txtEmail.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY), 
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlProcess.add(txtEmail);
 
-        lblName = new JLabel("Name: _________________________");
-        lblName.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblName.setBounds(25, 115, 325, 35);
+        lblName = new JLabel("Account Holder Name: ---");
+        lblName.setFont(new Font("Arial", Font.ITALIC, 13));
+        lblName.setForeground(new Color(82, 124, 174));
+        lblName.setBounds(30, 85, 360, 20);
         pnlProcess.add(lblName);
 
-        lblAmount = new JLabel("Amount");
-        lblAmount.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblAmount.setBounds(25, 160, 325, 35);
+        txtEmail.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                lookupRecipientName();
+            }
+        });
+        txtEmail.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    lookupRecipientName();
+                }
+            }
+        });
+
+        lblAmount = new JLabel("Transfer Amount");
+        lblAmount.setFont(new Font("Arial", Font.BOLD, 15));
+        lblAmount.setBounds(30, 120, 360, 25);
         pnlProcess.add(lblAmount);
 
         txtAmount = new JTextField();
-        txtAmount.setBounds(25, 205, 325, 35);
+        txtAmount.setBounds(30, 150, 360, 35);
+        txtAmount.setFont(new Font("Arial", Font.PLAIN, 15));
+        txtAmount.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY), 
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlProcess.add(txtAmount);
 
+        btnAmt500 = new JButton("₱500");
+        btnAmt500.setBounds(30, 195, 80, 28);
+        btnAmt1000 = new JButton("₱1000");
+        btnAmt1000.setBounds(120, 195, 80, 28);
+        btnAmt2500 = new JButton("₱2500");
+        btnAmt2500.setBounds(210, 195, 80, 28);
+        btnAmt5000 = new JButton("₱5000");
+        btnAmt5000.setBounds(300, 195, 90, 28);
+
+        JButton[] quickButtons = {btnAmt500, btnAmt1000, btnAmt2500, btnAmt5000};
+        for (JButton btn : quickButtons) {
+            btn.setBackground(Color.WHITE);
+            btn.setForeground(new Color(82, 124, 174));
+            btn.setBorder(BorderFactory.createLineBorder(new Color(82, 124, 174)));
+            btn.setFocusPainted(false);
+            btn.addActionListener(this);
+            pnlProcess.add(btn);
+        }
+
         btnTransfer = new JButton("Transfer");
-        btnTransfer.setBounds(160, 325, 85, 35);
+        btnTransfer.setBounds(160, 330, 110, 35);
         btnTransfer.setBackground(new Color(82, 124, 174));
         btnTransfer.setForeground(Color.WHITE);
+        btnTransfer.setFont(new Font("Arial", Font.BOLD, 13));
+        btnTransfer.setFocusPainted(false);
         btnTransfer.addActionListener(this);
         pnlProcess.add(btnTransfer);
 
         btnCancel = new JButton("Cancel");
-        btnCancel.setBounds(265, 325, 85, 35);
+        btnCancel.setBounds(280, 330, 110, 35);
         btnCancel.setBackground(Color.GRAY);
         btnCancel.setForeground(Color.WHITE);
+        btnCancel.setFont(new Font("Arial", Font.BOLD, 13));
+        btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
         pnlProcess.add(btnCancel);
 
-        lblReceipt = new JLabel("Receipt");
-        lblReceipt.setForeground(Color.GRAY);
-        lblReceipt.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblReceipt.setBounds(425, 25, 325, 35);
-        add(lblReceipt);
+        pnlGuidelines = new JPanel();
+        pnlGuidelines.setBounds(480, 130, 315, 395);
+        pnlGuidelines.setBackground(Color.WHITE);
+        pnlGuidelines.setBorder(new LineBorder(new Color(220, 220, 220)));
+        pnlGuidelines.setLayout(null);
+        add(pnlGuidelines);
 
-        txtReceipt = new JTextArea();
-        txtReceipt.setBounds(425, 65, 387, 470);
-        txtReceipt.setBorder(new LineBorder(Color.LIGHT_GRAY));
-        txtReceipt.setEditable(false);
-        add(txtReceipt);
+        lblGuideTitle = new JLabel("Transfer Guidelines");
+        lblGuideTitle.setFont(new Font("Arial", Font.BOLD, 15));
+        lblGuideTitle.setForeground(new Color(82, 124, 174));
+        lblGuideTitle.setBounds(20, 20, 275, 25);
+        pnlGuidelines.add(lblGuideTitle);
+
+        String guideText = "<html>"
+                + "<body style='font-family:Arial; font-size:11px; color:#555555;'>"
+                + "<b>Transfer Rules:</b><br>"
+                + "• Direct Peer-to-Peer Transfers: Always Free<br>"
+                + "<b>Security Notice:</b><br>"
+                + "• Double check target email credentials carefully. Peer funds cannot be dynamically recalled or adjusted once processing finishes.<br><br>"
+                + "• Verification strings will match the target data registry to display the legal name preview above."
+                + "</body>"
+                + "</html>";
+
+        JLabel lblGuideBody = new JLabel(guideText);
+        lblGuideBody.setBounds(20, 55, 275, 300);
+        lblGuideBody.setVerticalAlignment(SwingConstants.TOP);
+        pnlGuidelines.add(lblGuideBody);
+    }
+
+    private void lookupRecipientName() {
+        String email = txtEmail.getText().trim();
+        if (email.isEmpty()) {
+            lblName.setText("Account Holder Name: ---");
+            return;
+        }
+        if (email.equalsIgnoreCase(currentUser.getEmail())) {
+            lblName.setText("<html><font color='red'>Cannot transfer to yourself</font></html>");
+            return;
+        }
+        
+        Account receiver = AccountFunctions.getUser(email);
+        if (receiver != null) {
+            lblName.setText("Account Holder: " + receiver.getEmail().split("@")[0].toUpperCase());
+        } else {
+            lblName.setText("<html><font color='red'>Account not found</font></html>");
+        }
+    }
+
+    private String getNextTransactionID() {
+        java.util.ArrayList<Objects.AccountTransactHistory> history = BalanceFunctions.getTransactions(currentUser.getEmail());
+        int nextNum = 1; 
+        
+        if (history != null && !history.isEmpty()) {
+            try {
+                String lastID = history.get(history.size() - 1).getTransactionID(); 
+                int lastNum = Integer.parseInt(lastID.replaceAll("[^0-9]", ""));
+                nextNum = lastNum + 1; 
+            } catch (Exception e) {
+                nextNum = history.size() + 1;
+            }
+        }
+        return String.format("T%04d", nextNum);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnAmt500) txtAmount.setText("500");
+        else if (e.getSource() == btnAmt1000) txtAmount.setText("1000");
+        else if (e.getSource() == btnAmt2500) txtAmount.setText("2500");
+        else if (e.getSource() == btnAmt5000) txtAmount.setText("5000");
 
         if (e.getSource() == btnTransfer) {
-
-            String email = txtEmail.getText();
-            String amountText = txtAmount.getText();
-
             try {
+                String email = txtEmail.getText().trim();
+                String amountText = txtAmount.getText().trim();
+
+                if (email.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Enter recipient email!");
+                    return;
+                }
+                if (email.equalsIgnoreCase(currentUser.getEmail())) {
+                    JOptionPane.showMessageDialog(this, "You cannot transfer money to your own account!");
+                    return;
+                }
+                if (amountText.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Enter transfer amount!");
+                    return;
+                }
+
                 double amount = Double.parseDouble(amountText);
-
-                Account receiver = AccountFunctions.getUser(email);
-
-                if (receiver == null) {
-                    JOptionPane.showMessageDialog(this, "Account not found!");
-                    return;
-                }
-
                 if (amount <= 0) {
-                    JOptionPane.showMessageDialog(this, "Invalid amount!");
+                    JOptionPane.showMessageDialog(this, "Invalid amount calculation!");
                     return;
                 }
 
-                if (currentUser.getBalance() < amount) {
+                if (balance < amount) {
                     JOptionPane.showMessageDialog(this, "Insufficient balance!");
                     return;
                 }
 
+                Account receiver = AccountFunctions.getUser(email);
+                if (receiver == null) {
+                    JOptionPane.showMessageDialog(this, "Recipient account not found!");
+                    return;
+                }
+
+                String sequentialTxnId = getNextTransactionID();
+
+                
                 BalanceFunctions.transfer(currentUser, receiver, amount);
+                
+               
+                balance = currentUser.getBalance();
+                lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
 
-                lblBalanceAmount.setText("    ₱" + String.format("%.2f",currentUser.getBalance()));
-                lblName.setText("Name: " + receiver.getEmail());
-
-                txtReceipt.setText(
-                        "Transfer Successful\n" +
-                        "To: " + receiver.getEmail() + "\n" +
-                        "Amount: ₱" + amount + "\n" +
-                        "Remaining Balance: ₱" + currentUser.getBalance()
-                );
+                showReceiptPopup(amount, receiver, sequentialTxnId);
+                clearInputs();
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Enter valid amount!");
+                JOptionPane.showMessageDialog(this, "Invalid entry tracking numeric inputs!");
             }
         }
 
         if (e.getSource() == btnCancel) {
-            txtEmail.setText("");
-            txtAmount.setText("");
-            txtReceipt.setText("");
-            lblName.setText("Name: _________________________");
+            clearInputs();
         }
+    }
+
+    private void clearInputs() {
+        txtEmail.setText("");
+        txtAmount.setText("");
+        lblName.setText("Account Holder Name: ---");
+    }
+
+    private void showReceiptPopup(double amount, Account receiver, String txnId) {
+        Window parentWindow = SwingUtilities.getWindowAncestor(this);
+        JDialog dialog = new JDialog(parentWindow, "Receipt", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setSize(400, 520);
+        dialog.setLocationRelativeTo(this);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel pnlReceiptImage = new JPanel();
+        pnlReceiptImage.setBackground(new Color(82, 124, 174)); 
+        pnlReceiptImage.setLayout(null);
+
+        JPanel pnlWhiteCard = new JPanel();
+        pnlWhiteCard.setBackground(Color.WHITE);
+        pnlWhiteCard.setBounds(30, 40, 325, 360);
+        pnlWhiteCard.setLayout(null);
+        pnlReceiptImage.add(pnlWhiteCard);
+
+        JLabel lblCheck = new JLabel("[ ✓ ]", SwingConstants.CENTER);
+        lblCheck.setFont(new Font("Arial", Font.BOLD, 24));
+        lblCheck.setForeground(new Color(82, 124, 174));
+        lblCheck.setBounds(0, 15, 325, 30);
+        pnlWhiteCard.add(lblCheck);
+
+        JLabel lblSentVia = new JLabel("Transfer Successful", SwingConstants.CENTER);
+        lblSentVia.setFont(new Font("Arial", Font.PLAIN, 14));
+        lblSentVia.setForeground(Color.GRAY);
+        lblSentVia.setBounds(0, 45, 325, 25);
+        pnlWhiteCard.add(lblSentVia);
+
+        JSeparator sep1 = new JSeparator();
+        sep1.setBounds(20, 85, 285, 10);
+        pnlWhiteCard.add(sep1);
+
+        JLabel lblAmtTitle = new JLabel("Sent Amount");
+        lblAmtTitle.setFont(new Font("Arial", Font.BOLD, 14));
+        lblAmtTitle.setBounds(25, 110, 110, 25);
+        pnlWhiteCard.add(lblAmtTitle);
+
+        JLabel lblAmtVal = new JLabel("₱" + String.format("%.2f", amount), SwingConstants.RIGHT);
+        lblAmtVal.setFont(new Font("Arial", Font.BOLD, 18));
+        lblAmtVal.setForeground(new Color(0, 25, 75));
+        lblAmtVal.setBounds(140, 105, 160, 30);
+        pnlWhiteCard.add(lblAmtVal);
+
+        JSeparator sep2 = new JSeparator();
+        sep2.setBounds(20, 160, 285, 10);
+        pnlWhiteCard.add(sep2);
+
+        JLabel lblToTitle = new JLabel("Recipient Email");
+        lblToTitle.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblToTitle.setForeground(Color.GRAY);
+        lblToTitle.setBounds(25, 180, 100, 20);
+        pnlWhiteCard.add(lblToTitle);
+
+        JLabel lblToVal = new JLabel(receiver.getEmail(), SwingConstants.RIGHT);
+        lblToVal.setFont(new Font("Arial", Font.BOLD, 12));
+        lblToVal.setBounds(130, 180, 170, 20);
+        pnlWhiteCard.add(lblToVal);
+
+        JLabel lblBalTitle = new JLabel("Remaining Balance");
+        lblBalTitle.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblBalTitle.setForeground(Color.GRAY);
+        lblBalTitle.setBounds(25, 210, 120, 20);
+        pnlWhiteCard.add(lblBalTitle);
+
+        JLabel lblBalVal = new JLabel("₱" + String.format("%.2f", balance), SwingConstants.RIGHT);
+        lblBalVal.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblBalVal.setBounds(150, 210, 150, 20);
+        pnlWhiteCard.add(lblBalVal);
+
+        JPanel pnlRefTint = new JPanel();
+        pnlRefTint.setBackground(new Color(242, 245, 253));
+        pnlRefTint.setBounds(0, 260, 325, 100);
+        pnlRefTint.setLayout(null);
+        pnlWhiteCard.add(pnlRefTint);
+
+        JLabel lblRefNum = new JLabel("Transaction ID: " + txnId, SwingConstants.CENTER);
+        lblRefNum.setFont(new Font("Arial", Font.BOLD, 12));
+        lblRefNum.setForeground(new Color(0, 25, 75));
+        lblRefNum.setBounds(0, 25, 325, 20);
+        pnlRefTint.add(lblRefNum);
+
+        JLabel lblTime = new JLabel("Channel: Peer-to-Peer Transfer", SwingConstants.CENTER);
+        lblTime.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblTime.setForeground(Color.GRAY);
+        lblTime.setBounds(0, 50, 325, 20);
+        pnlRefTint.add(lblTime);
+
+        dialog.add(pnlReceiptImage, BorderLayout.CENTER);
+
+        JPanel pnlButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        pnlButtons.setBackground(new Color(82, 124, 174));
+
+        JButton btnSave = new JButton("Save Receipt as Image");
+        JButton btnClose = new JButton("Acknowledge");
+        
+        pnlButtons.add(btnSave);
+        pnlButtons.add(btnClose);
+        dialog.add(pnlButtons, BorderLayout.SOUTH);
+
+        btnSave.addActionListener(ae -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setSelectedFile(new File("Transfer_Receipt_" + txnId + ".png"));
+            if (chooser.showSaveDialog(dialog) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    BufferedImage img = new BufferedImage(pnlReceiptImage.getWidth(), pnlReceiptImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+                    Graphics g = img.getGraphics();
+                    pnlReceiptImage.paint(g);
+                    g.dispose();
+                    ImageIO.write(img, "png", chooser.getSelectedFile());
+                    JOptionPane.showMessageDialog(dialog, "Saved successfully!");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(dialog, "Error: " + ex.getMessage());
+                }
+            }
+        });
+
+        btnClose.addActionListener(ae -> dialog.dispose());
+        dialog.setVisible(true);
     }
 }

@@ -5,6 +5,8 @@
 package FeaturesPanelsUI;
 
 import AppService.AccountFunctions;
+import DashboardUIDefault.Colors;
+import DashboardUIDefault.MainDashboard;
 import Objects.Account;
 import Objects.AccountPersonalInformation;
 import java.awt.Color;
@@ -23,48 +25,57 @@ public class SettingsPanel extends JPanel implements ActionListener {
     private JButton btnChangePhoneNumber, btnChangeName, btnChangeEmail, btnChangePassword, btnChangeAddress, btnChangeBirthday;
     private JPanel pnlPersonalInfo, pnlAccountInfo, pnlAppPreference;
     private JComboBox<String> cmbTheme, cmbGender;
-    private String[] theme = {"System", "Dark", "Light"};
+    private String[] SystemTheme = {"System", "Dark", "Light"};
 //            gender = {"Male", "Female", "Croissant", "Prefer Not to Say"};
     private Account user;
     private AccountPersonalInformation userInfo;
+    public static Colors theme = Colors.LIGHT();
 
     public SettingsPanel(Account user, AccountPersonalInformation userInfo) {
         this.user = user;
         this.userInfo = userInfo;
 
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
+
         setBounds(0, 0, 837, 560);
-        setBackground(new Color(243, 243, 243));
-        setBorder(new LineBorder(Color.LIGHT_GRAY));
+        setBackground(theme.BACKGROUND);
+        setBorder(new LineBorder(theme.BORDER_GRAY));
         setLayout(null);
 
         lblAccountInfo = new JLabel("Account Information");
-        lblAccountInfo.setForeground(Color.GRAY);
+        lblAccountInfo.setForeground(theme.TEXT_GRAY);
         lblAccountInfo.setFont(new Font("Arial", Font.PLAIN, 18));
         lblAccountInfo.setBounds(25, 15, 250, 35);
         add(lblAccountInfo);
 
         pnlAccountInfo = new JPanel();
         pnlAccountInfo.setBounds(25, 60, 785, 160);
-        pnlAccountInfo.setBackground(new Color(243, 243, 243));
-        pnlAccountInfo.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        pnlAccountInfo.setBackground(theme.PANELS_BACKGROUND);
+        pnlAccountInfo.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlAccountInfo.setLayout(null);
         add(pnlAccountInfo);
 
         lblName = new JLabel("Name:");
         lblName.setFont(new Font("Calibri", Font.BOLD, 18));
         lblName.setBounds(25, 15, 54, 35);
+        lblName.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblName);
 
-        lblNameField = new JLabel("Kurt Paolo D. Redondo");
+        lblNameField = new JLabel(userInfo.getFirstName() + " " + userInfo.getLastName());
         lblNameField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblNameField.setBounds(84, 15, 325, 35);
+        lblNameField.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblNameField);
 
         btnChangeName = new JButton("Edit");
         btnChangeName.setHorizontalAlignment(JButton.CENTER);
         btnChangeName.setBounds(700, 15, 60, 25);
-        btnChangeName.setBackground(new Color(82, 124, 174));
-        btnChangeName.setForeground(Color.WHITE);
+        btnChangeName.setBackground(theme.PRIMARY_BLUE);
+        btnChangeName.setForeground(theme.TEXT_WHITE);
         btnChangeName.setFocusPainted(false);
         btnChangeName.addActionListener(this);
         pnlAccountInfo.add(btnChangeName);
@@ -72,18 +83,20 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblEmail = new JLabel("Email:");
         lblEmail.setBounds(25, 50, 51, 35);
         lblEmail.setFont(new Font("Calibri", Font.BOLD, 18));
+        lblEmail.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblEmail);
 
-        lblEmailField = new JLabel("kurtpaolo67@gmail.com");
+        lblEmailField = new JLabel(userInfo.getEmail());
         lblEmailField.setBounds(81, 50, 325, 35);
         lblEmailField.setFont(new Font("Calibri", Font.PLAIN, 18));
+        lblEmailField.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblEmailField);
 
         btnChangeEmail = new JButton("Edit");
         btnChangeEmail.setHorizontalAlignment(JButton.CENTER);
         btnChangeEmail.setBounds(700, 50, 60, 25);
-        btnChangeEmail.setBackground(new Color(82, 124, 174));
-        btnChangeEmail.setForeground(Color.WHITE);
+        btnChangeEmail.setBackground(theme.PRIMARY_BLUE);
+        btnChangeEmail.setForeground(theme.TEXT_WHITE);
         btnChangeEmail.setFocusPainted(false);
         btnChangeEmail.addActionListener(this);
         pnlAccountInfo.add(btnChangeEmail);
@@ -91,18 +104,20 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblPhoneNumber = new JLabel("Phone Number:");
         lblPhoneNumber.setBounds(25, 85, 127, 35);
         lblPhoneNumber.setFont(new Font("Calibri", Font.BOLD, 18));
+        lblPhoneNumber.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblPhoneNumber);
 
-        lblPhoneField = new JLabel("0967 123 4567");
+        lblPhoneField = new JLabel(userInfo.getPhoneNum());
         lblPhoneField.setBounds(157, 85, 325, 35);
         lblPhoneField.setFont(new Font("Calibri", Font.PLAIN, 18));
+        lblPhoneField.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblPhoneField);
 
         btnChangePhoneNumber = new JButton("Edit");
         btnChangePhoneNumber.setHorizontalAlignment(JButton.CENTER);
         btnChangePhoneNumber.setBounds(700, 85, 60, 25);
-        btnChangePhoneNumber.setBackground(new Color(82, 124, 174));
-        btnChangePhoneNumber.setForeground(Color.WHITE);
+        btnChangePhoneNumber.setBackground(theme.PRIMARY_BLUE);
+        btnChangePhoneNumber.setForeground(theme.TEXT_WHITE);
         btnChangePhoneNumber.setFocusPainted(false);
         btnChangePhoneNumber.addActionListener(this);
         pnlAccountInfo.add(btnChangePhoneNumber);
@@ -110,51 +125,58 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblPassword = new JLabel("Password:");
         lblPassword.setBounds(25, 120, 86, 35);
         lblPassword.setFont(new Font("Calibri", Font.BOLD, 18));
+        lblPassword.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblPassword);
+        
+        String password = user.getPassword();
+        String hiddenPass = "*".repeat(password.length());
 
-        lblPasswordField = new JLabel("************");
+        lblPasswordField = new JLabel(hiddenPass);
         lblPasswordField.setBounds(116, 120, 325, 35);
         lblPasswordField.setFont(new Font("Calibri", Font.PLAIN, 18));
+        lblPasswordField.setForeground(theme.TEXT_BLACK);
         pnlAccountInfo.add(lblPasswordField);
 
         btnChangePassword = new JButton("Edit");
         btnChangePassword.setHorizontalAlignment(JButton.CENTER);
         btnChangePassword.setBounds(700, 120, 60, 25);
-        btnChangePassword.setBackground(new Color(82, 124, 174));
-        btnChangePassword.setForeground(Color.WHITE);
+        btnChangePassword.setBackground(theme.PRIMARY_BLUE);
+        btnChangePassword.setForeground(theme.TEXT_WHITE);
         btnChangePassword.setFocusPainted(false);
         btnChangePassword.addActionListener(this);
         pnlAccountInfo.add(btnChangePassword);
 
         // PERSONAL INFORMATION
         lblAppPref = new JLabel("Personal Information");
-        lblAppPref.setForeground(Color.GRAY);
+        lblAppPref.setForeground(theme.TEXT_GRAY);
         lblAppPref.setFont(new Font("Arial", Font.PLAIN, 18));
         lblAppPref.setBounds(25, 230, 280, 35);
         add(lblAppPref);
 
         pnlPersonalInfo = new JPanel();
         pnlPersonalInfo.setBounds(25, 275, 785, 90);
-        pnlPersonalInfo.setBackground(new Color(243, 243, 243));
-        pnlPersonalInfo.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        pnlPersonalInfo.setBackground(theme.PANELS_BACKGROUND);
+        pnlPersonalInfo.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlPersonalInfo.setLayout(null);
         add(pnlPersonalInfo);
 
         lblBirthday = new JLabel("Birthday:");
         lblBirthday.setBounds(25, 15, 73, 35);
         lblBirthday.setFont(new Font("Calibri", Font.BOLD, 18));
+        lblBirthday.setForeground(theme.TEXT_BLACK);
         pnlPersonalInfo.add(lblBirthday);
 
-        lblBirthdayField = new JLabel("December 14, 2005");
+        lblBirthdayField = new JLabel(userInfo.getBirthdate());
         lblBirthdayField.setFont(new Font("Calibri", Font.PLAIN, 18));
         lblBirthdayField.setBounds(103, 15, 325, 35);
+        lblBirthdayField.setForeground(theme.TEXT_BLACK);
         pnlPersonalInfo.add(lblBirthdayField);
 
         btnChangeBirthday = new JButton("Edit");
         btnChangeBirthday.setHorizontalAlignment(JButton.CENTER);
         btnChangeBirthday.setBounds(700, 15, 60, 25);
-        btnChangeBirthday.setBackground(new Color(82, 124, 174));
-        btnChangeBirthday.setForeground(Color.WHITE);
+        btnChangeBirthday.setBackground(theme.PRIMARY_BLUE);
+        btnChangeBirthday.setForeground(theme.TEXT_WHITE);
         btnChangeBirthday.setFocusPainted(false);
         btnChangeBirthday.addActionListener(this);
         pnlPersonalInfo.add(btnChangeBirthday);
@@ -162,66 +184,60 @@ public class SettingsPanel extends JPanel implements ActionListener {
         lblAddress = new JLabel("Address:");
         lblAddress.setBounds(25, 50, 72, 35);
         lblAddress.setFont(new Font("Calibri", Font.BOLD, 18));
+        lblAddress.setForeground(theme.TEXT_BLACK);
         pnlPersonalInfo.add(lblAddress);
 
-        lblAddressField = new JLabel("67 Zone 2 Ilaya St. Malaban Biñan Laguna");
+        lblAddressField = new JLabel(userInfo.getAddress());
         lblAddressField.setBounds(102, 50, 325, 35);
         lblAddressField.setFont(new Font("Calibri", Font.PLAIN, 18));
+        lblAddressField.setForeground(theme.TEXT_BLACK);
         pnlPersonalInfo.add(lblAddressField);
 
         btnChangeAddress = new JButton("Edit");
         btnChangeAddress.setHorizontalAlignment(JButton.CENTER);
         btnChangeAddress.setBounds(700, 50, 60, 25);
-        btnChangeAddress.setBackground(new Color(82, 124, 174));
-        btnChangeAddress.setForeground(Color.WHITE);
+        btnChangeAddress.setBackground(theme.PRIMARY_BLUE);
+        btnChangeAddress.setForeground(theme.TEXT_WHITE);
         btnChangeAddress.setFocusPainted(false);
         btnChangeAddress.addActionListener(this);
         pnlPersonalInfo.add(btnChangeAddress);
 
-//        lblGender = new JLabel("Gender:");
-//        lblGender.setBounds(25, 95, 67, 35);
-//        lblGender.setFont(new Font("Calibri", Font.BOLD, 18));
-//        pnlPersonalInfo.add(lblGender);
-//        cmbGender = new JComboBox<String>(gender);
-//        cmbGender.setBounds(97, 95, 200, 35);
-//        cmbGender.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-//        cmbGender.setFont(new Font("Calibri", Font.PLAIN, 18));
-//        cmbGender.setOpaque(false);
-//        cmbGender.setFocusable(false);
-//        cmbGender.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-//        pnlPersonalInfo.add(cmbGender);
-//        lblLine = new JLabel("——————————————————————————————————————————————————————————————————————");
-//        lblLine.setBounds(25, 126, 715, 30);
-//        lblLine.setForeground(Color.LIGHT_GRAY);
-//        pnlPersonalInfo.add(lblLine);
-//        
         // APP PREFERENCE
         lblPersonalInfo = new JLabel("App Preference");
-        lblPersonalInfo.setForeground(Color.GRAY);
+        lblPersonalInfo.setForeground(theme.TEXT_GRAY);
         lblPersonalInfo.setFont(new Font("Arial", Font.PLAIN, 18));
         lblPersonalInfo.setBounds(25, 380, 280, 35);
         add(lblPersonalInfo);
 
         pnlAppPreference = new JPanel();
         pnlAppPreference.setBounds(25, 425, 785, 60);
-        pnlAppPreference.setBackground(new Color(243, 243, 243));
-        pnlAppPreference.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        pnlAppPreference.setBackground(theme.PANELS_BACKGROUND);
+        pnlAppPreference.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlAppPreference.setLayout(null);
         add(pnlAppPreference);
 
         lblPhoneNumber = new JLabel("Theme:");
         lblPhoneNumber.setBounds(25, 15, 63, 35);
         lblPhoneNumber.setFont(new Font("Calibri", Font.BOLD, 18));
+        lblPhoneNumber.setForeground(theme.TEXT_BLACK);
         pnlAppPreference.add(lblPhoneNumber);
 
-        cmbTheme = new JComboBox<String>(theme);
+        cmbTheme = new JComboBox<String>(SystemTheme);
         cmbTheme.setBounds(97, 15, 120, 35);
-        cmbTheme.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbTheme.setFont(new Font("Calibri", Font.PLAIN, 18));
-        cmbTheme.setOpaque(false);
-        cmbTheme.setFocusable(false);
-        cmbTheme.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        cmbTheme.setForeground(theme.TEXT_BLACK);
+        cmbTheme.setBackground(theme.PANELS_BACKGROUND);
         pnlAppPreference.add(cmbTheme);
+
+        cmbTheme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AppService.AccountFunctions.ChangeTheme(user.getEmail(), cmbTheme.getSelectedItem().toString());
+                MainDashboard md = new MainDashboard(user, userInfo);
+                md.setVisible(true);
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(SettingsPanel.this);
+                frame.dispose();
+            }
+        });
 
     }
 
@@ -251,7 +267,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
     }
 
     public void setUserSettings(Account user, AccountPersonalInformation userinfo) {
-        
+
         String password = user.getPassword();
         String hiddenPassword = "*".repeat(password.length());
 

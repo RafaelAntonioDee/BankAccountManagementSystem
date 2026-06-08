@@ -8,6 +8,8 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import AppService.AccountFunctions;
+import static DashboardUIDefault.MainDashboard.theme;
+import Objects.Account;
 
 /**
  *
@@ -16,15 +18,22 @@ import AppService.AccountFunctions;
 public class TopPanel extends JPanel {
 
     public static JLabel lblTopBar;
+    public static Colors theme = Colors.LIGHT();
 
-    TopPanel(String Name) {
+    TopPanel(String Name, Account user) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
         setBounds(175, 0, 837, 60);
-        setBackground(new Color(240, 240, 240));
-        setBorder(new LineBorder(Color.LIGHT_GRAY));
+        setBackground(theme.HeaderFooterColor);
+        setBorder(new LineBorder(theme.BORDER_GRAY));
         setLayout(null);
 
-        lblTopBar = new JLabel("Welcome back, "+ Name);
+        lblTopBar = new JLabel("Welcome back, " + Name);
         lblTopBar.setFont(new Font("Arial", Font.PLAIN, 25));
+        lblTopBar.setForeground(theme.TEXT_BLACK);
         lblTopBar.setBounds(20, 5, 500, 50);
         add(lblTopBar);
     }

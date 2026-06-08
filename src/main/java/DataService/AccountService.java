@@ -59,23 +59,16 @@ public class AccountService {
 
     // Account Functions
     public static boolean validateFirstName(String fName) {
-//        if (fName == null || fName.isEmpty()) {
-//            return false;
-//        }
+
         return fName.matches("[a-zA-Z ]+");
     }
 
     public static boolean validateLastName(String lName) {
-//        if (lName == null || lName.isEmpty()) {
-//            return false;
-//        }
         return lName.matches("[a-zA-Z ]+");
     }
 
     public static boolean validateEmail(String email) {
-//        if (email == null || email.isEmpty()) {
-//            return false;
-//        }
+
         return email.endsWith("@gmail.com") || email.contains("@");
     }
 
@@ -157,9 +150,6 @@ public class AccountService {
     public static void updatePassword(String email, String newPassword) {
         Account user = getUser(email);
         user.setPassword(newPassword);
-
-//        AccountPersonalInformation userinfo = getUserInfo(email);
-//        userinfo.setPassword(newPassword);
     }
 
     public static void updateFirstName(String email, String newFirstName) {
@@ -185,6 +175,11 @@ public class AccountService {
     public static void updateBirthday(String email, String newBirthday) {
         AccountPersonalInformation userinfo = getUserInfo(email);
         userinfo.setBirthdate(newBirthday);
+    }
+
+    public static void ChangeTheme(String email, String theme) {
+        Account user = getUser(email);
+        user.setSystemTheme(theme);
     }
 
 }

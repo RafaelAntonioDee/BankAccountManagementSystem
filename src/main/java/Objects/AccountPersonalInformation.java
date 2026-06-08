@@ -9,52 +9,59 @@ package Objects;
  * @author rafra
  */
 public class AccountPersonalInformation {
+
     private String Email;
     private String FirstName;
     private String LastName;
     private String Address;
     private String PhoneNum;
     private String Birthdate;
-    
-    public String getEmail(){
+
+    public String getEmail() {
         return Email;
     }
-    public void setEmail(String newEmail){
+
+    public void setEmail(String newEmail) {
         Email = newEmail;
     }
-    
-    public String getFirstName(){
+
+    public String getFirstName() {
         return FirstName;
     }
-    public void setFirstName(String newFirstName){
+
+    public void setFirstName(String newFirstName) {
         FirstName = newFirstName;
     }
-    
-    public String getLastName(){
+
+    public String getLastName() {
         return LastName;
     }
-    public void setLastName(String newLastName){
+
+    public void setLastName(String newLastName) {
         LastName = newLastName;
     }
-    
-    public String getAddress(){
+
+    public String getAddress() {
         return Address;
     }
-    public void setAddress(String newAddress){
+
+    public void setAddress(String newAddress) {
         Address = newAddress;
     }
-    
-    public String getPhoneNum(){
+
+    public String getPhoneNum() {
         return PhoneNum;
     }
-    public void setPhoneNum(String newPhoneNum){
+
+    public void setPhoneNum(String newPhoneNum) {
         PhoneNum = newPhoneNum;
     }
-    
-    public String getBirthdate(){
+
+    public String getBirthdate() {
         return Birthdate;
     }
-    public void setBirthdate(String newBirthdate){
+
+    public void setBirthdate(String newBirthdate) {
         Birthdate = newBirthdate;
     }
 }

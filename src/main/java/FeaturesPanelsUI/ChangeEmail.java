@@ -6,7 +6,9 @@ package FeaturesPanelsUI;
 
 import AppService.AccountFunctions;
 import AppService.SettingsFunctions;
+import DashboardUIDefault.Colors;
 import DashboardUIDefault.MainDashboard;
+import static FeaturesPanelsUI.DashboardPanel.theme;
 import Objects.Account;
 import Objects.AccountPersonalInformation;
 import java.awt.*;
@@ -25,8 +27,14 @@ public class ChangeEmail extends JFrame implements ActionListener {
     private Account user;
     private String updatedUser;
     private AccountPersonalInformation userInfo;
+    public static Colors theme = Colors.LIGHT();
 
     public ChangeEmail(Account user, AccountPersonalInformation userInfo) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
         this.user = user;
         this.userInfo = userInfo;
 
@@ -39,13 +47,14 @@ public class ChangeEmail extends JFrame implements ActionListener {
         setSize(375, 250);
         setLayout(null);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(243, 243, 243));
+        getContentPane().setBackground(theme.BACKGROUND);
 
         // NEW ADDRESS
         lblEmail = new JLabel("New Address");
         lblEmail.setBounds(38, 25, 65, 10);
         lblEmail.setOpaque(true);
-        lblEmail.setBackground(new Color(243, 243, 243));
+        lblEmail.setBackground(theme.BACKGROUND);
+        lblEmail.setForeground(theme.TEXT_BLACK);
         lblEmail.setFont(new Font("Arial", Font.PLAIN, 10));
         lblEmail.setHorizontalAlignment(JLabel.CENTER);
         add(lblEmail);
@@ -53,6 +62,8 @@ public class ChangeEmail extends JFrame implements ActionListener {
         txtEmail = new JTextField();
         txtEmail.setBounds(32, 30, 295, 35);
         txtEmail.setOpaque(false);
+        txtEmail.setBackground(theme.PANELS_BACKGROUND);
+        txtEmail.setForeground(theme.TEXT_BLACK);
         txtEmail.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         add(txtEmail);
 
@@ -60,8 +71,8 @@ public class ChangeEmail extends JFrame implements ActionListener {
         btnConfirm = new JButton("Confirm");
         btnConfirm.setHorizontalAlignment(JButton.CENTER);
         btnConfirm.setBounds(32, 90, 295, 35);
-        btnConfirm.setBackground(new Color(82, 124, 174));
-        btnConfirm.setForeground(Color.WHITE);
+        btnConfirm.setBackground(theme.PRIMARY_BLUE);
+        btnConfirm.setForeground(theme.TEXT_WHITE);
         btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(this);
         add(btnConfirm);
@@ -69,7 +80,8 @@ public class ChangeEmail extends JFrame implements ActionListener {
         btnCancel = new JButton("Cancel");
         btnCancel.setHorizontalAlignment(JButton.CENTER);
         btnCancel.setBounds(32, 150, 295, 35);
-        btnCancel.setBackground(new Color(243, 243, 243));
+        btnCancel.setBackground(theme.CancelButton);
+        btnCancel.setForeground(theme.TEXT_WHITE);
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
         add(btnCancel);
@@ -82,9 +94,13 @@ public class ChangeEmail extends JFrame implements ActionListener {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String currentEmail = SettingsPanel.lblEmailField.getText();
             String newEmailInput = txtEmail.getText();
-            
+
             if (currentEmail.equals(newEmailInput)) {
                 JOptionPane.showMessageDialog(this, "New email cannot be the same as the old email!", "", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!AccountFunctions.validateEmail(newEmailInput)) {
+                JOptionPane.showMessageDialog(this, "Invalid Email Address!");
                 return;
             }
 
@@ -106,6 +122,7 @@ public class ChangeEmail extends JFrame implements ActionListener {
                 if (choice == 0) {
                     updatedUser = SettingsFunctions.changeEmail(user.getEmail(), newEmailInput);
                     SettingsPanel.lblEmailField.setText(newEmailInput);
+                    DashboardUIDefault.SidePanel.lblAccEmail.setText(newEmailInput);
                     dispose();
                     JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
                 }

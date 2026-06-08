@@ -5,7 +5,10 @@
 package FeaturesPanelsUI;
 
 import AppService.SettingsFunctions;
+import DashboardUIDefault.Colors;
 import DashboardUIDefault.MainDashboard;
+import static FeaturesPanelsUI.ChangeAddress.theme;
+import static FeaturesPanelsUI.DashboardPanel.theme;
 import Objects.Account;
 import Objects.AccountPersonalInformation;
 import java.awt.*;
@@ -27,8 +30,14 @@ public class ChangeBirthday extends JFrame implements ActionListener {
     private String selectedMonth, updateBirthday;
     private String[] months = {"January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"};
+    public static Colors theme = Colors.LIGHT();
 
     public ChangeBirthday(Account user, AccountPersonalInformation userInfo) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
         this.user = user;
         this.userInfo = userInfo;
         //------------------------------- Frame Initialization -------------------------------
@@ -40,13 +49,14 @@ public class ChangeBirthday extends JFrame implements ActionListener {
         setSize(375, 370);
         setLayout(null);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(243, 243, 243));
+        getContentPane().setBackground(theme.BACKGROUND);
 
         // NEW FIRST NAME
         lblMonth = new JLabel("Month");
         lblMonth.setBounds(38, 25, 40, 10);
         lblMonth.setOpaque(true);
-        lblMonth.setBackground(new Color(243, 243, 243));
+        lblMonth.setBackground(theme.BACKGROUND);
+        lblMonth.setForeground(theme.TEXT_BLACK);
         lblMonth.setFont(new Font("Arial", Font.PLAIN, 10));
         lblMonth.setHorizontalAlignment(JLabel.CENTER);
         add(lblMonth);
@@ -55,7 +65,8 @@ public class ChangeBirthday extends JFrame implements ActionListener {
         cmbMonth.setBounds(32, 30, 295, 35);
         cmbMonth.setOpaque(false);
         cmbMonth.setFocusable(false);
-        cmbMonth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        cmbMonth.setBackground(theme.PANELS_BACKGROUND);
+        cmbMonth.setForeground(theme.TEXT_BLACK);
         add(cmbMonth);
 
         cmbMonth.addActionListener(e -> {
@@ -67,7 +78,8 @@ public class ChangeBirthday extends JFrame implements ActionListener {
         lblDay = new JLabel("Day");
         lblDay.setBounds(38, 85, 25, 10);
         lblDay.setOpaque(true);
-        lblDay.setBackground(new Color(243, 243, 243));
+        lblDay.setBackground(theme.BACKGROUND);
+        lblDay.setForeground(theme.TEXT_BLACK);
         lblDay.setFont(new Font("Arial", Font.PLAIN, 10));
         lblDay.setHorizontalAlignment(JLabel.CENTER);
         add(lblDay);
@@ -76,13 +88,15 @@ public class ChangeBirthday extends JFrame implements ActionListener {
         cmbDay.setBounds(32, 90, 295, 35);
         cmbDay.setOpaque(false);
         cmbDay.setFocusable(false);
-        cmbDay.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        cmbDay.setBackground(theme.PANELS_BACKGROUND);
+        cmbDay.setForeground(theme.TEXT_BLACK);
         add(cmbDay);
 
         lblYear = new JLabel("Year");
         lblYear.setBounds(38, 145, 30, 10);
         lblYear.setOpaque(true);
-        lblYear.setBackground(new Color(243, 243, 243));
+        lblYear.setBackground(theme.BACKGROUND);
+        lblYear.setForeground(theme.TEXT_BLACK);
         lblYear.setFont(new Font("Arial", Font.PLAIN, 10));
         lblYear.setHorizontalAlignment(JLabel.CENTER);
         add(lblYear);
@@ -91,15 +105,16 @@ public class ChangeBirthday extends JFrame implements ActionListener {
         cmbYear.setBounds(32, 150, 295, 35);
         cmbYear.setOpaque(false);
         cmbYear.setFocusable(false);
-        cmbYear.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        cmbYear.setBackground(theme.PANELS_BACKGROUND);
+        cmbYear.setForeground(theme.TEXT_BLACK);
         add(cmbYear);
 
         // BUTTONS
         btnConfirm = new JButton("Confirm");
         btnConfirm.setHorizontalAlignment(JButton.CENTER);
         btnConfirm.setBounds(32, 210, 295, 35);
-        btnConfirm.setBackground(new Color(82, 124, 174));
-        btnConfirm.setForeground(Color.WHITE);
+        btnConfirm.setBackground(theme.PRIMARY_BLUE);
+        btnConfirm.setForeground(theme.TEXT_WHITE);
         btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(this);
         add(btnConfirm);
@@ -107,7 +122,8 @@ public class ChangeBirthday extends JFrame implements ActionListener {
         btnCancel = new JButton("Cancel");
         btnCancel.setHorizontalAlignment(JButton.CENTER);
         btnCancel.setBounds(32, 270, 295, 35);
-        btnCancel.setBackground(new Color(243, 243, 243));
+        btnCancel.setBackground(theme.CancelButton);
+        btnCancel.setForeground(theme.TEXT_WHITE);
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
         add(btnCancel);

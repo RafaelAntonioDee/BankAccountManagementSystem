@@ -2,6 +2,7 @@ package FeaturesPanelsUI;
 
 import Objects.AccountTransactHistory;
 import AppService.BalanceFunctions;
+import DashboardUIDefault.Colors;
 import Objects.Account;
 import java.awt.*;
 import java.awt.event.*;
@@ -25,17 +26,23 @@ public class TransactionsPanel extends JPanel implements ActionListener {
     private DefaultTableModel model;
     private JPanel pnlProcess;
     private Account currentUser;
+    public static Colors theme = Colors.LIGHT();
 
     public TransactionsPanel(Account user) {
+        if (user.getSystemTheme().equals("Light")  || user.getSystemTheme().equals("System")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
         this.currentUser = user;
         setBounds(0, 0, 837, 560);
-        setBackground(new Color(243, 243, 243));
-        setBorder(new LineBorder(Color.LIGHT_GRAY));
+        setBackground(theme.BACKGROUND);
+        setBorder(new LineBorder(theme.BORDER_GRAY));
         setLayout(null);
 
         lblSearch = new JLabel("Search");
         lblSearch.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblSearch.setForeground(Color.GRAY);
+        lblSearch.setForeground(theme.TEXT_GRAY);
         lblSearch.setBounds(25, 25, 250, 35);
         add(lblSearch);
 
@@ -49,16 +56,19 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         btnSearch = new JButton(searchIcon);
         btnSearch.setBounds(25, 60, 40, 35);
         btnSearch.setFocusPainted(false);
+        btnSearch.setBackground(theme.BORDER_GRAY);
         btnSearch.addActionListener(this);
         add(btnSearch);
 
         txtSearch = new JTextField();
         txtSearch.setBounds(70, 60, 360, 35);
+        txtSearch.setForeground(theme.TEXT_BLACK);
+        txtSearch.setBackground(theme.PANELS_BACKGROUND);
         add(txtSearch);
 
         lblDate = new JLabel("Date");
         lblDate.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblDate.setForeground(Color.GRAY);
+        lblDate.setForeground(theme.TEXT_GRAY);
         lblDate.setBounds(485, 25, 100, 25);
         add(lblDate);
 
@@ -69,11 +79,20 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         cmbDateRange.addItem("Past Month");
         cmbDateRange.addItem("Past 3 Months");
         cmbDateRange.setBounds(485, 60, 150, 35);
+        cmbDateRange.setForeground(theme.TEXT_BLACK);
+        cmbDateRange.setBackground(theme.PANELS_BACKGROUND);
         add(cmbDateRange);
+        
+        cmbDateRange.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showTransactions();
+            }
+        });
 
         lblType = new JLabel("Type");
         lblType.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblType.setForeground(Color.GRAY);
+        lblType.setForeground(theme.TEXT_GRAY);
         lblType.setBounds(665, 25, 100, 25);
         add(lblType);
 
@@ -84,12 +103,21 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         cmbTransactionType.addItem("Transfer");
         cmbTransactionType.addItem("Payment");
         cmbTransactionType.setBounds(665, 60, 147, 35);
+        cmbTransactionType.setForeground(theme.TEXT_BLACK);
+        cmbTransactionType.setBackground(theme.PANELS_BACKGROUND);
         add(cmbTransactionType);
+        
+        cmbTransactionType.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showTransactions();
+            }
+        });
 
         //------------------------------- Transactions List -------------------------------
         lblTransactions = new JLabel("Transactions");
         lblTransactions.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblTransactions.setForeground(Color.GRAY);
+        lblTransactions.setForeground(theme.TEXT_GRAY);
         lblTransactions.setBounds(25, 110, 737, 35);
         add(lblTransactions);
 
@@ -102,17 +130,24 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         TransactionsTable.setIntercellSpacing(new Dimension(10, 6));
         TransactionsTable.getTableHeader().setResizingAllowed(false);
         TransactionsTable.setRowSelectionAllowed(false);
+        TransactionsTable.setBackground(theme.BACKGROUND);
+        TransactionsTable.setForeground(theme.TEXT_BLACK);
+        TransactionsTable.setBorder(new LineBorder(theme.BORDER_GRAY));
 
         JTableHeader header = TransactionsTable.getTableHeader();
         header.setReorderingAllowed(false);
         header.setFont(new Font("Arial", Font.BOLD, 12));
-        header.setBackground(new Color(82, 124, 174));
-        header.setForeground(Color.WHITE);
+        header.setBackground(theme.PRIMARY_BLUE);
+        header.setForeground(theme.TEXT_WHITE);
+        header.setBorder(new LineBorder(theme.BORDER_GRAY));
         header.setPreferredSize(new Dimension(header.getWidth(), 35));
         ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
 
         scroll = new JScrollPane(TransactionsTable);
         scroll.setBounds(25, 145, 787, 390);
+        scroll.setBackground(theme.BACKGROUND);
+        scroll.setBorder(new LineBorder(theme.BORDER_GRAY));
+        scroll.getViewport().setBackground(theme.BACKGROUND);
         add(scroll);
 
         showTransactions();

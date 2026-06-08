@@ -43,7 +43,7 @@ public class MainDashboard extends JFrame implements ActionListener {
 
     public MainDashboard(Account user, AccountPersonalInformation userinfo) {
 
-        if (user.getSystemTheme().equals("Light")) {
+        if (user.getSystemTheme().equals("Light") || user.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
             icons = Icons.LIGHT();
         } else {

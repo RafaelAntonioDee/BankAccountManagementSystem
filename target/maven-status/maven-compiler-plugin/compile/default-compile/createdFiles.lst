@@ -8,7 +8,6 @@ FeaturesPanelsUI\WithdrawPanel.class
 AppService\TransactHistoryFunctions.class
 DashboardUIDefault\Colors.class
 DashboardUIDefault\Icons.class
-Objects\UserAccount.class
 FeaturesPanelsUI\ChangeEmail.class
 FeaturesPanelsUI\TransactionsPanel$4.class
 FeaturesPanelsUI\SettingsPanel$1.class

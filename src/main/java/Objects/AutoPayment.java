@@ -15,7 +15,6 @@ public class AutoPayment {
     private String AutoPayID, Payee, Frequency, Email;
     private LocalDate Date;
     private double Amount;
-    private boolean isActive;
         
     public String getAutoPayID(){
         return AutoPayID;
@@ -59,11 +58,5 @@ public class AutoPayment {
         Amount = newAmount;
     }
     
-    public boolean getActive() {
-        return isActive;
-    }
-    
-    public void setActive(boolean newIsActive) {
-        isActive = newIsActive;
-    }
+
 }

@@ -7,7 +7,6 @@ package LoginUI;
 import AppService.AccountFunctions;
 import LoginUI.LoginPage;
 import Objects.Account;
-import Objects.UserAccount;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;

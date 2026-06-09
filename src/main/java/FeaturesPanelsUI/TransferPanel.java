@@ -252,7 +252,7 @@ public class TransferPanel extends JPanel implements ActionListener {
                 }
 
                 String sequentialTxnId = BalanceFunctions.getNextTransactionID();
-                BalanceFunctions.addTransaction(currentUser.getEmail(), "Transferred", LocalDate.now(), "- " + amount, sequentialTxnId);
+                BalanceFunctions.addTransaction(currentUser.getEmail(), "Transfer", LocalDate.now(), "- " + amount, sequentialTxnId);
 
                 String sequentialTxnId2 = BalanceFunctions.getNextTransactionID();
                 BalanceFunctions.addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amount, sequentialTxnId2);

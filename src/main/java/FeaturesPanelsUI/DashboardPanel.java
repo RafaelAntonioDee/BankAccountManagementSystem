@@ -14,12 +14,18 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import DashboardUIDefault.MainDashboard;
+import static FeaturesPanelsUI.TransferPanel.theme;
 import Objects.Account;
 import Objects.AccountTransactHistory;
 import Objects.AutoPayment;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
@@ -124,7 +130,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
         TransactionsTable.setBorder(new LineBorder(theme.BORDER_GRAY));
         TransactionsTable.setDefaultEditor(Object.class, null);
         TransactionsTable.setFocusable(false);
-        
+
         JTableHeader header = TransactionsTable.getTableHeader();
         header.setReorderingAllowed(false);
         header.setFont(new Font("Arial", Font.BOLD, 12));
@@ -347,7 +353,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
                 }
 
                 String sequentialTxnId = BalanceFunctions.getNextTransactionID();
-                BalanceFunctions.addTransaction(currentUser.getEmail(), "Transferred", LocalDate.now(), "- " + amount, sequentialTxnId);
+                BalanceFunctions.addTransaction(currentUser.getEmail(), "Transfer", LocalDate.now(), "- " + amount, sequentialTxnId);
 
                 String sequentialTxnId2 = BalanceFunctions.getNextTransactionID();
                 BalanceFunctions.addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amount, sequentialTxnId2);
@@ -358,6 +364,8 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
                 lblAmount.setText("    ₱" + String.format("%.2f", currentUser.getBalance()));
 
+                showReceiptPopup(amount, receiver, sequentialTxnId);
+
                 txtAmount.setText("");
                 txtEmail.setText("");
             } catch (NumberFormatException ex) {
@@ -366,6 +374,158 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
             showTransactions();
         }
+    }
+    
+    private void showReceiptPopup(double amount, Account receiver, String txnId) {
+        Window parentWindow = SwingUtilities.getWindowAncestor(this);
+        JDialog dialog = new JDialog(parentWindow, "Receipt", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setSize(400, 520);
+        dialog.setLocationRelativeTo(this);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel pnlReceiptImage = new JPanel();
+        pnlReceiptImage.setBackground(new Color(82, 124, 174));
+        pnlReceiptImage.setLayout(null);
+
+        JPanel pnlWhiteCard = new JPanel();
+        pnlWhiteCard.setBackground(Color.WHITE);
+        pnlWhiteCard.setBounds(30, 40, 325, 360);
+        pnlWhiteCard.setLayout(null);
+        pnlReceiptImage.add(pnlWhiteCard);
+
+        ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
+        Image scaledImage = BankIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        
+        JLabel lblCheck = new JLabel(new ImageIcon(scaledImage), SwingConstants.CENTER);
+        lblCheck.setBounds(0, 15, 325, 30);
+        pnlWhiteCard.add(lblCheck);
+
+        JLabel lblSentVia = new JLabel("Transfer Successful", SwingConstants.CENTER);
+        lblSentVia.setFont(new Font("Arial", Font.PLAIN, 14));
+        lblSentVia.setForeground(Color.GRAY);
+        lblSentVia.setBounds(0, 45, 325, 25);
+        pnlWhiteCard.add(lblSentVia);
+
+        JSeparator sep1 = new JSeparator();
+        sep1.setBounds(20, 85, 285, 10);
+        pnlWhiteCard.add(sep1);
+
+        JLabel lblAmtTitle = new JLabel("Sent Amount");
+        lblAmtTitle.setFont(new Font("Arial", Font.BOLD, 14));
+        lblAmtTitle.setBounds(25, 110, 110, 25);
+        pnlWhiteCard.add(lblAmtTitle);
+
+        JLabel lblAmtVal = new JLabel("₱" + String.format("%.2f", amount), SwingConstants.RIGHT);
+        lblAmtVal.setFont(new Font("Arial", Font.BOLD, 18));
+        lblAmtVal.setForeground(new Color(0, 25, 75));
+        lblAmtVal.setBounds(140, 105, 160, 30);
+        pnlWhiteCard.add(lblAmtVal);
+
+        JSeparator sep2 = new JSeparator();
+        sep2.setBounds(20, 160, 285, 10);
+        pnlWhiteCard.add(sep2);
+
+        JLabel lblToTitle = new JLabel("Recipient Email");
+        lblToTitle.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblToTitle.setForeground(Color.GRAY);
+        lblToTitle.setBounds(25, 180, 100, 20);
+        pnlWhiteCard.add(lblToTitle);
+
+        JLabel lblToVal = new JLabel(receiver.getEmail(), SwingConstants.RIGHT);
+        lblToVal.setFont(new Font("Arial", Font.BOLD, 12));
+        lblToVal.setBounds(130, 180, 170, 20);
+        pnlWhiteCard.add(lblToVal);
+
+        JLabel lblBalTitle = new JLabel("Remaining Balance");
+        lblBalTitle.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblBalTitle.setForeground(Color.GRAY);
+        lblBalTitle.setBounds(25, 210, 120, 20);
+        pnlWhiteCard.add(lblBalTitle);
+
+        double balance = AccountFunctions.getUser(currentUser.getEmail()).getBalance();
+
+        JLabel lblBalVal = new JLabel("₱" + String.format("%.2f", balance), SwingConstants.RIGHT);
+        lblBalVal.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblBalVal.setBounds(150, 210, 150, 20);
+        pnlWhiteCard.add(lblBalVal);
+
+        JPanel pnlRefTint = new JPanel();
+        pnlRefTint.setBackground(new Color(242, 245, 253));
+        pnlRefTint.setBounds(0, 260, 325, 100);
+        pnlRefTint.setLayout(null);
+        pnlWhiteCard.add(pnlRefTint);
+
+        JLabel lblRefNum = new JLabel("Reference ID: " + txnId, SwingConstants.CENTER);
+        lblRefNum.setFont(new Font("Arial", Font.BOLD, 12));
+        lblRefNum.setForeground(new Color(0, 25, 75));
+        lblRefNum.setBounds(19, 25, 240, 20);
+        pnlRefTint.add(lblRefNum);
+        
+        JLabel lblCopy = new JLabel("[Copy]", SwingConstants.CENTER);
+        lblCopy.setFont(new Font("Arial", Font.BOLD, 11));
+        lblCopy.setForeground(theme.PRIMARY_BLUE);
+        lblCopy.setBounds(217, 24, 55, 20);
+        lblCopy.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        lblCopy.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                java.awt.datatransfer.StringSelection selection = new java.awt.datatransfer.StringSelection(txnId);
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+                
+                JOptionPane.showMessageDialog(dialog, "Reference ID copied to clipboard!", "Copied", JOptionPane.INFORMATION_MESSAGE);
+                 
+            }
+            
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                lblCopy.setForeground(new Color(0, 25, 75));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                lblCopy.setForeground(theme.PRIMARY_BLUE);
+            }
+        });
+        pnlRefTint.add(lblCopy);
+
+        JLabel lblTime = new JLabel("Channel: Peer-to-Peer Transfer", SwingConstants.CENTER);
+        lblTime.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblTime.setForeground(Color.GRAY);
+        lblTime.setBounds(0, 50, 325, 20);
+        pnlRefTint.add(lblTime);
+
+        dialog.add(pnlReceiptImage, BorderLayout.CENTER);
+
+        JPanel pnlButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        pnlButtons.setBackground(new Color(82, 124, 174));
+
+        JButton btnSave = new JButton("Save Receipt as Image");
+        JButton btnClose = new JButton("Back");
+
+        pnlButtons.add(btnSave);
+        pnlButtons.add(btnClose);
+        dialog.add(pnlButtons, BorderLayout.SOUTH);
+
+        btnSave.addActionListener(ae -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setSelectedFile(new File("Transfer_Receipt_" + txnId + ".png"));
+            if (chooser.showSaveDialog(dialog) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    BufferedImage img = new BufferedImage(pnlReceiptImage.getWidth(), pnlReceiptImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+                    Graphics g = img.getGraphics();
+                    pnlReceiptImage.paint(g);
+                    g.dispose();
+                    ImageIO.write(img, "png", chooser.getSelectedFile());
+                    JOptionPane.showMessageDialog(dialog, "Saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(dialog, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        btnClose.addActionListener(ae -> dialog.dispose());
+        dialog.setVisible(true);
     }
 
 }

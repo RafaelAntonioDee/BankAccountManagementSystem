@@ -161,7 +161,7 @@ public class AutoPaymentService {
                     TransactionsService.addTransaction(email, "Auto Payment", today, "Insufficient Balance", sequentialTxnId);
 
                 } else {
-                    TransactionsService.addTransaction(email, "Auto Payment" + p.getPayee(), today, "-" + amount, sequentialTxnId);
+                    TransactionsService.addTransaction(email, "Auto Payment", today, "-" + amount, sequentialTxnId);
                     AutoPaymentService.markAsPaid(p.getAutoPayID());
 
                     // Changes the Auto Payment Status back to Unpaid

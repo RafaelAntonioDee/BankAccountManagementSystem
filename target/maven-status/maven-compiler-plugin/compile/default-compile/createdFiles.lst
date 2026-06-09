@@ -44,5 +44,6 @@ FeaturesPanelsUI\TransactionsPanel$3.class
 FeaturesPanelsUI\DepositPanel.class
 FeaturesPanelsUI\DashboardPanel.class
 LoginUI\RegisterPage.class
+FeaturesPanelsUI\DashboardPanel$2.class
 LoginUI\LoginPage.class
 Objects\Account.class

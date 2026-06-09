@@ -67,6 +67,10 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         txtSearch.setBackground(theme.PANELS_BACKGROUND);
         add(txtSearch);
 
+        txtSearch.addActionListener(e -> {
+            showTransactions();
+        });
+
         lblDate = new JLabel("Date");
         lblDate.setFont(new Font("Arial", Font.PLAIN, 18));
         lblDate.setForeground(theme.TEXT_GRAY);
@@ -142,7 +146,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         TransactionsTable.setBorder(new LineBorder(theme.BORDER_GRAY));
         TransactionsTable.setDefaultEditor(Object.class, null);
         TransactionsTable.setFocusable(false);
-        
+
         JTableHeader header = TransactionsTable.getTableHeader();
         header.setReorderingAllowed(false);
         header.setFont(new Font("Arial", Font.BOLD, 12));

@@ -1,5 +1,6 @@
 package DataService;
 
+import AppService.BalanceFunctions;
 import Objects.Account;
 import Objects.AutoPayment;
 import java.sql.*;
@@ -23,8 +24,8 @@ public class AutoPaymentService {
     public static void addAutoPayment(AutoPayment payment) {
 
         String sql = "INSERT INTO autopayments "
-                + "(AutoPayID, Email, Payee, Frequency, DueDate, Amount) "
-                + "VALUES (?,?,?,?,?,?)";
+                + "(AutoPayID, Email, Payee, Frequency, DueDate, Amount, isPaid) "
+                + "VALUES (?,?,?,?,?,?,?)";
 
         try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql)) {
 
@@ -34,6 +35,7 @@ public class AutoPaymentService {
             st.setString(4, payment.getFrequency());
             st.setDate(5, java.sql.Date.valueOf(payment.getDate()));
             st.setDouble(6, payment.getAmount());
+            st.setBoolean(7, payment.isPaid());
 
             st.executeUpdate();
 
@@ -153,14 +155,15 @@ public class AutoPaymentService {
                 String email = p.getEmail();
 
                 boolean success = AccountService.deductBalance(email, amount);
+                String sequentialTxnId = BalanceFunctions.getNextTransactionID();
 
                 if (!success) {
-                    TransactionsService.addTransaction(email, "Auto Payment", today, "Insufficient Balance");
+                    TransactionsService.addTransaction(email, "Auto Payment", today, "Insufficient Balance", sequentialTxnId);
 
                 } else {
-                    TransactionsService.addTransaction(email, "Auto Payment" + p.getPayee(), today, "-" + amount);
+                    TransactionsService.addTransaction(email, "Auto Payment" + p.getPayee(), today, "-" + amount, sequentialTxnId);
                     AutoPaymentService.markAsPaid(p.getAutoPayID());
-                    
+
                     // Changes the Auto Payment Status back to Unpaid
                     LocalDate nextDate = calculateNextDueDate(p.getDate(), p.getFrequency());
                     AutoPaymentService.updatePaymentForNextCycle(p.getAutoPayID(), nextDate);

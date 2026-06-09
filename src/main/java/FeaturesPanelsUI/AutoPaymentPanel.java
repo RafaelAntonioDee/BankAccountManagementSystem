@@ -39,7 +39,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
 
     public AutoPaymentPanel(String email, Account user) {
         this.currentEmail = user.getEmail();
-        DataService.AutoPaymentService.processDuePayments();
+        AppService.AutoPaymentFunctions.processDuePayments();
         this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
         this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
 
@@ -311,7 +311,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
                             dueDate
                     );
 
-                    DataService.AutoPaymentService.processDuePayments();
+                    AppService.AutoPaymentFunctions.processDuePayments();
                     loadExistingAutoPayments();
 
                     txtRecipient.setText("");

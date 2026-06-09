@@ -67,4 +67,8 @@ public class AutoPaymentFunctions {
 
         return list.get(0);
     }
+
+    public static void processDuePayments() {
+        AutoPaymentService.processDuePayments();
+    }
 }

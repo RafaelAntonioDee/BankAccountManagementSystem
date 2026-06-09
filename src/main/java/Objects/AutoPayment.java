@@ -16,7 +16,7 @@ public class AutoPayment {
     private String AutoPayID, Payee, Frequency, Email;
     private LocalDate Date;
     private double Amount;
-    private boolean isPaid;
+    private boolean isPaid = false;
 
     public String getAutoPayID() {
         return AutoPayID;

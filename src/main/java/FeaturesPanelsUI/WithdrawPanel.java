@@ -246,9 +246,10 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         pnlWhiteCard.setLayout(null);
         pnlReceiptImage.add(pnlWhiteCard);
 
-        JLabel lblCheck = new JLabel("[ ✓ ]", SwingConstants.CENTER);
-        lblCheck.setFont(new Font("Arial", Font.BOLD, 24));
-        lblCheck.setForeground(new Color(82, 124, 174));
+        ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
+        Image scaledImage = BankIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        
+        JLabel lblCheck = new JLabel(new ImageIcon(scaledImage), SwingConstants.CENTER);
         lblCheck.setBounds(0, 15, 325, 30);
         pnlWhiteCard.add(lblCheck);
 
@@ -309,9 +310,37 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         JLabel lblRefNum = new JLabel("Reference ID: " + txnId, SwingConstants.CENTER);
         lblRefNum.setFont(new Font("Arial", Font.BOLD, 12));
         lblRefNum.setForeground(new Color(0, 25, 75));
-        lblRefNum.setBounds(0, 25, 325, 20);
+        lblRefNum.setBounds(19, 25, 240, 20);
         pnlRefTint.add(lblRefNum);
 
+        JLabel lblCopy = new JLabel("[Copy]", SwingConstants.CENTER);
+        lblCopy.setFont(new Font("Arial", Font.BOLD, 11));
+        lblCopy.setForeground(theme.PRIMARY_BLUE);
+        lblCopy.setBounds(217, 24, 55, 20);
+        lblCopy.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        lblCopy.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                java.awt.datatransfer.StringSelection selection = new java.awt.datatransfer.StringSelection(txnId);
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+                
+                JOptionPane.showMessageDialog(dialog, "Reference ID copied to clipboard!", "Copied", JOptionPane.INFORMATION_MESSAGE);
+                 
+            }
+            
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                lblCopy.setForeground(new Color(0, 25, 75));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                lblCopy.setForeground(theme.PRIMARY_BLUE);
+            }
+        });
+        pnlRefTint.add(lblCopy);
+        
         JLabel lblTime = new JLabel("Channel Mode: " + mode, SwingConstants.CENTER);
         lblTime.setFont(new Font("Arial", Font.PLAIN, 12));
         lblTime.setForeground(Color.GRAY);

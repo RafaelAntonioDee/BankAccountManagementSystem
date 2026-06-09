@@ -3,12 +3,14 @@ package FeaturesPanelsUI;
 import Objects.Account;
 import AppService.BalanceFunctions;
 import AppService.AccountFunctions;
+import static AppService.BalanceFunctions.addTransaction;
 import DashboardUIDefault.Colors;
 import static FeaturesPanelsUI.DepositPanel.theme;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.time.LocalDate;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -35,7 +37,6 @@ public class TransferPanel extends JPanel implements ActionListener {
         } else {
             theme = Colors.DARK();
         }
-
 
         setBounds(0, 0, 837, 560);
         setBackground(theme.BACKGROUND);
@@ -194,33 +195,12 @@ public class TransferPanel extends JPanel implements ActionListener {
             lblName.setText("Transferring to (email): ---");
             return;
         }
-        if (email.equalsIgnoreCase(currentUser.getEmail())) {
-            JOptionPane.showMessageDialog(this, "Cannot transfer to yourself!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+
 
         Account receiver = AccountFunctions.getUser(email);
         if (receiver != null) {
             lblName.setText("Transferring to (email): " + receiver.getEmail());
-        } else {
-            JOptionPane.showMessageDialog(this, "Account not found!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    private String getNextTransactionID() {
-        java.util.ArrayList<Objects.AccountTransactHistory> history = BalanceFunctions.getTransactions(currentUser.getEmail());
-        int nextNum = 1;
-
-        if (history != null && !history.isEmpty()) {
-            try {
-                String lastID = history.get(history.size() - 1).getTransactionID();
-                int lastNum = Integer.parseInt(lastID.replaceAll("[^0-9]", ""));
-                nextNum = lastNum + 1;
-            } catch (Exception e) {
-                nextNum = history.size() + 1;
-            }
-        }
-        return String.format("T%04d", nextNum);
     }
 
     @Override
@@ -270,11 +250,17 @@ public class TransferPanel extends JPanel implements ActionListener {
                     return;
                 }
 
-                String sequentialTxnId = getNextTransactionID();
+                String sequentialTxnId = BalanceFunctions.getNextTransactionID();
+                BalanceFunctions.addTransaction(currentUser.getEmail(), "Transferred", LocalDate.now(), "- " + amount, sequentialTxnId);
+
+                String sequentialTxnId2 = BalanceFunctions.getNextTransactionID();
+                BalanceFunctions.addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amount, sequentialTxnId2);
+
+                System.out.println(sequentialTxnId + sequentialTxnId2);
 
                 BalanceFunctions.transfer(currentUser, receiver, amount);
 
-                balance = currentUser.getBalance();
+                balance = AccountFunctions.getUser(currentUser.getEmail()).getBalance();
                 lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
 
                 showReceiptPopup(amount, receiver, sequentialTxnId);
@@ -361,6 +347,8 @@ public class TransferPanel extends JPanel implements ActionListener {
         lblBalTitle.setBounds(25, 210, 120, 20);
         pnlWhiteCard.add(lblBalTitle);
 
+        balance = AccountFunctions.getUser(currentUser.getEmail()).getBalance();
+
         JLabel lblBalVal = new JLabel("₱" + String.format("%.2f", balance), SwingConstants.RIGHT);
         lblBalVal.setFont(new Font("Arial", Font.PLAIN, 12));
         lblBalVal.setBounds(150, 210, 150, 20);
@@ -372,7 +360,7 @@ public class TransferPanel extends JPanel implements ActionListener {
         pnlRefTint.setLayout(null);
         pnlWhiteCard.add(pnlRefTint);
 
-        JLabel lblRefNum = new JLabel("Transaction ID: " + txnId, SwingConstants.CENTER);
+        JLabel lblRefNum = new JLabel("Reference ID: " + txnId, SwingConstants.CENTER);
         lblRefNum.setFont(new Font("Arial", Font.BOLD, 12));
         lblRefNum.setForeground(new Color(0, 25, 75));
         lblRefNum.setBounds(0, 25, 325, 20);

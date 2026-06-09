@@ -203,21 +203,7 @@ public class DepositPanel extends JPanel implements ActionListener {
         pnlGuidelines.add(txaGuideBody);
     }
 
-    private String getNextTransactionID() {
-        java.util.ArrayList<Objects.AccountTransactHistory> history = BalanceFunctions.getTransactions(currentuser.getEmail());
-        int nextNum = 1;
 
-        if (history != null && !history.isEmpty()) {
-            try {
-                String lastID = history.get(history.size() - 1).getTransactionID();
-                int lastNum = Integer.parseInt(lastID.replaceAll("[^0-9]", ""));
-                nextNum = lastNum + 1;
-            } catch (Exception e) {
-                nextNum = history.size() + 1;
-            }
-        }
-        return String.format("T%04d", nextNum);
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -267,7 +253,7 @@ public class DepositPanel extends JPanel implements ActionListener {
                     return;
                 }
 
-                String sequentialTxnId = getNextTransactionID();
+                String sequentialTxnId = BalanceFunctions.getNextTransactionID();
 
                 balance = BalanceFunctions.deposit(currentuser.getEmail(), netAmount, sequentialTxnId);
                 lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
@@ -374,7 +360,7 @@ public class DepositPanel extends JPanel implements ActionListener {
         pnlRefTint.setLayout(null);
         pnlWhiteCard.add(pnlRefTint);
 
-        JLabel lblRefNum = new JLabel("Transaction ID: " + txnId, SwingConstants.CENTER);
+        JLabel lblRefNum = new JLabel("Referebce ID: " + txnId, SwingConstants.CENTER);
         lblRefNum.setFont(new Font("Arial", Font.BOLD, 12));
         lblRefNum.setForeground(new Color(0, 25, 75));
         lblRefNum.setBounds(0, 25, 325, 20);

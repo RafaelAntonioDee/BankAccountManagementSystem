@@ -128,7 +128,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
         lblTransactions.setBounds(25, 110, 737, 35);
         add(lblTransactions);
 
-        String[] columns = {"Transaction ID", "Transaction Type", "Date", "Balance"};
+        String[] columns = {"Reference ID", "Transaction Type", "Date", "Balance"};
         model = new DefaultTableModel(columns, 0);
 
         TransactionsTable = new JTable(model);

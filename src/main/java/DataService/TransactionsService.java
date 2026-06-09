@@ -8,6 +8,7 @@ import Objects.AccountTransactHistory;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -55,9 +56,7 @@ public class TransactionsService {
     }
 
     // Add Transaction
-    public static void addTransaction(String email, String type, LocalDate date, String balanceChange) {
-
-        String newId = generateNextTransactionID();
+    public static void addTransaction(String email, String type, LocalDate date, String balanceChange, String newId) {
 
         String sql = "INSERT INTO transactions "
                 + "(TransactionID, Email, TransactionType, Date, BalanceChange) "
@@ -79,23 +78,43 @@ public class TransactionsService {
     }
 
     // Generate ID
-    private static String generateNextTransactionID() {
+    public static String generateNextTransactionID() {
 
-        String sql = "SELECT TransactionID FROM transactions ORDER BY TransactionID DESC LIMIT 1";
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
 
-        try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
+        while (true) {
 
-            if (rs.next()) {
-                String lastId = rs.getString("TransactionID");
+            StringBuilder id = new StringBuilder("RN");
 
-                int num = Integer.parseInt(lastId.substring(1));
-                return String.format("T%04d", num + 1);
+            for (int i = 0; i < 8; i++) {
+                id.append(chars.charAt(random.nextInt(chars.length())));
+            }
+
+            String transactionID = id.toString();
+
+            if (!transactionIDExists(transactionID)) {
+                return transactionID;
+            }
+        }
+    }
+
+    private static boolean transactionIDExists(String id) {
+
+        String sql = "SELECT 1 FROM transactions WHERE TransactionID = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setString(1, id);
+
+            try (ResultSet rs = st.executeQuery()) {
+                return rs.next();
             }
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
-        return "T0001";
+        return true;
     }
 }

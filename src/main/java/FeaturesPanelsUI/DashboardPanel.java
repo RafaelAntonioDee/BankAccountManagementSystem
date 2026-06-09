@@ -44,7 +44,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
         this.currentUser = AppService.AccountFunctions.getUser(user.getEmail());
         this.dashboard = dashboard;
-        
+
         if (currentUser.getSystemTheme().equals("Light") || currentUser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
@@ -110,7 +110,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblTransactions.setForeground(theme.TEXT_BLACK);
         pnlTransactions.add(lblTransactions);
 
-        String[] columns = {"Transaction ID", "Type", "Date", "Balance"};
+        String[] columns = {"Reference ID", "Type", "Date", "Balance"};
         model = new DefaultTableModel(columns, 0);
 
         TransactionsTable = new JTable(model);
@@ -254,21 +254,30 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
     public void showTransactions() {
 
-        ArrayList<AccountTransactHistory> userHistory = BalanceFunctions.getTransactions(currentUser.getEmail());
+        ArrayList<AccountTransactHistory> userHistory
+                = BalanceFunctions.getTransactions(currentUser.getEmail());
+
         model.setRowCount(0);
 
-        LocalDate today = LocalDate.now();
+        int count = 0;
 
         for (AccountTransactHistory transaction : userHistory) {
+
+            if (count >= 10) {
+                break;
+            }
 
             String id = transaction.getTransactionID();
             String type = transaction.getTransaction();
             LocalDate date = transaction.getDate();
-            String dueDateFormatted = date.format(DateTimeFormatter.ofPattern("MMMM dd, yyyy"));
+            String dueDateFormatted = date.format(
+                    DateTimeFormatter.ofPattern("MMMM dd, yyyy")
+            );
             String balance = String.valueOf(transaction.getBalanceChange());
 
             model.addRow(new Object[]{id, type, dueDateFormatted, balance});
 
+            count++;
         }
     }
 
@@ -304,6 +313,14 @@ public class DashboardPanel extends JPanel implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Insufficient balance!");
                     return;
                 }
+
+                String sequentialTxnId = BalanceFunctions.getNextTransactionID();
+                BalanceFunctions.addTransaction(currentUser.getEmail(), "Transferred", LocalDate.now(), "- " + amount, sequentialTxnId);
+
+                String sequentialTxnId2 = BalanceFunctions.getNextTransactionID();
+                BalanceFunctions.addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amount, sequentialTxnId2);
+
+                System.out.println(sequentialTxnId + sequentialTxnId2);
 
                 BalanceFunctions.transfer(currentUser, receiver, amount);
 

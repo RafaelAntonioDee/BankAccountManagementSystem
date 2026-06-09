@@ -17,21 +17,18 @@ import java.util.ArrayList;
 public class BalanceFunctions {
 
     public static double deposit(String email, double amount, String transactionId) {
-        addTransaction(email, "Deposit", LocalDate.now(), "+ " + amount);
+        addTransaction(email, "Deposit", LocalDate.now(), "+ " + amount, transactionId);
 
         return AccountService.deposit(email, amount);
     }
 
     public static double withdraw(String email, double amount, String transactionId) {
-        addTransaction(email, "Withdraw", LocalDate.now(), "- " + amount);
+        addTransaction(email, "Withdraw", LocalDate.now(), "- " + amount, transactionId);
 
         return AccountService.withdraw(email, amount);
     }
 
     public static void transfer(Account user, Account receiver, double amount) {
-        addTransaction(user.getEmail(), "Transferred", LocalDate.now(), "- " + amount);
-        addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amount);
-
         AccountService.withdraw(user.getEmail(), amount);
         AccountService.deposit(receiver.getEmail(), amount);
     }
@@ -40,7 +37,11 @@ public class BalanceFunctions {
         return TransactionsService.getTransactions(email);
     }
 
-    public static void addTransaction(String email, String type, LocalDate date, String balancechange) {
-        TransactionsService.addTransaction(email, type, date, balancechange);
+    public static void addTransaction(String email, String type, LocalDate date, String balancechange, String newId) {
+        TransactionsService.addTransaction(email, type, date, balancechange, newId);
+    }
+    
+    public static String getNextTransactionID(){
+        return TransactionsService.generateNextTransactionID();
     }
 }

@@ -5,6 +5,7 @@ DashboardUIDefault\MainDashboard.class
 FeaturesPanelsUI\ChangePassword.class
 AppService\AutoPaymentFunctions.class
 FeaturesPanelsUI\WithdrawPanel.class
+FeaturesPanelsUI\DashboardPanel$1.class
 DashboardUIDefault\Colors.class
 DashboardUIDefault\Icons.class
 FeaturesPanelsUI\ChangeEmail.class
@@ -18,6 +19,7 @@ FeaturesPanelsUI\TransferPanel$1.class
 FeaturesPanelsUI\TransferPanel.class
 AppService\SettingsFunctions.class
 FeaturesPanelsUI\AutoPaymentPanel.class
+FeaturesPanelsUI\TransactionsPanel$5.class
 DataService\TransactionsService.class
 FeaturesPanelsUI\SettingsPanel.class
 AppService\BalanceFunctions.class

@@ -122,7 +122,9 @@ public class DashboardPanel extends JPanel implements ActionListener {
         TransactionsTable.setBackground(theme.BACKGROUND);
         TransactionsTable.setForeground(theme.TEXT_BLACK);
         TransactionsTable.setBorder(new LineBorder(theme.BORDER_GRAY));
-
+        TransactionsTable.setDefaultEditor(Object.class, null);
+        TransactionsTable.setFocusable(false);
+        
         JTableHeader header = TransactionsTable.getTableHeader();
         header.setReorderingAllowed(false);
         header.setFont(new Font("Arial", Font.BOLD, 12));
@@ -137,6 +139,15 @@ public class DashboardPanel extends JPanel implements ActionListener {
         scroll.setBackground(theme.BACKGROUND);
         scroll.setBorder(new LineBorder(theme.BORDER_GRAY));
         scroll.getViewport().setBackground(theme.BACKGROUND);
+        scroll.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                thumbColor = theme.ThumbBar;
+                trackColor = theme.TrackBar;
+            }
+        });
+
+        add(scroll);
         pnlTransactions.add(scroll);
 
         // Scheduled Payments

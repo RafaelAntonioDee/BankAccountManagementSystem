@@ -21,7 +21,7 @@ import javax.swing.*;
  *
  * @author rafra
  */
-public class ChangeName extends JFrame implements ActionListener {
+public class ChangeName extends JDialog implements ActionListener {
 
     private JLabel lblLogin, lblTitle, lblFirst, lblLast, lblLogo, lblLine, lblOr;
     private JTextField txtFirst, txtLast;

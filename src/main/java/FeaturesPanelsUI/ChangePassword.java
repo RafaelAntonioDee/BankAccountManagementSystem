@@ -20,7 +20,7 @@ import javax.swing.*;
  *
  * @author rafra
  */
-public class ChangePassword extends JFrame implements ActionListener {
+public class ChangePassword extends JDialog implements ActionListener {
 
     private JLabel lblLogin, lblTitle, lblCurrentPass, lblNewPass, lblConfirmPass, lblLogo, lblLine, lblOr;
     private JPasswordField txtCurrent, txtFirst, txtNewPass, txtConfirmPass;

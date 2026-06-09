@@ -19,7 +19,7 @@ import Objects.AccountPersonalInformation;
  *
  * @author rafra
  */
-public class ChangePhoneNumber extends JFrame implements ActionListener {
+public class ChangePhoneNumber extends JDialog implements ActionListener {
 
     private JLabel lblLogin, lblTitle, lblNewPhone, lblLogo, lblLine, lblOr;
     private JTextField txtNewPhone;

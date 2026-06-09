@@ -19,7 +19,7 @@ import javax.swing.*;
  *
  * @author rafra
  */
-public class ChangeBirthday extends JFrame implements ActionListener {
+public class ChangeBirthday extends JDialog implements ActionListener {
 
     private JLabel lblMonth, lblDay, lblYear;
     private JComboBox cmbMonth, cmbDay, cmbYear;

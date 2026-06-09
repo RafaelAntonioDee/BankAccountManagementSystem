@@ -36,8 +36,8 @@ public class MainDashboard extends JFrame implements ActionListener {
     private TransactionsPanel pnlTransactions;
     private TransferPanel pnlTransfer;
     private WithdrawPanel pnlWithdraw;
-    private Account currentUser;
-    private AccountPersonalInformation currentUserInfo;
+    public static Account currentUser;
+    public static AccountPersonalInformation currentUserInfo;
     public static Colors theme = Colors.LIGHT();
     public static Icons icons = Icons.LIGHT();
 

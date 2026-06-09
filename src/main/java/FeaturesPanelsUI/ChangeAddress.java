@@ -17,7 +17,7 @@ import javax.swing.*;
  *
  * @author rafra
  */
-public class ChangeAddress extends JFrame implements ActionListener {
+public class ChangeAddress extends JDialog implements ActionListener {
 
     private JLabel lblAddress, lblLogo;
     private JTextField txtAddress;

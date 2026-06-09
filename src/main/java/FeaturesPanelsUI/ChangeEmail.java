@@ -19,7 +19,7 @@ import javax.swing.*;
  *
  * @author rafra
  */
-public class ChangeEmail extends JFrame implements ActionListener {
+public class ChangeEmail extends JDialog implements ActionListener {
 
     private JLabel lblEmail, lblLogo;
     private JTextField txtEmail;
@@ -32,7 +32,7 @@ public class ChangeEmail extends JFrame implements ActionListener {
     public ChangeEmail(Account user, AccountPersonalInformation userInfo) {
         this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
         this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
-        
+
         if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
@@ -95,7 +95,7 @@ public class ChangeEmail extends JFrame implements ActionListener {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String currentEmail = SettingsPanel.lblEmailField.getText();
             String newEmailInput = txtEmail.getText();
-            
+
             if (newEmailInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -119,17 +119,20 @@ public class ChangeEmail extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Invalid Email Address!", "Try Again", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-                if (choice == 0) {
-                    updatedUser = SettingsFunctions.changeEmail(currentuser.getEmail(), newEmailInput);
-                    SettingsPanel.lblEmailField.setText(newEmailInput);
-                    DashboardUIDefault.SidePanel.lblAccEmail.setText(newEmailInput);
-                    dispose();
-                    JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
-                }
-            
+            int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (choice == 0) {
+                updatedUser = SettingsFunctions.changeEmail(currentuser.getEmail(), newEmailInput);
+                SettingsPanel.lblEmailField.setText(newEmailInput);
+                DashboardUIDefault.SidePanel.lblAccEmail.setText(newEmailInput);
+                DashboardUIDefault.MainDashboard.currentUser = AppService.AccountFunctions.getUser(newEmailInput);
+                DashboardUIDefault.MainDashboard.currentUserInfo = AppService.AccountFunctions.getUserInfo(newEmailInput);
+
+                dispose();
+                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
+            }
+
         } else if (e.getSource() == btnCancel) {
             dispose();
         }

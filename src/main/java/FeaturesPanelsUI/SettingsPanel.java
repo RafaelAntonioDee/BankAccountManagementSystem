@@ -262,21 +262,27 @@ public class SettingsPanel extends JPanel implements ActionListener {
 
         if (e.getSource() == btnChangeName) {
             ChangeName name = new ChangeName(user, userinfo);
+            name.setModal(true);
             name.setVisible(true);
         } else if (e.getSource() == btnChangePassword) {
             ChangePassword pass = new ChangePassword(user, userinfo);
+            pass.setModal(true);
             pass.setVisible(true);
         } else if (e.getSource() == btnChangePhoneNumber) {
             ChangePhoneNumber phone = new ChangePhoneNumber(user, userinfo);
+            phone.setModal(true);
             phone.setVisible(true);
         } else if (e.getSource() == btnChangeEmail) {
             ChangeEmail email = new ChangeEmail(user, userinfo);
+            email.setModal(true);
             email.setVisible(true);
         } else if (e.getSource() == btnChangeAddress) {
             ChangeAddress address = new ChangeAddress(user, userinfo);
+            address.setModal(true);
             address.setVisible(true);
         } else if (e.getSource() == btnChangeBirthday) {
             ChangeBirthday birth = new ChangeBirthday(user, userinfo);
+            birth.setModal(true);
             birth.setVisible(true);
         }
 

@@ -23,7 +23,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
     private JComboBox cmbModeOfTransac;
     private JPanel pnlProcess, pnlGuidelines;
     private Account currentuser;
-    private String[] modeOfTransac = {"Select Mode", "Linked Bank Account", "Generate a QR Code", "Over-the-Counter Cashier"};
+    private String[] modeOfTransac = {"Select Mode", "Linked Bank Account", "Over-the-Counter Cashier"};
     public static Colors theme = Colors.LIGHT();
 
     double balance = 0;
@@ -146,9 +146,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
         String guideText = "Withdrawal Charges: \n"
                 + "• Linked Bank Account: Free \n"
-                + "• Local Banks: Free  \n"
-                + "• Over-the-Counter Kiosk: ₱20.00  \n"
-                + "• Over-the-Counter Cashier: ₱20.00  \n"
+                + "• Over-the-Counter: ₱20.00  \n"
                 + " \n"
                 + "Processing Time:  \n"
                 + "• Handled immediately in real-time. \n"

@@ -295,9 +295,30 @@ public class DashboardPanel extends JPanel implements ActionListener {
             String amountText = txtAmount.getText();
 
             try {
+
+                if (email.isEmpty() && amountText.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (email.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Enter recipient email!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (amountText.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Enter transfer amount!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 double amount = Double.parseDouble(amountText);
 
                 Account receiver = AccountFunctions.getUser(email);
+
+                if (email.equalsIgnoreCase(currentUser.getEmail())) {
+                    JOptionPane.showMessageDialog(this, "You cannot transfer money to your own account!", "Invalid", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
                 if (receiver == null) {
                     JOptionPane.showMessageDialog(this, "Account not found!", "Invalid", JOptionPane.ERROR_MESSAGE);

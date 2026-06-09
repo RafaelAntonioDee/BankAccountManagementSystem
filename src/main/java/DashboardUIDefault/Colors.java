@@ -65,8 +65,9 @@ public class Colors {
         c.TEXT_WHITE = Color.WHITE;
         c.TEXT_BLACK = Color.BLACK;
         
-        c.ThumbBar = new Color(60, 64, 67);
-        c.TrackBar = new Color(30, 31, 32);
+        c.ThumbBar = new Color(233, 233, 233);
+        c.TrackBar = new Color(255, 255, 255);        
+
 
         return c;
     }
@@ -89,6 +90,9 @@ public class Colors {
         c.TEXT_GRAY = new Color(248, 250, 252);
         c.TEXT_WHITE = Color.WHITE;
         c.TEXT_BLACK = Color.WHITE;
+        
+        c.ThumbBar = new Color(60, 64, 67);
+        c.TrackBar = new Color(30, 31, 32);
 
         return c;
     }

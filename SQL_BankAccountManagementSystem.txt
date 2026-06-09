@@ -32,6 +32,7 @@ CREATE TABLE autopayments (
   Frequency varchar(254) NOT NULL,
   DueDate date NOT NULL,
   Amount double NOT NULL,
+  isPaid boolean NOT NULL,
   PRIMARY KEY (AutoPayID)
 );
 

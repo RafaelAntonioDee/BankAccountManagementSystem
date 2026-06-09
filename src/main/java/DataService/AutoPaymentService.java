@@ -3,6 +3,8 @@ package DataService;
 import Objects.Account;
 import Objects.AutoPayment;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.*;
 import java.util.HashMap;
@@ -61,6 +63,7 @@ public class AutoPaymentService {
                 p.setFrequency(rs.getString("Frequency"));
                 p.setPaymentDate(rs.getDate("DueDate").toLocalDate());
                 p.setAmount(rs.getDouble("Amount"));
+                p.setPaid(rs.getBoolean("IsPaid"));
 
                 list.add(p);
             }
@@ -93,6 +96,7 @@ public class AutoPaymentService {
                 p.setFrequency(rs.getString("Frequency"));
                 p.setPaymentDate(rs.getDate("DueDate").toLocalDate());
                 p.setAmount(rs.getDouble("Amount"));
+                p.setPaid(rs.getBoolean("IsPaid"));
 
                 list.add(p);
             }
@@ -119,4 +123,100 @@ public class AutoPaymentService {
         }
     }
 
+    // Date Format
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+
+    public static LocalDate getDateNow() {
+        return LocalDate.now();
+    }
+
+    public static String getFormattedDateNow() {
+        return LocalDate.now().format(DATE_FORMAT);
+    }
+
+    // Check if Auto Payment Due date is today na
+    public static void processDuePayments() {
+
+        ArrayList<AutoPayment> payments = AutoPaymentService.getAllAutoPayments();
+
+        LocalDate today = LocalDate.now();
+
+        for (AutoPayment p : payments) {
+
+            if (p.isPaid()) {
+                continue;
+            }
+
+            if (!today.isBefore(p.getDate())) {
+
+                double amount = p.getAmount();
+                String email = p.getEmail();
+
+                boolean success = AccountService.deductBalance(email, amount);
+
+                if (!success) {
+                    TransactionsService.addTransaction(email, "Auto Payment", today, "Insufficient Balance");
+
+                } else {
+                    TransactionsService.addTransaction(email, "Auto Payment" + p.getPayee(), today, "-" + amount);
+                    AutoPaymentService.markAsPaid(p.getAutoPayID());
+                    
+                    // Changes the Auto Payment Status back to Unpaid
+                    LocalDate nextDate = calculateNextDueDate(p.getDate(), p.getFrequency());
+                    AutoPaymentService.updatePaymentForNextCycle(p.getAutoPayID(), nextDate);
+                }
+            }
+        }
+    }
+
+    // Mark if Paid na 'yung AutoPayment
+    public static void markAsPaid(String autoPayID) {
+
+        String sql = "UPDATE autopayments SET IsPaid = 1 WHERE AutoPayID = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setString(1, autoPayID);
+            st.executeUpdate();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private static LocalDate calculateNextDueDate(LocalDate currentDueDate, String frequency) {
+        if (frequency == null) {
+            return null;
+        }
+
+        switch (frequency.toLowerCase().trim()) {
+            case "daily":
+                return currentDueDate.plusDays(1);
+            case "monthly":
+                return currentDueDate.plusMonths(1);
+            case "quarterly":
+                return currentDueDate.plusMonths(3);
+            case "semi-annually":
+                return currentDueDate.plusMonths(6);
+            case "annually":
+                return currentDueDate.plusYears(1);
+            default:
+                return currentDueDate.plusMonths(1);
+        }
+    }
+
+    // Update the Payment Date after Succesfully Auto-Paying
+    public static void updatePaymentForNextCycle(String autoPayID, LocalDate nextDate) {
+        String sql = "UPDATE autopayments SET DueDate = ?, IsPaid = 0 WHERE AutoPayID = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setDate(1, java.sql.Date.valueOf(nextDate));
+            st.setString(2, autoPayID);
+            st.executeUpdate();
+
+        } catch (java.sql.SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

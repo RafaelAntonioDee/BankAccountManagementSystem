@@ -295,12 +295,12 @@ public class RegisterPage extends JFrame implements ActionListener {
             String bday = cmbBirthMonth.getSelectedItem() + " " + cmbBirthDay.getSelectedItem() + ", " + cmbBirthYear.getSelectedItem();
 
             if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || addr.isEmpty() || phone.isEmpty() || pass.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Fields can't be empty!", "Invalid", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Fields can't be empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             if (AccountFunctions.validateExistingEmail(email)) {
-                JOptionPane.showMessageDialog(this, "Email Already Exists!", "Invalid", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Email Already Exists!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 

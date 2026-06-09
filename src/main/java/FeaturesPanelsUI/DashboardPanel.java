@@ -200,7 +200,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
             pnlAutoPay.add(lblDate);
         }
 
-        // Quick Transfer
+        // QUICK TRANSFER
         pnlQuickTransfer = new JPanel();
         pnlQuickTransfer.setBounds(475, 250, 330, 280);
         pnlQuickTransfer.setBackground(theme.PANELS_BACKGROUND);
@@ -222,7 +222,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
         txtEmail = new JTextField();
         txtEmail.setBounds(120, 85, 185, 35);
-        txtEmail.setOpaque(false);
+        txtEmail.setBackground(theme.BACKGROUND);
         txtEmail.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         txtEmail.setForeground(theme.TEXT_BLACK);
         pnlQuickTransfer.add(txtEmail);
@@ -235,7 +235,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
         txtAmount = new JTextField();
         txtAmount.setBounds(120, 145, 185, 35);
-        txtAmount.setOpaque(false);
+        txtAmount.setBackground(theme.BACKGROUND);
         txtAmount.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         txtAmount.setForeground(theme.TEXT_BLACK);
         pnlQuickTransfer.add(txtAmount);
@@ -300,17 +300,17 @@ public class DashboardPanel extends JPanel implements ActionListener {
                 Account receiver = AccountFunctions.getUser(email);
 
                 if (receiver == null) {
-                    JOptionPane.showMessageDialog(this, "Account not found!");
+                    JOptionPane.showMessageDialog(this, "Account not found!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 if (amount <= 0) {
-                    JOptionPane.showMessageDialog(this, "Invalid amount!");
+                    JOptionPane.showMessageDialog(this, "Invalid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 if (currentUser.getBalance() < amount) {
-                    JOptionPane.showMessageDialog(this, "Insufficient balance!");
+                    JOptionPane.showMessageDialog(this, "Insufficient balance!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -329,7 +329,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
                 txtAmount.setText("");
                 txtEmail.setText("");
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Enter valid amount!");
+                JOptionPane.showMessageDialog(this, "Enter valid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
             }
 
             showTransactions();

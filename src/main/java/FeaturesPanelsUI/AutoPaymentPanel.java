@@ -34,13 +34,15 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
     private AccountPersonalInformation currentuserInfo;
     private int ScheduledCount = 0, y = 15;
     private JComboBox<String> cmbFrequency, cmbDay, cmbMonth, cmbYear;
-    private String[] frequency = {"Monthly", "Quarterly", "Semi-Annually", "Annually"};
+    private String[] frequency = {"Daily", "Monthly", "Quarterly", "Semi-Annually", "Annually"};
     public static Colors theme = Colors.LIGHT();
 
     public AutoPaymentPanel(String email, Account user) {
+        this.currentEmail = user.getEmail();
+        DataService.AutoPaymentService.processDuePayments();
         this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
         this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
-        
+
         this.currentEmail = currentuser.getEmail();
         if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
@@ -53,7 +55,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         setBorder(new LineBorder(theme.BORDER_GRAY));
         setLayout(null);
 
-        //---------------------------------AUTOPAYMENTd
+        // AUTO PAYMENT
         lblAutoPayment = new JLabel("Auto Payment Setup");
         lblAutoPayment.setForeground(theme.TEXT_GRAY);
         lblAutoPayment.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -75,7 +77,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
 
         txtRecipient = new JTextField();
         txtRecipient.setBounds(25, 60, 325, 35);
-        txtRecipient.setOpaque(false);
+        txtRecipient.setBackground(theme.BACKGROUND);
         txtRecipient.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(theme.BORDER_GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         txtRecipient.setForeground(theme.TEXT_BLACK);
         pnlAutoPayment.add(txtRecipient);
@@ -88,8 +90,8 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
 
         txtAmount = new JTextField();
         txtAmount.setBounds(25, 130, 325, 35);
-        txtAmount.setOpaque(false);
-        txtAmount.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        txtAmount.setBackground(theme.BACKGROUND);
+        txtAmount.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(theme.BORDER_GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         txtAmount.setForeground(theme.TEXT_BLACK);
         pnlAutoPayment.add(txtAmount);
 
@@ -124,7 +126,7 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         btnCancel.addActionListener(this);
         pnlAutoPayment.add(btnCancel);
 
-        //---------------------------------RECEIPT
+        // RESIBO NG MGA AUTO PAYMENT
         lblReceipt = new JLabel("Enabled Auto Payments");
         lblReceipt.setForeground(theme.TEXT_GRAY);
         lblReceipt.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -259,6 +261,14 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
 
         if (e.getSource() == btnEnableAuto) {
             String payee = txtRecipient.getText().trim();
+
+            for (AutoPayment payment : AppService.AutoPaymentFunctions.getAllUserPayments(currentEmail)) {
+                if (payment.getPayee().equalsIgnoreCase(payee)) {
+                    JOptionPane.showMessageDialog(this, "An enabled auto-payment for this payee already exists.", "Invalid", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
             if (!payee.isEmpty()) {
                 try {
                     double amount = Double.parseDouble(txtAmount.getText().trim());
@@ -267,6 +277,9 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
                     LocalDate dueDate = LocalDate.now();
 
                     switch (frequency.toLowerCase()) {
+                        case "daily":
+                            dueDate = dueDate.plusDays(1);
+                            break;
                         case "monthly":
                             dueDate = dueDate.plusMonths(1);
                             break;
@@ -295,9 +308,10 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
                             payee,
                             amount,
                             frequency,
-                            LocalDate.parse(dueDateFormatted, format)
+                            dueDate
                     );
 
+                    DataService.AutoPaymentService.processDuePayments();
                     loadExistingAutoPayments();
 
                     txtRecipient.setText("");
@@ -317,8 +331,6 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
             AppService.AutoPaymentFunctions.removeAutoPay(id);
 
             loadExistingAutoPayments();
-
-            System.out.println(id);
         }
     }
 }

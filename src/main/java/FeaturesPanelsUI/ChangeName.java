@@ -34,7 +34,7 @@ public class ChangeName extends JFrame implements ActionListener {
     public ChangeName(Account user, AccountPersonalInformation userInfo) {
         this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
         this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
-        
+
         if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
@@ -117,29 +117,32 @@ public class ChangeName extends JFrame implements ActionListener {
             String newFirst = txtFirst.getText();
             String newLast = txtLast.getText();
 
+            if (newFirst.isEmpty() || newLast.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             if (!AccountFunctions.validateFirstName(newFirst)) {
-                JOptionPane.showMessageDialog(this, "Invalid First Name!");
+                JOptionPane.showMessageDialog(this, "Invalid First Name!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (!AccountFunctions.validateLastName(newLast)) {
-                JOptionPane.showMessageDialog(this, "Invalid Last Name!");
+                JOptionPane.showMessageDialog(this, "Invalid Last Name!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            if (newFirst.isEmpty() || newLast.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
-            } else {
-                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
+            
+            int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-                if (choice == 0) {
-                    updateFirst = SettingsFunctions.changeFirstName(currentuser.getEmail(), newFirst);
-                    updatedLast = SettingsFunctions.changeLastName(currentuser.getEmail(), newLast);
-                    SettingsPanel.lblNameField.setText(newFirst + " " + newLast);
-                    DashboardUIDefault.SidePanel.lblAccName.setText(newFirst + " " + newLast);
-                    dispose();
-                    JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
-                }
+            if (choice == 0) {
+                updateFirst = SettingsFunctions.changeFirstName(currentuser.getEmail(), newFirst);
+                updatedLast = SettingsFunctions.changeLastName(currentuser.getEmail(), newLast);
+                SettingsPanel.lblNameField.setText(newFirst + " " + newLast);
+                DashboardUIDefault.SidePanel.lblAccName.setText(newFirst + " " + newLast);
+                dispose();
+                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
             }
+
         } else if (e.getSource() == btnCancel) {
             dispose();
         }

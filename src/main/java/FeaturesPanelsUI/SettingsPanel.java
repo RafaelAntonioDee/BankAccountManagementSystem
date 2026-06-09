@@ -232,11 +232,21 @@ public class SettingsPanel extends JPanel implements ActionListener {
         cmbTheme.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AppService.AccountFunctions.ChangeTheme(currentuser.getEmail(), cmbTheme.getSelectedItem().toString());
-                MainDashboard md = new MainDashboard(currentuser, currentuserInfo);
-                md.setVisible(true);
-                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(SettingsPanel.this);
-                frame.dispose();
+                String selectedTheme = String.valueOf(cmbTheme.getSelectedItem());
+
+                int choice = JOptionPane.showConfirmDialog(SettingsPanel.this, "Are you sure?", "Theme Change", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                if (choice == JOptionPane.YES_OPTION) {
+                    AppService.AccountFunctions.ChangeTheme(currentuser.getEmail(), cmbTheme.getSelectedItem().toString());
+                    MainDashboard md = new MainDashboard(currentuser, currentuserInfo);
+                    md.setVisible(true);
+                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(SettingsPanel.this);
+                    frame.dispose();
+                }
+                
+                else {
+                    cmbTheme.setSelectedItem(user.getSystemTheme());
+                }
             }
         });
 

@@ -125,7 +125,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         btnCancel = new JButton("Cancel");
         btnCancel.setBounds(280, 330, 110, 35);
         btnCancel.setBackground(theme.CancelButton);
-        btnCancel.setForeground(theme.TEXT_BLACK);
+        btnCancel.setForeground(theme.TEXT_WHITE);
         btnCancel.setFont(new Font("Arial", Font.BOLD, 13));
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
@@ -185,24 +185,24 @@ public class WithdrawPanel extends JPanel implements ActionListener {
                 String mode = (String) cmbModeOfTransac.getSelectedItem();
 
                 if (amountText.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Enter amount!");
+                    JOptionPane.showMessageDialog(this, "Enter amount!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (mode.equals("Select Mode")) {
-                    JOptionPane.showMessageDialog(this, "Select transaction mode!");
+                    JOptionPane.showMessageDialog(this, "Select transaction mode!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 double amount = Double.parseDouble(amountText);
                 if (amount <= 0) {
-                    JOptionPane.showMessageDialog(this, "Invalid amount!");
+                    JOptionPane.showMessageDialog(this, "Invalid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 double fee = 0;
                 double totalDeduction = amount + fee;
                 if (totalDeduction > balance) {
-                    JOptionPane.showMessageDialog(this, "Insufficient balance!");
+                    JOptionPane.showMessageDialog(this, "Insufficient balance!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -215,7 +215,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
                 clearInputs();
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid input!");
+                JOptionPane.showMessageDialog(this, "Invalid input!", "Invalid", JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -340,9 +340,9 @@ public class WithdrawPanel extends JPanel implements ActionListener {
                     pnlReceiptImage.paint(g);
                     g.dispose();
                     ImageIO.write(img, "png", chooser.getSelectedFile());
-                    JOptionPane.showMessageDialog(dialog, "Saved successfully!");
+                    JOptionPane.showMessageDialog(dialog, "Saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(dialog, "Error: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(dialog, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

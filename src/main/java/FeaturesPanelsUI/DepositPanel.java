@@ -178,7 +178,7 @@ public class DepositPanel extends JPanel implements ActionListener {
         lblGuideTitle.setBounds(20, 30, 275, 25);
         pnlGuidelines.add(lblGuideTitle);
 
-        String guideText = "Charges: \n"
+        String guideText = "Deposit Charges: \n"
                 + "• Linked Bank Account: Free \n"
                 + "• Local Banks: Free  \n"
                 + "• Over-the-Counter Kiosk: ₱20.00  \n"
@@ -188,7 +188,7 @@ public class DepositPanel extends JPanel implements ActionListener {
                 + "• Handled immediately in real-time. \n"
                 + " \n"
                 + "Notice:  \n"
-                + "Ensure your source funds are active  \n"
+                + " • Ensure your source funds are active  \n"
                 + "before submitting. Deductions for  \n"
                 + "processing fees are automatically  \n"
                 + "handled upon deposit completion.";
@@ -223,22 +223,22 @@ public class DepositPanel extends JPanel implements ActionListener {
                 String mode = (String) cmbModeOfTransac.getSelectedItem();
 
                 if (amountText.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Enter amount!");
+                    JOptionPane.showMessageDialog(this, "Enter an amount!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (mode.equals("Select Mode")) {
-                    JOptionPane.showMessageDialog(this, "Select transaction mode!");
+                    JOptionPane.showMessageDialog(this, "Select transaction mode!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 if (mode.equals("Local Banks") && cmbBankList.getSelectedIndex() == 0) {
-                    JOptionPane.showMessageDialog(this, "Please choose your local bank provider!");
+                    JOptionPane.showMessageDialog(this, "Please choose your local bank provider!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 double amount = Double.parseDouble(amountText);
                 if (amount <= 0) {
-                    JOptionPane.showMessageDialog(this, "Invalid amount!");
+                    JOptionPane.showMessageDialog(this, "Invalid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -249,7 +249,7 @@ public class DepositPanel extends JPanel implements ActionListener {
 
                 double netAmount = amount - fee;
                 if (netAmount <= 0) {
-                    JOptionPane.showMessageDialog(this, "Amount too small after fees!");
+                    JOptionPane.showMessageDialog(this, "Amount too small after fees!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -394,9 +394,9 @@ public class DepositPanel extends JPanel implements ActionListener {
                     pnlReceiptImage.paint(g);
                     g.dispose();
                     ImageIO.write(img, "png", chooser.getSelectedFile());
-                    JOptionPane.showMessageDialog(dialog, "Saved successfully!");
+                    JOptionPane.showMessageDialog(dialog, "Saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(dialog, "Error: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(dialog, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

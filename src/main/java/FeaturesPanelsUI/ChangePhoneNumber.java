@@ -94,24 +94,27 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
             String newPhoneInput = txtNewPhone.getText();
             String currentPhone = SettingsPanel.lblPhoneField.getText();
 
-            if (!AccountFunctions.validatePhoneNumber(newPhoneInput)) {
-                JOptionPane.showMessageDialog(this, "Invalid Phone Number!");
+            if (newPhoneInput.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            if (newPhoneInput.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
-            } else if (currentPhone.equals(newPhoneInput)) {
-                JOptionPane.showMessageDialog(this, "New phone number cannot be the same as the old phone number!", "", JOptionPane.ERROR_MESSAGE);
-            } else {
-                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
+            if (!AccountFunctions.validatePhoneNumber(newPhoneInput)) {
+                JOptionPane.showMessageDialog(this, "Invalid Phone Number!", "Try Again", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-                if (choice == 0) {
-                    SettingsFunctions.changePhone(currentuser.getEmail(), newPhoneInput);
-                    SettingsPanel.lblPhoneField.setText(newPhoneInput);
-                    dispose();
-                    JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
-                }
+            if (currentPhone.equals(newPhoneInput)) {
+                JOptionPane.showMessageDialog(this, "New phone number cannot be the same as the old phone number!", "", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (choice == 0) {
+                SettingsFunctions.changePhone(currentuser.getEmail(), newPhoneInput);
+                SettingsPanel.lblPhoneField.setText(newPhoneInput);
+                dispose();
+                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
             }
         } else if (e.getSource() == btnCancel) {
             dispose();

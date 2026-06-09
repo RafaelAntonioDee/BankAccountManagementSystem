@@ -118,12 +118,16 @@ public class LoginPage extends JFrame implements ActionListener {
         if (e.getSource() == btnLogin) {
             String email = txtEmail.getText();
             String pass = new String(txtPass.getPassword());
-
+            
+            
             Account loggedUser = AccountFunctions.getAuthenticatedUser(email, pass);
-            AccountPersonalInformation loggedUserInfo = AccountFunctions.getUserInfo(email);
-
             
             if (loggedUser != null) {
+                
+                DataService.AutoPaymentService.processDuePayments();
+                AccountPersonalInformation loggedUserInfo = AccountFunctions.getUserInfo(email);
+                Account updatedUser = AccountFunctions.getUser(email);
+                
                 MainDashboard md = new MainDashboard(loggedUser, loggedUserInfo);
                 md.setVisible(true);
                 this.dispose();

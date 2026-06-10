@@ -251,7 +251,7 @@ public class DepositPanel extends JPanel implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Invalid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                
+
                 if (amount > 500000) {
                     JOptionPane.showMessageDialog(this, "Amount exceeds per deposit limit!!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -280,11 +280,15 @@ public class DepositPanel extends JPanel implements ActionListener {
 
                 showReceiptPopup(amount, fee, netAmount, displayMode, sequentialTxnId);
                 clearInputs();
+
                 AppService.AutoPaymentFunctions.processDuePayments();
+
+                lblBalanceAmount.setText("    ₱" + amountFormat.format(AppService.AccountFunctions.getUser(currentuser.getEmail()).getBalance()));
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid input!");
             }
+            
         }
 
         if (e.getSource() == btnCancel) {

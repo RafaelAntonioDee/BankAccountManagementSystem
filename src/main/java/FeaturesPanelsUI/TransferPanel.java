@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -27,6 +28,9 @@ public class TransferPanel extends JPanel implements ActionListener {
     public static Colors theme = Colors.LIGHT();
 
     private double balance = 0;
+    
+    // Money Display Formatter
+    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
 
     public TransferPanel(Account user) {
         this.currentUser = AppService.AccountFunctions.getUser(user.getEmail());
@@ -49,7 +53,7 @@ public class TransferPanel extends JPanel implements ActionListener {
         lblBalance.setBounds(40, 20, 755, 25);
         add(lblBalance);
 
-        lblBalanceAmount = new JLabel("    ₱" + String.format("%.2f", balance));
+        lblBalanceAmount = new JLabel("    ₱" + amountFormat.format(balance));
         lblBalanceAmount.setForeground(theme.TEXT_WHITE);
         lblBalanceAmount.setFont(new Font("Arial", Font.BOLD, 22));
         lblBalanceAmount.setBounds(40, 50, 755, 55);
@@ -178,8 +182,10 @@ public class TransferPanel extends JPanel implements ActionListener {
                 + "• Handled immediately in real-time. \n"
                 + " \n"
                 + "Notice:  \n"
-                + "• Ensure your balance can fully cover  \n"
-                + "the transfer amount prior to submitting.";
+                + "• You can only send up to ₱ 50,000 \n"
+                + "per transaction. \n"
+                + "• Ensure your balance can cover the  \n"
+                + "transfer amount prior to submitting.";
 
         txaGuideBody = new JTextArea(guideText);
         txaGuideBody.setFont(new Font("Arial", Font.BOLD, 15));
@@ -195,7 +201,6 @@ public class TransferPanel extends JPanel implements ActionListener {
             lblName.setText("Transferring to (email): ---");
             return;
         }
-
 
         Account receiver = AccountFunctions.getUser(email);
         if (receiver != null) {
@@ -234,7 +239,7 @@ public class TransferPanel extends JPanel implements ActionListener {
                 }
 
                 double amount = Double.parseDouble(amountText);
-                
+
                 if (amount <= 0) {
                     JOptionPane.showMessageDialog(this, "Invalid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -245,28 +250,37 @@ public class TransferPanel extends JPanel implements ActionListener {
                     return;
                 }
 
+                if (amount > 50000) {
+                    JOptionPane.showMessageDialog(this, "Amount exceeds per transfer limit!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 Account receiver = AccountFunctions.getUser(email);
                 if (receiver == null) {
                     JOptionPane.showMessageDialog(this, "Recipient account not found!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                String sequentialTxnId = BalanceFunctions.getNextTransactionID();
-                BalanceFunctions.addTransaction(currentUser.getEmail(), "Transfer", LocalDate.now(), "- " + amount, sequentialTxnId);
+                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Transfer Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-                String sequentialTxnId2 = BalanceFunctions.getNextTransactionID();
-                BalanceFunctions.addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amount, sequentialTxnId2);
+                if (choice == JOptionPane.YES_OPTION) {
 
-                System.out.println(sequentialTxnId + sequentialTxnId2);
+                    String sequentialTxnId = BalanceFunctions.getNextTransactionID();
+                    BalanceFunctions.addTransaction(currentUser.getEmail(), "Transfer", LocalDate.now(), "- " + amount, sequentialTxnId);
 
-                BalanceFunctions.transfer(currentUser, receiver, amount);
+                    String sequentialTxnId2 = BalanceFunctions.getNextTransactionID();
+                    BalanceFunctions.addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amount, sequentialTxnId2);
 
-                balance = AccountFunctions.getUser(currentUser.getEmail()).getBalance();
-                lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
+                    System.out.println(sequentialTxnId + sequentialTxnId2);
 
-                showReceiptPopup(amount, receiver, sequentialTxnId);
-                clearInputs();
+                    BalanceFunctions.transfer(currentUser, receiver, amount);
 
+                    balance = AccountFunctions.getUser(currentUser.getEmail()).getBalance();
+                    lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
+
+                    showReceiptPopup(amount, receiver, sequentialTxnId);
+                    clearInputs();
+                }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid entry tracking numeric inputs!", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -302,7 +316,7 @@ public class TransferPanel extends JPanel implements ActionListener {
 
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         Image scaledImage = BankIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        
+
         JLabel lblCheck = new JLabel(new ImageIcon(scaledImage), SwingConstants.CENTER);
         lblCheck.setBounds(0, 15, 325, 30);
         pnlWhiteCard.add(lblCheck);
@@ -367,23 +381,23 @@ public class TransferPanel extends JPanel implements ActionListener {
         lblRefNum.setForeground(new Color(0, 25, 75));
         lblRefNum.setBounds(19, 25, 240, 20);
         pnlRefTint.add(lblRefNum);
-        
+
         JLabel lblCopy = new JLabel("[Copy]", SwingConstants.CENTER);
         lblCopy.setFont(new Font("Arial", Font.BOLD, 11));
         lblCopy.setForeground(theme.PRIMARY_BLUE);
         lblCopy.setBounds(217, 24, 55, 20);
         lblCopy.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
+
         lblCopy.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 java.awt.datatransfer.StringSelection selection = new java.awt.datatransfer.StringSelection(txnId);
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-                
+
                 JOptionPane.showMessageDialog(dialog, "Reference ID copied to clipboard!", "Copied", JOptionPane.INFORMATION_MESSAGE);
-                 
+
             }
-            
+
             @Override
             public void mouseEntered(MouseEvent e) {
                 lblCopy.setForeground(new Color(0, 25, 75));

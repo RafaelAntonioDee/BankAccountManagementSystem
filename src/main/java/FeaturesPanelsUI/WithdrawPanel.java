@@ -12,6 +12,7 @@ import AppService.BalanceFunctions;
 import DashboardUIDefault.Colors;
 import static FeaturesPanelsUI.DepositPanel.theme;
 import static FeaturesPanelsUI.TransferPanel.theme;
+import java.text.DecimalFormat;
 
 public class WithdrawPanel extends JPanel implements ActionListener {
 
@@ -27,6 +28,9 @@ public class WithdrawPanel extends JPanel implements ActionListener {
     public static Colors theme = Colors.LIGHT();
 
     double balance = 0;
+    
+    // Money Display Formatter
+    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
 
     public WithdrawPanel(Account user) {
         this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
@@ -49,7 +53,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
         lblBalance.setBounds(40, 20, 755, 25);
         add(lblBalance);
 
-        lblBalanceAmount = new JLabel("    ₱" + String.format("%.2f", balance));
+        lblBalanceAmount = new JLabel("    ₱" + amountFormat.format(balance));
         lblBalanceAmount.setForeground(theme.TEXT_WHITE);
         lblBalanceAmount.setFont(new Font("Arial", Font.BOLD, 22));
         lblBalanceAmount.setBounds(40, 50, 755, 55);
@@ -207,7 +211,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
                 String sequentialTxnId = BalanceFunctions.getNextTransactionID();;
 
                 balance = BalanceFunctions.withdraw(currentuser.getEmail(), totalDeduction, sequentialTxnId);
-                lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
+                lblBalanceAmount.setText("    ₱" + amountFormat.format(balance));
 
                 showReceiptPopup(amount, fee, totalDeduction, mode, sequentialTxnId);
                 clearInputs();

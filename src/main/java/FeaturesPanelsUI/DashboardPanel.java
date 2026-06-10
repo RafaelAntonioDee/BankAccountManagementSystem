@@ -22,6 +22,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -46,10 +47,15 @@ public class DashboardPanel extends JPanel implements ActionListener {
     private DefaultTableModel model;
     public static Colors theme = Colors.LIGHT();
 
+    // Money Display Formatter
+    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+
     public DashboardPanel(MainDashboard dashboard, Account user) {
 
         this.currentUser = AppService.AccountFunctions.getUser(user.getEmail());
         this.dashboard = dashboard;
+
+        double balance = currentUser.getBalance();
 
         if (currentUser.getSystemTheme().equals("Light") || currentUser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
@@ -76,7 +82,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblBalance.setBounds(25, 20, 250, 35);
         pnlBalance.add(lblBalance);
 
-        lblAmount = new JLabel("    ₱" + String.format("%.2f", currentUser.getBalance()));
+        lblAmount = new JLabel("    ₱" + amountFormat.format(balance));
         lblAmount.setForeground(theme.TEXT_WHITE);
         lblAmount.setFont(new Font("Arial", Font.PLAIN, 20));
         lblAmount.setBounds(25, 60, 250, 50);
@@ -334,16 +340,20 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
                 if (email.equalsIgnoreCase(currentUser.getEmail())) {
                     JOptionPane.showMessageDialog(this, "You cannot transfer money to your own account!", "Invalid", JOptionPane.ERROR_MESSAGE);
+                    txtEmail.setText("");
+                    txtAmount.setText("");
                     return;
                 }
 
                 if (receiver == null) {
                     JOptionPane.showMessageDialog(this, "Account not found!", "Invalid", JOptionPane.ERROR_MESSAGE);
+                    txtEmail.setText("");
                     return;
                 }
 
                 if (amount <= 0) {
                     JOptionPane.showMessageDialog(this, "Invalid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
+                    txtAmount.setText("");
                     return;
                 }
 
@@ -352,22 +362,34 @@ public class DashboardPanel extends JPanel implements ActionListener {
                     return;
                 }
 
-                String sequentialTxnId = BalanceFunctions.getNextTransactionID();
-                BalanceFunctions.addTransaction(currentUser.getEmail(), "Transfer", LocalDate.now(), "- " + amount, sequentialTxnId);
+                if (amount > 50000) {
+                    JOptionPane.showMessageDialog(this, "Amount exceeds per transfer limit!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                String sequentialTxnId2 = BalanceFunctions.getNextTransactionID();
-                BalanceFunctions.addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amount, sequentialTxnId2);
+                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Transfer Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-                System.out.println(sequentialTxnId + sequentialTxnId2);
+                if (choice == JOptionPane.YES_OPTION) {
+                    String sequentialTxnId = BalanceFunctions.getNextTransactionID();
+                    BalanceFunctions.addTransaction(currentUser.getEmail(), "Transfer", LocalDate.now(), "- " + amount, sequentialTxnId);
 
-                BalanceFunctions.transfer(currentUser, receiver, amount);
+                    String sequentialTxnId2 = BalanceFunctions.getNextTransactionID();
+                    BalanceFunctions.addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amount, sequentialTxnId2);
 
-                lblAmount.setText("    ₱" + String.format("%.2f", currentUser.getBalance()));
+                    System.out.println(sequentialTxnId + sequentialTxnId2);
 
-                showReceiptPopup(amount, receiver, sequentialTxnId);
+                    BalanceFunctions.transfer(currentUser, receiver, amount);
 
-                txtAmount.setText("");
-                txtEmail.setText("");
+                    lblAmount.setText("    ₱" + String.format("%.2f", currentUser.getBalance()));
+
+                    showReceiptPopup(amount, receiver, sequentialTxnId);
+
+                    txtAmount.setText("");
+                    txtEmail.setText("");
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Transfer Cancelled", "Cancel", JOptionPane.INFORMATION_MESSAGE);
+                }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Enter valid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
             }
@@ -375,7 +397,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
             showTransactions();
         }
     }
-    
+
     private void showReceiptPopup(double amount, Account receiver, String txnId) {
         Window parentWindow = SwingUtilities.getWindowAncestor(this);
         JDialog dialog = new JDialog(parentWindow, "Receipt", Dialog.ModalityType.APPLICATION_MODAL);
@@ -395,7 +417,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         Image scaledImage = BankIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        
+
         JLabel lblCheck = new JLabel(new ImageIcon(scaledImage), SwingConstants.CENTER);
         lblCheck.setBounds(0, 15, 325, 30);
         pnlWhiteCard.add(lblCheck);
@@ -460,23 +482,23 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblRefNum.setForeground(new Color(0, 25, 75));
         lblRefNum.setBounds(19, 25, 240, 20);
         pnlRefTint.add(lblRefNum);
-        
+
         JLabel lblCopy = new JLabel("[Copy]", SwingConstants.CENTER);
         lblCopy.setFont(new Font("Arial", Font.BOLD, 11));
         lblCopy.setForeground(theme.PRIMARY_BLUE);
         lblCopy.setBounds(217, 24, 55, 20);
         lblCopy.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
+
         lblCopy.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 java.awt.datatransfer.StringSelection selection = new java.awt.datatransfer.StringSelection(txnId);
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-                
+
                 JOptionPane.showMessageDialog(dialog, "Reference ID copied to clipboard!", "Copied", JOptionPane.INFORMATION_MESSAGE);
-                 
+
             }
-            
+
             @Override
             public void mouseEntered(MouseEvent e) {
                 lblCopy.setForeground(new Color(0, 25, 75));

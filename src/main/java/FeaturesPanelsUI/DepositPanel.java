@@ -10,6 +10,8 @@ import javax.swing.border.LineBorder;
 import Objects.Account;
 import AppService.BalanceFunctions;
 import DashboardUIDefault.Colors;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class DepositPanel extends JPanel implements ActionListener {
 
@@ -27,6 +29,9 @@ public class DepositPanel extends JPanel implements ActionListener {
     public static Colors theme = Colors.LIGHT();
 
     double balance = 0;
+    
+    // Money Display Formatter
+    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
 
     public DepositPanel(Account user) {
         this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
@@ -54,7 +59,7 @@ public class DepositPanel extends JPanel implements ActionListener {
         lblBalance.setBounds(40, 20, 755, 25);
         add(lblBalance);
 
-        lblBalanceAmount = new JLabel("    ₱" + String.format("%.2f", balance));
+        lblBalanceAmount = new JLabel("    ₱" + amountFormat.format(balance));
         lblBalanceAmount.setFont(new Font("Arial", Font.BOLD, 22));
         lblBalanceAmount.setBounds(40, 50, 755, 55);
         lblBalanceAmount.setOpaque(true);
@@ -201,8 +206,6 @@ public class DepositPanel extends JPanel implements ActionListener {
         pnlGuidelines.add(txaGuideBody);
     }
 
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnAmt500) {
@@ -254,7 +257,7 @@ public class DepositPanel extends JPanel implements ActionListener {
                 String sequentialTxnId = BalanceFunctions.getNextTransactionID();
 
                 balance = BalanceFunctions.deposit(currentuser.getEmail(), netAmount, sequentialTxnId);
-                lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
+                lblBalanceAmount.setText("    ₱" + amountFormat.format(balance));
 
                 String displayMode = mode;
                 if (mode.equals("Local Banks")) {
@@ -300,7 +303,7 @@ public class DepositPanel extends JPanel implements ActionListener {
 
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         Image scaledImage = BankIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        
+
         JLabel lblCheck = new JLabel(new ImageIcon(scaledImage), SwingConstants.CENTER);
         lblCheck.setBounds(0, 15, 325, 30);
         pnlWhiteCard.add(lblCheck);
@@ -370,19 +373,19 @@ public class DepositPanel extends JPanel implements ActionListener {
         lblCopy.setForeground(theme.PRIMARY_BLUE);
         lblCopy.setBounds(217, 24, 55, 20);
         lblCopy.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
+
         lblCopy.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 java.awt.datatransfer.StringSelection selection = new java.awt.datatransfer.StringSelection(txnId);
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-                
+
                 JOptionPane.showMessageDialog(dialog, "Reference ID copied to clipboard!", "Copied", JOptionPane.INFORMATION_MESSAGE);
             }
-            
+
             @Override
             public void mouseEntered(MouseEvent e) {
-                lblCopy.setForeground(new Color(0, 25, 75)); 
+                lblCopy.setForeground(new Color(0, 25, 75));
             }
 
             @Override
@@ -391,7 +394,7 @@ public class DepositPanel extends JPanel implements ActionListener {
             }
         });
         pnlRefTint.add(lblCopy);
-        
+
         JLabel lblTime = new JLabel("Channel Mode: " + mode, SwingConstants.CENTER);
         lblTime.setFont(new Font("Arial", Font.PLAIN, 11));
         lblTime.setForeground(Color.GRAY);

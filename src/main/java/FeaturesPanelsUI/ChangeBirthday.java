@@ -149,6 +149,7 @@ public class ChangeBirthday extends JDialog implements ActionListener {
 
     // FOR DIFFERENT DAYS EACH MONTH
     private void updateDays(String month) {
+        
         String[] initialDays = new String[31];
         for (int i = 0; i < 31; i++) {
             initialDays[i] = String.valueOf(i + 1);
@@ -156,6 +157,7 @@ public class ChangeBirthday extends JDialog implements ActionListener {
         for (String day : initialDays) {
             cmbDay.addItem(day);
         }
+        
         cmbDay.removeAllItems();
 
         int days = 31;

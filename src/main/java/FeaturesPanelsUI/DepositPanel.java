@@ -31,7 +31,7 @@ public class DepositPanel extends JPanel implements ActionListener {
     double balance = 0;
     
     // Money Display Formatter
-    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+    DecimalFormat amountFormat = new DecimalFormat("#,##0.00");
 
     public DepositPanel(Account user) {
         this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
@@ -192,6 +192,8 @@ public class DepositPanel extends JPanel implements ActionListener {
                 + "• Handled immediately in real-time. \n"
                 + " \n"
                 + "Notice:  \n"
+                + "• The maximum deposit amount per\n"
+                + "transaction is ₱ 500,000. \n"
                 + " • Ensure your source funds are active  \n"
                 + "before submitting. Deductions for  \n"
                 + "processing fees are automatically  \n"
@@ -241,6 +243,11 @@ public class DepositPanel extends JPanel implements ActionListener {
                 
                 if (amount <= 0) {
                     JOptionPane.showMessageDialog(this, "Invalid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                if (amount > 500000) {
+                    JOptionPane.showMessageDialog(this, "Amount exceeds per deposit limit!!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 

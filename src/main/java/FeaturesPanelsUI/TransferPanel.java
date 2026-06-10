@@ -30,7 +30,7 @@ public class TransferPanel extends JPanel implements ActionListener {
     private double balance = 0;
 
     // Money Display Formatter
-    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+    DecimalFormat amountFormat = new DecimalFormat("#,##0.00");
 
     public TransferPanel(Account user) {
         this.currentUser = AppService.AccountFunctions.getUser(user.getEmail());
@@ -182,8 +182,8 @@ public class TransferPanel extends JPanel implements ActionListener {
                 + "• Handled immediately in real-time. \n"
                 + " \n"
                 + "Notice:  \n"
-                + "• You can only send up to ₱ 50,000 \n"
-                + "per transaction. \n"
+                + "• The maximum transfer amount per\n"
+                + "transaction is ₱ 50,000. \n"
                 + "• Ensure your balance can cover the  \n"
                 + "transfer amount prior to submitting.";
 
@@ -264,7 +264,7 @@ public class TransferPanel extends JPanel implements ActionListener {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Transfer Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                 if (choice == JOptionPane.YES_OPTION) {
-                    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+                    DecimalFormat amountFormat = new DecimalFormat("#,##0.00");
 
                     String sequentialTxnId = BalanceFunctions.getNextTransactionID();
                     BalanceFunctions.addTransaction(currentUser.getEmail(), "Transfer", LocalDate.now(), "- " + amountFormat.format(amount), sequentialTxnId);
@@ -277,7 +277,7 @@ public class TransferPanel extends JPanel implements ActionListener {
                     BalanceFunctions.transfer(currentUser, receiver, amount);
 
                     balance = AccountFunctions.getUser(currentUser.getEmail()).getBalance();
-                    lblBalanceAmount.setText("    ₱" + String.format("%.2f", balance));
+                    lblBalanceAmount.setText("    ₱" + amountFormat.format(balance));
 
                     showReceiptPopup(amount, receiver, sequentialTxnId);
                     clearInputs();

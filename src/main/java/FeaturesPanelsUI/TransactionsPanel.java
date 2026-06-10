@@ -194,9 +194,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
             String dueDateFormatted = date.format(DateTimeFormatter.ofPattern("MMMM dd, yyyy"));
             String balance = String.valueOf(transaction.getBalanceChange());
 
-            // Money Display Formatter
-//            DecimalFormat amountFormat = new DecimalFormat("#,###.00");
-//            String formattedBalance = amountFormat.format(Double.parseDouble(balance));
+
 
             boolean searchOk = search.equals("") || id.toLowerCase().contains(search) || type.toLowerCase().contains(search);
 

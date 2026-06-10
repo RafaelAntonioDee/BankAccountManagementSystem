@@ -47,8 +47,8 @@ public class DashboardPanel extends JPanel implements ActionListener {
     private DefaultTableModel model;
     public static Colors theme = Colors.LIGHT();
 
-    // Money Display Formatter
-    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+    // Money Display Formatter 
+    DecimalFormat amountFormat = new DecimalFormat("#,##0.00");
 
     public DashboardPanel(MainDashboard dashboard, Account user) {
 
@@ -380,10 +380,11 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
                     BalanceFunctions.transfer(currentUser, receiver, amount);
 
-                    lblAmount.setText("    ₱" + String.format("%.2f", currentUser.getBalance()));
-
                     showReceiptPopup(amount, receiver, sequentialTxnId);
-
+                    
+                    double balance = AccountFunctions.getUser(currentUser.getEmail()).getBalance();
+                    lblAmount.setText("    ₱" + amountFormat.format(balance));
+                    
                     txtAmount.setText("");
                     txtEmail.setText("");
 

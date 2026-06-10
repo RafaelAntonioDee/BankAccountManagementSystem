@@ -323,6 +323,9 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         } else if (e.getSource() == btnCancel) {
             txtRecipient.setText("");
             txtAmount.setText("");
+        } else if (e.getSource() == btnUnsub) {
+            
+        
         } else {
             JButton btn = (JButton) e.getSource();
 

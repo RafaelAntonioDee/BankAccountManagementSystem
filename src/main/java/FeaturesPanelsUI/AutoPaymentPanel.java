@@ -323,16 +323,23 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         } else if (e.getSource() == btnCancel) {
             txtRecipient.setText("");
             txtAmount.setText("");
-        } else if (e.getSource() == btnUnsub) {
             
-        
-        } else {
+        } else if (e.getSource() == btnUnsub) {
             JButton btn = (JButton) e.getSource();
-
             String id = (String) btn.getClientProperty("ID");
 
-            AppService.AutoPaymentFunctions.removeAutoPay(id);
+            if (!AutoPaymentService.canUnsubscribe(id)) {
+                JOptionPane.showMessageDialog(this, "A due payment has not been processed yet.", "Unable to Unsubscribe", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
+            AppService.AutoPaymentFunctions.removeAutoPay(id);
+            loadExistingAutoPayments();
+
+        } else {
+            JButton btn = (JButton) e.getSource();
+            String id = (String) btn.getClientProperty("ID");
+            AppService.AutoPaymentFunctions.removeAutoPay(id);
             loadExistingAutoPayments();
         }
     }

@@ -157,17 +157,13 @@ public class AutoPaymentService {
                 boolean success = AccountService.deductBalance(email, amount);
                 String sequentialTxnId = BalanceFunctions.getNextTransactionID();
 
-                if (!success) {
-                    TransactionsService.addTransaction(email, "Auto Payment", today, "Insufficient Balance", sequentialTxnId);
-
-                } else {
                     TransactionsService.addTransaction(email, "Auto Payment", today, "-" + amount, sequentialTxnId);
                     AutoPaymentService.markAsPaid(p.getAutoPayID());
 
                     // Changes the Auto Payment Status back to Unpaid
                     LocalDate nextDate = calculateNextDueDate(p.getDate(), p.getFrequency());
                     AutoPaymentService.updatePaymentForNextCycle(p.getAutoPayID(), nextDate);
-                }
+                
             }
         }
     }
@@ -221,5 +217,34 @@ public class AutoPaymentService {
         } catch (java.sql.SQLException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    // Check if you're eligible to unsubscribe (Can't if you have unpaid subscription)
+    public static boolean canUnsubscribe(String id) {
+
+        String sql = "SELECT IsPaid, DueDate FROM autopayments WHERE AutoPayID = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setString(1, id);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+
+                boolean isPaid = rs.getBoolean("IsPaid");
+                LocalDate dueDate = rs.getDate("DueDate").toLocalDate();
+
+                if (!isPaid && LocalDate.now().isBefore(dueDate)) {
+                    return true;
+                }
+
+                return isPaid;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
     }
 }

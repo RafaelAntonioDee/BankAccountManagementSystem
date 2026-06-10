@@ -2,14 +2,21 @@ package FeaturesPanelsUI;
 
 import Objects.AccountTransactHistory;
 import AppService.BalanceFunctions;
+import DashboardUIDefault.Colors;
+import DashboardUIDefault.Icons;
+import static DashboardUIDefault.MainDashboard.theme;
 import Objects.Account;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 public class TransactionsPanel extends JPanel implements ActionListener {
 
@@ -22,100 +29,154 @@ public class TransactionsPanel extends JPanel implements ActionListener {
     private DefaultTableModel model;
     private JPanel pnlProcess;
     private Account currentUser;
+    private String[] dateRange = {"Past Day", "Past Week", "Past Month", "Past 3 Months"},
+            transacType = {"All", "Deposit", "Withdraw", "Transfer", "Received", "Auto Payment"};
+    public static Colors theme = Colors.LIGHT();
+    public static Icons icons = Icons.LIGHT();
 
     public TransactionsPanel(Account user) {
-        this.currentUser = user;
+        this.currentUser = AppService.AccountFunctions.getUser(user.getEmail());
+
+        if (currentUser.getSystemTheme().equals("Light") || currentUser.getSystemTheme().equals("System")) {
+            theme = Colors.LIGHT();
+            icons = Icons.LIGHT();
+        } else {
+            theme = Colors.DARK();
+            icons = Icons.DARK();
+        }
         setBounds(0, 0, 837, 560);
-        setBackground(new Color(243, 243, 243));
-        setBorder(new LineBorder(Color.LIGHT_GRAY));
+        setBackground(theme.BACKGROUND);
+        setBorder(new LineBorder(theme.BORDER_GRAY));
         setLayout(null);
 
-        pnlProcess = new JPanel();
-        pnlProcess.setBounds(25, 25, 787, 510);
-        pnlProcess.setBackground(new Color(243, 243, 243));
-        pnlProcess.setBorder(new LineBorder(Color.LIGHT_GRAY));
-        pnlProcess.setLayout(null);
-        add(pnlProcess);
-
         lblSearch = new JLabel("Search");
-        lblSearch.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblSearch.setBounds(25, 20, 200, 25);
-        pnlProcess.add(lblSearch);
+        lblSearch.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblSearch.setForeground(theme.TEXT_GRAY);
+        lblSearch.setBounds(25, 25, 250, 35);
+        add(lblSearch);
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/images/search.png"));
-
-        Image img = icon.getImage();
-        Image resizedImg = img.getScaledInstance(16, 16, Image.SCALE_SMOOTH);
-
-        ImageIcon searchIcon = new ImageIcon(resizedImg);
-
-        btnSearch = new JButton(searchIcon);
-        btnSearch.setBounds(25, 50, 40, 35);
-
+        btnSearch = new JButton(icons.SearchIcon);
+        btnSearch.setBounds(25, 60, 40, 35);
         btnSearch.setFocusPainted(false);
-
+        btnSearch.setBackground(theme.BORDER_GRAY);
         btnSearch.addActionListener(this);
-
-        pnlProcess.add(btnSearch);
-
-        btnSearch = new JButton(searchIcon);
-        btnSearch.setBounds(25, 50, 40, 35);
-        btnSearch.setFocusPainted(false);
-        btnSearch.addActionListener(this);
-        pnlProcess.add(btnSearch);
+        add(btnSearch);
 
         txtSearch = new JTextField();
-        txtSearch.setBounds(70, 50, 360, 35);
-        pnlProcess.add(txtSearch);
+        txtSearch.setBounds(70, 60, 360, 35);
+        txtSearch.setForeground(theme.TEXT_BLACK);
+        txtSearch.setBackground(theme.PANELS_BACKGROUND);
+        add(txtSearch);
+
+        txtSearch.addActionListener(e -> {
+            showTransactions();
+        });
 
         lblDate = new JLabel("Date");
-        lblDate.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblDate.setBounds(485, 20, 100, 25);
-        pnlProcess.add(lblDate);
+        lblDate.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblDate.setForeground(theme.TEXT_GRAY);
+        lblDate.setBounds(485, 25, 100, 25);
+        add(lblDate);
 
-        cmbDateRange = new JComboBox();
-        cmbDateRange.addItem("All");
-        cmbDateRange.addItem("Past Day");
-        cmbDateRange.addItem("Past Week");
-        cmbDateRange.addItem("Past Month");
-        cmbDateRange.addItem("Past 3 Months");
-        cmbDateRange.setBounds(485, 50, 150, 35);
-        pnlProcess.add(cmbDateRange);
+        cmbDateRange = new JComboBox(dateRange);
+        cmbDateRange.setBounds(485, 60, 150, 35);
+        cmbDateRange.setFocusable(false);
+        cmbDateRange.setForeground(theme.TEXT_BLACK);
+        cmbDateRange.setBackground(theme.PANELS_BACKGROUND);
+        add(cmbDateRange);
+
+        cmbDateRange.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showTransactions();
+            }
+        });
+
+        cmbDateRange.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showTransactions();
+            }
+        });
 
         lblType = new JLabel("Type");
-        lblType.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblType.setBounds(665, 20, 100, 25);
-        pnlProcess.add(lblType);
+        lblType.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblType.setForeground(theme.TEXT_GRAY);
+        lblType.setBounds(665, 25, 100, 25);
+        add(lblType);
 
-        cmbTransactionType = new JComboBox();
-        cmbTransactionType.addItem("All");
-        cmbTransactionType.addItem("Deposit");
-        cmbTransactionType.addItem("Withdraw");
-        cmbTransactionType.addItem("Transfer");
-        cmbTransactionType.addItem("Payment");
-        cmbTransactionType.setBounds(665, 50, 100, 35);
-        pnlProcess.add(cmbTransactionType);
+        cmbTransactionType = new JComboBox(transacType);
+        cmbTransactionType.setBounds(665, 60, 147, 35);
+        cmbTransactionType.setFocusable(false);
+        cmbTransactionType.setForeground(theme.TEXT_BLACK);
+        cmbTransactionType.setBackground(theme.PANELS_BACKGROUND);
+        add(cmbTransactionType);
 
+        cmbTransactionType.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showTransactions();
+            }
+        });
+
+        cmbTransactionType.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showTransactions();
+            }
+        });
+
+        //------------------------------- Transactions List -------------------------------
         lblTransactions = new JLabel("Transactions");
         lblTransactions.setFont(new Font("Arial", Font.PLAIN, 18));
-        lblTransactions.setBounds(25, 120, 737, 35);
-        pnlProcess.add(lblTransactions);
+        lblTransactions.setForeground(theme.TEXT_GRAY);
+        lblTransactions.setBounds(25, 110, 737, 35);
+        add(lblTransactions);
 
-        String[] columns = {"Transaction ID", "Transaction Type", "Date", "Balance"};
+        String[] columns = {"Reference ID", "Transaction Type", "Date", "Balance"};
         model = new DefaultTableModel(columns, 0);
 
         TransactionsTable = new JTable(model);
         TransactionsTable.getTableHeader().setReorderingAllowed(false);
+        TransactionsTable.setRowHeight(28);
+        TransactionsTable.setIntercellSpacing(new Dimension(10, 6));
+        TransactionsTable.getTableHeader().setResizingAllowed(false);
+        TransactionsTable.setRowSelectionAllowed(false);
+        TransactionsTable.setBackground(theme.BACKGROUND);
+        TransactionsTable.setForeground(theme.TEXT_BLACK);
+        TransactionsTable.setBorder(new LineBorder(theme.BORDER_GRAY));
+        TransactionsTable.setDefaultEditor(Object.class, null);
+        TransactionsTable.setFocusable(false);
+
+        JTableHeader header = TransactionsTable.getTableHeader();
+        header.setReorderingAllowed(false);
+        header.setFont(new Font("Arial", Font.BOLD, 12));
+        header.setBackground(theme.PRIMARY_BLUE);
+        header.setForeground(theme.TEXT_WHITE);
+        header.setBorder(new LineBorder(theme.BORDER_GRAY));
+        header.setPreferredSize(new Dimension(header.getWidth(), 35));
+        ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
 
         scroll = new JScrollPane(TransactionsTable);
-        scroll.setBounds(25, 160, 737, 320);
-        pnlProcess.add(scroll);
+        scroll.setBounds(25, 145, 787, 390);
+        scroll.setBackground(theme.BACKGROUND);
+        scroll.setBorder(new LineBorder(theme.BORDER_GRAY));
+        scroll.getViewport().setBackground(theme.BACKGROUND);
+        scroll.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                thumbColor = theme.ThumbBar;
+                trackColor = theme.TrackBar;
+            }
+        });
+
+        add(scroll);
 
         showTransactions();
     }
 
     public void showTransactions() {
-        
+
         ArrayList<AccountTransactHistory> userHistory = BalanceFunctions.getTransactions(currentUser.getEmail());
         model.setRowCount(0);
 
@@ -130,7 +191,12 @@ public class TransactionsPanel extends JPanel implements ActionListener {
             String id = transaction.getTransactionID();
             String type = transaction.getTransaction();
             LocalDate date = transaction.getDate();
+            String dueDateFormatted = date.format(DateTimeFormatter.ofPattern("MMMM dd, yyyy"));
             String balance = String.valueOf(transaction.getBalanceChange());
+
+            // Money Display Formatter
+//            DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+//            String formattedBalance = amountFormat.format(Double.parseDouble(balance));
 
             boolean searchOk = search.equals("") || id.toLowerCase().contains(search) || type.toLowerCase().contains(search);
 
@@ -150,7 +216,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
             }
 
             if (searchOk && typeOk && dateOk) {
-                model.addRow(new Object[]{id, type, date, balance});
+                model.addRow(new Object[]{id, type, dueDateFormatted, balance});
             }
         }
     }

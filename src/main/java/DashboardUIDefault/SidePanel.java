@@ -5,6 +5,8 @@
 package DashboardUIDefault;
 
 import AppService.AccountFunctions;
+import static DashboardUIDefault.BottomPanel.theme;
+import static DashboardUIDefault.MainDashboard.theme;
 import Objects.Account;
 import Objects.AccountPersonalInformation;
 import java.awt.*;
@@ -19,47 +21,62 @@ import javax.swing.border.LineBorder;
 public class SidePanel extends JPanel implements MouseListener {
 
     public JPanel pnlSideBar, pnlSideBar_Header, pnlAccount;
-    public JLabel lblBank, lblAccName, lblAccEmail, lblLine, lblSelectIndicator;
+    public static JLabel lblBank, lblAccName, lblAccEmail, lblLine, lblSelectIndicator;
     public JButton btnDashboard, btnDeposit, btnWithdraw, btnTransfer, btnTransactions, btnAutoPayments, btnSettings, btnLogout;
     public String SelectedButton = "btnDashboard";
+    public static Colors theme = Colors.LIGHT();
+    public static Icons icons = Icons.LIGHT();
+    public static Account currentuser;
 
-    SidePanel() {
+    SidePanel(Account user) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
+            theme = Colors.LIGHT();
+            icons = Icons.LIGHT();
+        } else {
+            theme = Colors.DARK();
+            icons = Icons.DARK();
+        }
+
         setBounds(0, 0, 175, 620);
-        setBackground(new Color(228, 228, 236));
-        setBorder(new LineBorder(Color.LIGHT_GRAY));
+        setBackground(theme.SidePanel);
+        setBorder(new LineBorder(theme.BORDER_GRAY));
         setLayout(null);
 
         pnlSideBar_Header = new JPanel();
         pnlSideBar_Header.setBounds(0, 0, 175, 60);
-        pnlSideBar_Header.setBackground(new Color(82, 124, 174));
-        pnlSideBar_Header.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        pnlSideBar_Header.setBackground(theme.PRIMARY_BLUE);
+        pnlSideBar_Header.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlSideBar_Header.setLayout(null);
         add(pnlSideBar_Header);
 
         lblBank = new JLabel("Bank", Icons.BankIconWhite, JLabel.LEFT);
-        lblBank.setForeground(Color.WHITE);
+        lblBank.setForeground(theme.TEXT_WHITE);
         lblBank.setFont(new Font("Arial", Font.PLAIN, 20));
         lblBank.setBounds(25, 10, 125, 40);
         lblBank.setHorizontalAlignment(JLabel.CENTER);
         lblBank.setIconTextGap(10);
         pnlSideBar_Header.add(lblBank);
 
-        btnDashboard = new JButton("Dashboard", Icons.DashboardIcon);
+        btnDashboard = new JButton("Dashboard", icons.DashboardIcon);
         btnDashboard.setHorizontalAlignment(JButton.LEFT);
         btnDashboard.setIconTextGap(10);
         btnDashboard.setBounds(10, 70, 155, 30);
-        btnDashboard.setBackground(new Color(201, 211, 221));
+        btnDashboard.setBackground(theme.ButtonHighlight);
+        btnDashboard.setForeground(theme.TEXT_BLACK);
         btnDashboard.setBorderPainted(false);
         btnDashboard.setFocusPainted(false);
         btnDashboard.setLayout(null);
         btnDashboard.addMouseListener(this);
         add(btnDashboard);
 
-        btnDeposit = new JButton("Deposit", Icons.DepositIcon);
+        btnDeposit = new JButton("Deposit", icons.DepositIcon);
         btnDeposit.setHorizontalAlignment(JButton.LEFT);
         btnDeposit.setIconTextGap(10);
         btnDeposit.setBounds(10, 110, 155, 30);
-        btnDeposit.setBackground(new Color(201, 211, 221));
+        btnDeposit.setBackground(theme.ButtonHighlight);
+        btnDeposit.setForeground(theme.TEXT_BLACK);
         btnDeposit.setBorderPainted(false);
         btnDeposit.setFocusPainted(false);
         btnDeposit.setContentAreaFilled(false);
@@ -67,11 +84,12 @@ public class SidePanel extends JPanel implements MouseListener {
         btnDeposit.addMouseListener(this);
         add(btnDeposit);
 
-        btnWithdraw = new JButton("Withdraw", Icons.WithdrawIcon);
+        btnWithdraw = new JButton("Withdraw", icons.WithdrawIcon);
         btnWithdraw.setHorizontalAlignment(JButton.LEFT);
         btnWithdraw.setIconTextGap(10);
         btnWithdraw.setBounds(10, 150, 155, 30);
-        btnWithdraw.setBackground(new Color(201, 211, 221));
+        btnWithdraw.setBackground(theme.ButtonHighlight);
+        btnWithdraw.setForeground(theme.TEXT_BLACK);
         btnWithdraw.setBorderPainted(false);
         btnWithdraw.setFocusPainted(false);
         btnWithdraw.setContentAreaFilled(false);
@@ -79,11 +97,12 @@ public class SidePanel extends JPanel implements MouseListener {
         btnWithdraw.addMouseListener(this);
         add(btnWithdraw);
 
-        btnTransfer = new JButton("Transfer", Icons.TransferIcon);
+        btnTransfer = new JButton("Transfer", icons.TransferIcon);
         btnTransfer.setHorizontalAlignment(JButton.LEFT);
         btnTransfer.setIconTextGap(10);
         btnTransfer.setBounds(10, 190, 155, 30);
-        btnTransfer.setBackground(new Color(201, 211, 221));
+        btnTransfer.setBackground(theme.ButtonHighlight);
+        btnTransfer.setForeground(theme.TEXT_BLACK);
         btnTransfer.setBorderPainted(false);
         btnTransfer.setFocusPainted(false);
         btnTransfer.setContentAreaFilled(false);
@@ -91,11 +110,12 @@ public class SidePanel extends JPanel implements MouseListener {
         btnTransfer.addMouseListener(this);
         add(btnTransfer);
 
-        btnTransactions = new JButton("Transactions", Icons.TransactionsIcon);
+        btnTransactions = new JButton("Transactions", icons.TransactionsIcon);
         btnTransactions.setHorizontalAlignment(JButton.LEFT);
         btnTransactions.setIconTextGap(10);
         btnTransactions.setBounds(10, 230, 155, 30);
-        btnTransactions.setBackground(new Color(201, 211, 221));
+        btnTransactions.setBackground(theme.ButtonHighlight);
+        btnTransactions.setForeground(theme.TEXT_BLACK);
         btnTransactions.setBorderPainted(false);
         btnTransactions.setFocusPainted(false);
         btnTransactions.setContentAreaFilled(false);
@@ -103,11 +123,12 @@ public class SidePanel extends JPanel implements MouseListener {
         btnTransactions.addMouseListener(this);
         add(btnTransactions);
 
-        btnAutoPayments = new JButton("Auto Payments", Icons.AutoPaymentIcon);
+        btnAutoPayments = new JButton("Auto Payments", icons.AutoPaymentIcon);
         btnAutoPayments.setHorizontalAlignment(JButton.LEFT);
         btnAutoPayments.setIconTextGap(10);
         btnAutoPayments.setBounds(10, 270, 155, 30);
-        btnAutoPayments.setBackground(new Color(201, 211, 221));
+        btnAutoPayments.setBackground(theme.ButtonHighlight);
+        btnAutoPayments.setForeground(theme.TEXT_BLACK);
         btnAutoPayments.setBorderPainted(false);
         btnAutoPayments.setFocusPainted(false);
         btnAutoPayments.setContentAreaFilled(false);
@@ -115,11 +136,12 @@ public class SidePanel extends JPanel implements MouseListener {
         btnAutoPayments.setLayout(null);
         add(btnAutoPayments);
 
-        btnSettings = new JButton("Settings", Icons.SettingsIcon);
+        btnSettings = new JButton("Settings", icons.SettingsIcon);
         btnSettings.setHorizontalAlignment(JButton.LEFT);
         btnSettings.setIconTextGap(10);
         btnSettings.setBounds(10, 310, 155, 30);
-        btnSettings.setBackground(new Color(201, 211, 221));
+        btnSettings.setBackground(theme.ButtonHighlight);
+        btnSettings.setForeground(theme.TEXT_BLACK);
         btnSettings.setBorderPainted(false);
         btnSettings.setFocusPainted(false);
         btnSettings.setContentAreaFilled(false);
@@ -129,28 +151,29 @@ public class SidePanel extends JPanel implements MouseListener {
 
         pnlAccount = new JPanel();
         pnlAccount.setBounds(0, 520, 175, 100);
-        pnlAccount.setBackground(new Color(240, 240, 240));
-        pnlAccount.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        pnlAccount.setBackground(theme.HeaderFooterColor);
+        pnlAccount.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlAccount.setLayout(null);
         add(pnlAccount);
 
-        lblAccName = new JLabel("Rafael Antonio Dee");
+        lblAccName = new JLabel();
         lblAccName.setBounds(20, 8, 135, 30);
+        lblAccName.setForeground(theme.TEXT_BLACK);
         pnlAccount.add(lblAccName);
 
-        lblAccEmail = new JLabel("hatdog@gmail.com");
+        lblAccEmail = new JLabel();
         lblAccEmail.setFont(new Font("Arial", Font.PLAIN, 10));
         lblAccEmail.setBounds(20, 28, 135, 30);
-        lblAccEmail.setForeground(Color.GRAY);
+        lblAccEmail.setForeground(theme.TEXT_GRAY);
         pnlAccount.add(lblAccEmail);
 
         lblLine = new JLabel("_______________________");
         lblLine.setBounds(5, 37, 165, 30);
-        lblLine.setForeground(Color.LIGHT_GRAY);
+        lblLine.setForeground(theme.BORDER_GRAY);
         lblLine.setHorizontalAlignment(JLabel.CENTER);
         pnlAccount.add(lblLine);
 
-        btnLogout = new JButton("Log Out", Icons.LogoutIcon);
+        btnLogout = new JButton("Log Out", icons.LogoutIcon);
         btnLogout.setHorizontalAlignment(JButton.LEFT);
         btnLogout.setHorizontalTextPosition(JButton.RIGHT);
         btnLogout.setIconTextGap(10);
@@ -158,12 +181,13 @@ public class SidePanel extends JPanel implements MouseListener {
         btnLogout.setBorderPainted(false);
         btnLogout.setFocusPainted(false);
         btnLogout.setContentAreaFilled(false);
+        btnLogout.setForeground(theme.TEXT_BLACK);
         pnlAccount.add(btnLogout);
 
         lblSelectIndicator = new JLabel("");
         lblSelectIndicator.setBounds(0, 0, 5, 30);
         lblSelectIndicator.setOpaque(true);
-        lblSelectIndicator.setBackground(new Color(82, 124, 174));
+        lblSelectIndicator.setBackground(theme.PRIMARY_BLUE);
         btnDashboard.add(lblSelectIndicator);
     }
 
@@ -253,11 +277,11 @@ public class SidePanel extends JPanel implements MouseListener {
                 break;
         }
     }
-    
+
     public void setUserDetails(AccountPersonalInformation userinfo) {
-    lblAccName.setText(AccountFunctions.getFullName(userinfo)); 
-    lblAccEmail.setText(userinfo.getEmail());   
-}
+        lblAccName.setText(AccountFunctions.getFullName(userinfo));
+        lblAccEmail.setText(userinfo.getEmail());
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {

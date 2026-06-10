@@ -1,0 +1,46 @@
+CREATE DATABASE IF NOT EXISTS db_bankaccountmanagement;
+USE db_bankaccountmanagement;
+
+DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS accountspersonalinfo;
+DROP TABLE IF EXISTS autopayments;
+DROP TABLE IF EXISTS transactions;
+
+CREATE TABLE accounts (
+  Email varchar(254) NOT NULL,
+  Password varchar(254) NOT NULL,
+  Role varchar(254) NOT NULL,
+  Balance double NOT NULL,
+  SystemTheme varchar(254) NOT NULL,
+  PRIMARY KEY (Email)
+);
+
+CREATE TABLE accountspersonalinfo (
+  Email varchar(254) NOT NULL,
+  FirstName varchar(254) NOT NULL,
+  LastName varchar(254) NOT NULL,
+  Address varchar(254) NOT NULL,
+  PhoneNum varchar(254) NOT NULL,
+  Birthdate varchar(254) NOT NULL,
+  PRIMARY KEY (Email)
+);
+
+CREATE TABLE autopayments (
+  AutoPayID varchar(254) NOT NULL,
+  Email varchar(254) NOT NULL,
+  Payee varchar(254) NOT NULL,
+  Frequency varchar(254) NOT NULL,
+  DueDate date NOT NULL,
+  Amount double NOT NULL,
+  isPaid boolean NOT NULL,
+  PRIMARY KEY (AutoPayID)
+);
+
+CREATE TABLE transactions (
+  TransactionID varchar(254) NOT NULL,
+  Email varchar(254) NOT NULL,
+  TransactionType varchar(254) NOT NULL,
+  Date date NOT NULL,
+  BalanceChange varchar(254) NOT NULL,
+  PRIMARY KEY (TransactionID)
+);

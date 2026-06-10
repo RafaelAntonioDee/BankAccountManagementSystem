@@ -7,7 +7,7 @@ package AppService;
 import Objects.Account;
 import DataService.AccountService;
 import DataService.TransactionsService;
-import Objects.AccountPersonalInformation;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -17,30 +17,38 @@ import java.util.ArrayList;
  */
 public class BalanceFunctions {
 
-    public static double deposit(String email, double amount) {
-        addTransaction(email, "Deposit", LocalDate.now(), "+ " + amount);
+    public static double deposit(String email, double amount, String transactionId) {
+        DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+
+        addTransaction(email, "Deposit", LocalDate.now(), "+ " + amountFormat.format(amount), transactionId);
 
         return AccountService.deposit(email, amount);
     }
 
-    public static double withdraw(String email, double amount) {
-        addTransaction(email, "Withdraw", LocalDate.now(), "- " + amount);
+    public static double withdraw(String email, double amount, String transactionId) {
+        DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+
+        addTransaction(email, "Withdraw", LocalDate.now(), "- " + amountFormat.format(amount), transactionId);
 
         return AccountService.withdraw(email, amount);
     }
 
     public static void transfer(Account user, Account receiver, double amount) {
-        addTransaction(user.getEmail(), "Transfer", LocalDate.now(), "- " + amount);
+        DecimalFormat amountFormat = new DecimalFormat("#,###.00");
 
-        user.setBalance(user.getBalance() - amount);
-        receiver.setBalance(receiver.getBalance() + amount);
+        AccountService.withdraw(user.getEmail(), amount);
+        AccountService.deposit(receiver.getEmail(), amount);
     }
 
     public static ArrayList getTransactions(String email) {
         return TransactionsService.getTransactions(email);
     }
 
-    public static void addTransaction(String email, String type, LocalDate date, String balancechange) {
-        TransactionsService.addTransaction(email, type, date, balancechange);
+    public static void addTransaction(String email, String type, LocalDate date, String balancechange, String newId) {
+        TransactionsService.addTransaction(email, type, date, balancechange, newId);
+    }
+
+    public static String getNextTransactionID() {
+        return TransactionsService.generateNextTransactionID();
     }
 }

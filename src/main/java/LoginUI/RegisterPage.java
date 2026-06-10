@@ -6,9 +6,10 @@ package LoginUI;
 
 import AppService.AccountFunctions;
 import LoginUI.LoginPage;
-import Objects.UserAccount;
+import Objects.Account;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -23,8 +24,8 @@ public class RegisterPage extends JFrame implements ActionListener {
     private JButton btnSignup, btnLogin;
     private final JPasswordField txtNewPass;
 
-    private String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "June",
-        "July", "Aug", "Sept", "Oct", "Nov", "Dec"};
+    private String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Noob", "Dec"};
 
     RegisterPage() {
         //------------------------------- Frame Initialization -------------------------------
@@ -46,7 +47,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 
         btnLogin = new JButton("<- Log In");
         btnLogin.setBounds(252, 20, 90, 20);
-        btnLogin.setForeground(new Color(82, 124, 174));
+        btnLogin.setForeground(new Color(59, 130, 246));
         btnLogin.setBorderPainted(false);
         btnLogin.setFocusPainted(false);
         btnLogin.setContentAreaFilled(false);
@@ -56,7 +57,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 
         lblLine = new JLabel("________________________________________________");
         lblLine.setBounds(22, 40, 315, 30);
-        lblLine.setForeground(new Color(82, 124, 174));
+        lblLine.setForeground(new Color(59, 130, 246));
         lblLine.setHorizontalAlignment(JLabel.CENTER);
         add(lblLine);
 
@@ -182,6 +183,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 
         cmbBirthMonth = new JComboBox(months);
         cmbBirthMonth.setBounds(32, 380, 85, 35);
+        cmbBirthMonth.setFocusable(false);
         cmbBirthMonth.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         cmbBirthMonth.setOpaque(false);
         cmbBirthMonth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
@@ -197,6 +199,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 
         cmbBirthDay = new JComboBox();
         cmbBirthDay.setBounds(137, 380, 85, 35);
+        cmbBirthDay.setFocusable(false);
         cmbBirthDay.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         cmbBirthDay.setOpaque(false);
         cmbBirthDay.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
@@ -212,6 +215,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 
         cmbBirthYear = new JComboBox();
         cmbBirthYear.setBounds(242, 380, 85, 35);
+        cmbBirthYear.setFocusable(false);
         cmbBirthYear.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
         cmbBirthYear.setOpaque(false);
         cmbBirthYear.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
@@ -220,20 +224,13 @@ public class RegisterPage extends JFrame implements ActionListener {
         btnSignup = new JButton("Sign Up");
         btnSignup.setHorizontalAlignment(JButton.CENTER);
         btnSignup.setBounds(32, 430, 295, 35);
-        btnSignup.setBackground(new Color(82, 124, 174));
+        btnSignup.setBackground(new Color(59, 130, 246));
         btnSignup.setForeground(Color.WHITE);
         btnSignup.setFocusPainted(false);
         btnSignup.addActionListener(this);
         add(btnSignup);
 
-        String[] days = new String[31];
-        for (int i = 0; i < 31; i++) {
-            days[i] = String.valueOf(i + 1);
-        }
-        for (String day : days) {
-            cmbBirthDay.addItem(day);
-        }
-
+        // YEAR OPTION
         int startYear = 2026;
         int endYear = 1950;
         String[] years = new String[startYear - endYear + 1];
@@ -243,11 +240,51 @@ public class RegisterPage extends JFrame implements ActionListener {
         for (String year : years) {
             cmbBirthYear.addItem(year);
         }
+
+        // FOR DAYS TO HAVE INITIAL OPTION
+        updateDays((String) cmbBirthMonth.getSelectedItem());
+    }
+
+    // FOR DIFFERENT DAYS EACH MONTH
+    private void updateDays(String month) {
+        String[] initialDays = new String[31];
+        for (int i = 0; i < 31; i++) {
+            initialDays[i] = String.valueOf(i + 1);
+        }
+        for (String day : initialDays) {
+            cmbBirthDay.addItem(day);
+        }
+        cmbBirthDay.removeAllItems();
+
+        int days = 31;
+
+        switch (month) {
+            case "Apr":
+            case "Jun":
+            case "Sep":
+            case "Nov":
+                days = 30;
+                break;
+
+            case "Feb":
+                days = 28;
+                break;
+
+            default:
+                days = 31;
+                break;
+        }
+
+        for (int i = 1; i <= days; i++) {
+            cmbBirthDay.addItem(String.valueOf(i));
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         if (e.getSource() == btnSignup) {
+            
 
             String fName = txtFName.getText();
             String lName = txtLName.getText();
@@ -257,18 +294,38 @@ public class RegisterPage extends JFrame implements ActionListener {
             String pass = new String(txtNewPass.getPassword());
             String bday = cmbBirthMonth.getSelectedItem() + " " + cmbBirthDay.getSelectedItem() + ", " + cmbBirthYear.getSelectedItem();
 
+            if (fName.isEmpty() || lName.isEmpty() || email.isEmpty() || addr.isEmpty() || phone.isEmpty() || pass.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Fields can't be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (AccountFunctions.validateExistingEmail(email)) {
+                JOptionPane.showMessageDialog(this, "Email Already Exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             if (!AccountFunctions.validateEmail(email)) {
-                JOptionPane.showMessageDialog(this, "Invalid email address.");
+                JOptionPane.showMessageDialog(this, "Invalid Email Address!", "Invalid", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (!AccountFunctions.validateFirstName(fName)) {
+                JOptionPane.showMessageDialog(this, "Invalid First Name!", "Invalid", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!AccountFunctions.validateLastName(lName)) {
+                JOptionPane.showMessageDialog(this, "Invalid Last Name!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             if (!AccountFunctions.validatePhoneNumber(phone)) {
-                JOptionPane.showMessageDialog(this, "Invalid phone number.");
+                JOptionPane.showMessageDialog(this, "Invalid Phone Number!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             AccountFunctions.registerUser(fName, lName, email, addr, phone, pass, bday);
-            JOptionPane.showMessageDialog(this, "Account Created Successfully!");
+            JOptionPane.showMessageDialog(this, "Account Created Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
             LoginPage lp = new LoginPage();
             lp.setVisible(true);

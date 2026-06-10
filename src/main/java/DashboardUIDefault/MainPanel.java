@@ -4,6 +4,7 @@
  */
 package DashboardUIDefault;
 
+import static DashboardUIDefault.SidePanel.theme;
 import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;

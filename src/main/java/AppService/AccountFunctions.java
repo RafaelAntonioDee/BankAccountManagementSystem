@@ -7,25 +7,41 @@ package AppService;
 import Objects.Account;
 import DataService.AccountService;
 import Objects.AccountPersonalInformation;
-import java.util.ArrayList;
 
 /**
  *
  * @author rafra
  */
 public class AccountFunctions {
-
+    
+    // CHECK FIRST NAME FORMAT (bawal number)
+    public static boolean validateFirstName(String fName) {
+        return AccountService.validateFirstName(fName);
+    }
+    
+    // CHECK LAST NAME FORMAT (bawal number)
+    public static boolean validateLastName(String lName) {
+        return AccountService.validateLastName(lName);
+    }
+    
+    // CHECK IF EMAIL EXISTS
+    public static boolean emailExists(String email) {
+        return AccountService.getUser(email) != null;
+    }
+    public static boolean validateExistingEmail(String email) {
+        return emailExists(email);
+    }
+    
+    // CHECK EMAIL FORMAT
     public static boolean validateEmail(String email) {
         return AccountService.validateEmail(email);
     }
-
+    
+    // CHECK PHONE NUMBER FORMAT
     public static boolean validatePhoneNumber(String phone) {
-        if (phone == null || phone.isEmpty()) {
-            return false;
-        }
         return AccountService.validatePhoneNumber(phone);
     }
-
+    
     public static void registerUser(String fName, String lName, String email, String addr, String phone, String pass, String bday) {
         Account newUser = new Account();
         newUser.setEmail(email);
@@ -55,10 +71,13 @@ public class AccountFunctions {
     public static AccountPersonalInformation getUserInfo(String email) {
         return AccountService.getUserInfo(email);
     }
-    
+
     public static Account getUser(String email) {
         return AccountService.getUser(email);
     }
 
-
+    public static void ChangeTheme(String email, String theme){
+        AccountService.changeTheme(email, theme);
+    }
+   
 }

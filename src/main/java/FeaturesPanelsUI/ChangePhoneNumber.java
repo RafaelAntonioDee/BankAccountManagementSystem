@@ -4,23 +4,39 @@
  */
 package FeaturesPanelsUI;
 
+import AppService.AccountFunctions;
+import AppService.SettingsFunctions;
+import DashboardUIDefault.Colors;
 import DashboardUIDefault.MainDashboard;
-import static FeaturesPanelsUI.SettingsPanel.lblPhoneField;
+import static FeaturesPanelsUI.DashboardPanel.theme;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
 
 /**
  *
  * @author rafra
  */
-public class ChangePhoneNumber extends JFrame implements ActionListener {
+public class ChangePhoneNumber extends JDialog implements ActionListener {
 
     private JLabel lblLogin, lblTitle, lblNewPhone, lblLogo, lblLine, lblOr;
     private JTextField txtNewPhone;
     private JButton btnConfirm, btnCancel;
+    private Account currentuser;
+    private AccountPersonalInformation currentuserInfo;
+    public static Colors theme = Colors.LIGHT();
 
-    public ChangePhoneNumber() {
+    public ChangePhoneNumber(Account user, AccountPersonalInformation userInfo) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
+
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
 
         // LOGO
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
@@ -31,12 +47,13 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
         setSize(375, 250);
         setLayout(null);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(243, 243, 243));
+        getContentPane().setBackground(theme.BACKGROUND);
 
         lblNewPhone = new JLabel("New Phone Number");
         lblNewPhone.setBounds(38, 25, 100, 10);
         lblNewPhone.setOpaque(true);
-        lblNewPhone.setBackground(new Color(243, 243, 243));
+        lblNewPhone.setBackground(theme.BACKGROUND);
+        lblNewPhone.setForeground(theme.TEXT_BLACK);
         lblNewPhone.setFont(new Font("Arial", Font.PLAIN, 10));
         lblNewPhone.setHorizontalAlignment(JLabel.CENTER);
         add(lblNewPhone);
@@ -44,6 +61,8 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
         txtNewPhone = new JTextField();
         txtNewPhone.setBounds(32, 30, 295, 35);
         txtNewPhone.setOpaque(false);
+        txtNewPhone.setBackground(theme.PANELS_BACKGROUND);
+        txtNewPhone.setForeground(theme.TEXT_BLACK);
         txtNewPhone.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         add(txtNewPhone);
 
@@ -51,8 +70,8 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
         btnConfirm = new JButton("Confirm");
         btnConfirm.setHorizontalAlignment(JButton.CENTER);
         btnConfirm.setBounds(32, 90, 295, 35);
-        btnConfirm.setBackground(new Color(82, 124, 174));
-        btnConfirm.setForeground(Color.WHITE);
+        btnConfirm.setBackground(theme.PRIMARY_BLUE);
+        btnConfirm.setForeground(theme.TEXT_WHITE);
         btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(this);
         add(btnConfirm);
@@ -60,7 +79,8 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
         btnCancel = new JButton("Cancel");
         btnCancel.setHorizontalAlignment(JButton.CENTER);
         btnCancel.setBounds(32, 150, 295, 35);
-        btnCancel.setBackground(new Color(243, 243, 243));
+        btnCancel.setBackground(theme.CancelButton);
+        btnCancel.setForeground(theme.TEXT_WHITE);
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
         add(btnCancel);
@@ -76,16 +96,25 @@ public class ChangePhoneNumber extends JFrame implements ActionListener {
 
             if (newPhoneInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
-            } else if (currentPhone.equals(newPhoneInput)) {
-                JOptionPane.showMessageDialog(this, "New phone number cannot be the same as the old phone number!", "", JOptionPane.ERROR_MESSAGE);
-            } else {
-                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
+                return;
+            }
 
-                if (choice == 0) {
-                    SettingsPanel.lblPhoneField.setText(newPhoneInput);
-                    dispose();
-                    JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
-                }
+            if (!AccountFunctions.validatePhoneNumber(newPhoneInput)) {
+                JOptionPane.showMessageDialog(this, "Invalid Phone Number!", "Try Again", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (currentPhone.equals(newPhoneInput)) {
+                JOptionPane.showMessageDialog(this, "New phone number cannot be the same as the old phone number!", "", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (choice == 0) {
+                SettingsFunctions.changePhone(currentuser.getEmail(), newPhoneInput);
+                SettingsPanel.lblPhoneField.setText(newPhoneInput);
+                dispose();
+                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
             }
         } else if (e.getSource() == btnCancel) {
             dispose();

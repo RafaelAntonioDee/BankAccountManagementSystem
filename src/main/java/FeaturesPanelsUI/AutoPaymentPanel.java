@@ -4,10 +4,19 @@
  */
 package FeaturesPanelsUI;
 
+import DashboardUIDefault.Colors;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import java.util.ArrayList;
+import DataService.AutoPaymentService;
+import static FeaturesPanelsUI.DashboardPanel.theme;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
+import Objects.AutoPayment;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -15,131 +24,95 @@ import javax.swing.border.LineBorder;
  */
 public class AutoPaymentPanel extends JPanel implements ActionListener {
 
-    private JLabel lblAutoPayment, lblRecipient, lblAmount, lblFrequency, lblDate, lblEnable, lblBirthday, lblMonth, lblDay, lblYear, lblReceipt;
-    private JButton btnEnableAuto, btnCancel;
+    private JLabel lblAutoPayment, lblRecipient, lblAmount, lblFrequency, lblDate, lblReceipt;
+    private JButton btnEnableAuto, btnCancel, btnUnsub;
     private JPanel pnlAutoPayment, pnlScheduledPayment, pnlAutoPayListContent;
     private JScrollPane pnlAutoPayList;
     private JTextField txtRecipient, txtAmount;
-    private int startYear = 1970, endYear = 2050, ScheduledCount = 0, y = 15;
+    private String currentEmail;
+    private Account currentuser;
+    private AccountPersonalInformation currentuserInfo;
+    private int ScheduledCount = 0, y = 15;
     private JComboBox<String> cmbFrequency, cmbDay, cmbMonth, cmbYear;
-    private String[] frequency = {"every second", "Monthly", "Quarterly", "Semi-Anually", "Anually"},
-            months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"},
-            days = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"},
-            years = {"1970",  "2026"};
+    private String[] frequency = {"Daily", "Monthly", "Quarterly", "Semi-Annually", "Annually"};
+    public static Colors theme = Colors.LIGHT();
 
-    public AutoPaymentPanel() {
+    public AutoPaymentPanel(String email, Account user) {
+        this.currentEmail = user.getEmail();
+        AppService.AutoPaymentFunctions.processDuePayments();
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
+
+        this.currentEmail = currentuser.getEmail();
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
 
         setBounds(0, 0, 837, 560);
-        setBackground(new Color(243, 243, 243));
-        setBorder(new LineBorder(Color.LIGHT_GRAY));
+        setBackground(theme.BACKGROUND);
+        setBorder(new LineBorder(theme.BORDER_GRAY));
         setLayout(null);
 
-        //---------------------------------AUTOPAYMENT
+        // AUTO PAYMENT
         lblAutoPayment = new JLabel("Auto Payment Setup");
-        lblAutoPayment.setForeground(Color.GRAY);
+        lblAutoPayment.setForeground(theme.TEXT_GRAY);
         lblAutoPayment.setFont(new Font("Arial", Font.PLAIN, 18));
         lblAutoPayment.setBounds(25, 15, 250, 35);
         add(lblAutoPayment);
 
         pnlAutoPayment = new JPanel();
         pnlAutoPayment.setBounds(25, 60, 375, 475);
-        pnlAutoPayment.setBackground(new Color(243, 243, 243));
-        pnlAutoPayment.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        pnlAutoPayment.setBackground(theme.PANELS_BACKGROUND);
+        pnlAutoPayment.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlAutoPayment.setLayout(null);
         add(pnlAutoPayment);
 
         lblRecipient = new JLabel("Payee: ");
         lblRecipient.setFont(new Font("Arial", Font.PLAIN, 18));
         lblRecipient.setBounds(25, 25, 325, 35);
+        lblRecipient.setForeground(theme.TEXT_BLACK);
         pnlAutoPayment.add(lblRecipient);
 
         txtRecipient = new JTextField();
         txtRecipient.setBounds(25, 60, 325, 35);
-        txtRecipient.setOpaque(false);
-        txtRecipient.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        txtRecipient.setBackground(theme.BACKGROUND);
+        txtRecipient.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(theme.BORDER_GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        txtRecipient.setForeground(theme.TEXT_BLACK);
         pnlAutoPayment.add(txtRecipient);
 
         lblAmount = new JLabel("Amount: ");
         lblAmount.setBounds(25, 95, 325, 35);
         lblAmount.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblAmount.setForeground(theme.TEXT_BLACK);
         pnlAutoPayment.add(lblAmount);
 
         txtAmount = new JTextField();
         txtAmount.setBounds(25, 130, 325, 35);
-        txtAmount.setOpaque(false);
-        txtAmount.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        txtAmount.setBackground(theme.BACKGROUND);
+        txtAmount.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(theme.BORDER_GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        txtAmount.setForeground(theme.TEXT_BLACK);
         pnlAutoPayment.add(txtAmount);
 
         lblFrequency = new JLabel("Frequency: ");
         lblFrequency.setBounds(25, 165, 325, 35);
         lblFrequency.setFont(new Font("Arial", Font.PLAIN, 18));
+        lblFrequency.setForeground(theme.TEXT_BLACK);
         pnlAutoPayment.add(lblFrequency);
 
         cmbFrequency = new JComboBox<String>(frequency);
         cmbFrequency.setBounds(25, 200, 325, 35);
-        cmbFrequency.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbFrequency.setFont(new Font("Arial", Font.PLAIN, 18));
-        cmbFrequency.setOpaque(false);
+        cmbFrequency.setForeground(theme.TEXT_BLACK);
+        cmbFrequency.setBackground(theme.PANELS_BACKGROUND);
         cmbFrequency.setFocusable(false);
-        cmbFrequency.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         pnlAutoPayment.add(cmbFrequency);
-
-        lblBirthday = new JLabel("Starting Date: ");
-        lblBirthday.setBounds(25, 245, 150, 20);
-        lblBirthday.setFont(new Font("Arial", Font.PLAIN, 18));
-        pnlAutoPayment.add(lblBirthday);
-
-        lblMonth = new JLabel("Month");
-        lblMonth.setBounds(30, 275, 35, 10);
-        lblMonth.setOpaque(true);
-        lblMonth.setBackground(new Color(243, 243, 243));
-        lblMonth.setFont(new Font("Arial", Font.PLAIN, 10));
-        lblMonth.setHorizontalAlignment(JLabel.CENTER);
-        pnlAutoPayment.add(lblMonth);
-
-        cmbMonth = new JComboBox<String>(months);
-        cmbMonth.setBounds(25, 280, 130, 35);
-        cmbMonth.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbMonth.setOpaque(false);
-        cmbMonth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlAutoPayment.add(cmbMonth);
-
-        lblDay = new JLabel("Day");
-        lblDay.setBounds(175, 275, 25, 10);
-        lblDay.setOpaque(true);
-        lblDay.setBackground(new Color(243, 243, 243));
-        lblDay.setFont(new Font("Arial", Font.PLAIN, 10));
-        lblDay.setHorizontalAlignment(JLabel.CENTER);
-        pnlAutoPayment.add(lblDay);
-
-        cmbDay = new JComboBox<String>(days);
-        cmbDay.setBounds(170, 280, 80, 35);
-        cmbDay.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbDay.setOpaque(false);
-        cmbDay.setFocusable(false);
-        cmbDay.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlAutoPayment.add(cmbDay);
-
-        lblYear = new JLabel("Year");
-        lblYear.setBounds(268, 275, 30, 10);
-        lblYear.setOpaque(true);
-        lblYear.setBackground(new Color(243, 243, 243));
-        lblYear.setFont(new Font("Arial", Font.PLAIN, 10));
-        lblYear.setHorizontalAlignment(JLabel.CENTER);
-        pnlAutoPayment.add(lblYear);
-
-        cmbYear = new JComboBox<String>(years);
-        cmbYear.setBounds(265, 280, 85, 35);
-        cmbYear.setUI(new javax.swing.plaf.basic.BasicComboBoxUI());
-        cmbYear.setOpaque(false);
-        cmbYear.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        pnlAutoPayment.add(cmbYear);
 
         btnEnableAuto = new JButton("Set Up Payment");
         btnEnableAuto.setHorizontalAlignment(JButton.CENTER);
         btnEnableAuto.setBounds(120, 395, 125, 35);
-        btnEnableAuto.setBackground(new Color(82, 124, 174));
-        btnEnableAuto.setForeground(Color.WHITE);
+        btnEnableAuto.setBackground(theme.PRIMARY_BLUE);
+        btnEnableAuto.setForeground(theme.TEXT_WHITE);
         btnEnableAuto.setFocusPainted(false);
         btnEnableAuto.addActionListener(this);
         pnlAutoPayment.add(btnEnableAuto);
@@ -147,23 +120,36 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         btnCancel = new JButton("Cancel");
         btnCancel.setHorizontalAlignment(JButton.CENTER);
         btnCancel.setBounds(265, 395, 85, 35);
-        btnCancel.setBackground(Color.GRAY);
-        btnCancel.setForeground(Color.WHITE);
+        btnCancel.setBackground(theme.CancelButton);
+        btnCancel.setForeground(theme.TEXT_WHITE);
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
         pnlAutoPayment.add(btnCancel);
 
-        //---------------------------------RECEIPT
+        // RESIBO NG MGA AUTO PAYMENT
         lblReceipt = new JLabel("Enabled Auto Payments");
-        lblReceipt.setForeground(Color.GRAY);
+        lblReceipt.setForeground(theme.TEXT_GRAY);
         lblReceipt.setFont(new Font("Arial", Font.PLAIN, 18));
         lblReceipt.setBounds(425, 15, 325, 35);
         add(lblReceipt);
 
         pnlAutoPayList = new JScrollPane();
-        pnlAutoPayList.setBounds(425, 60, 395, 475);
+        pnlAutoPayList.setBounds(425, 60, 387, 475);
         pnlAutoPayList.setOpaque(true);
         pnlAutoPayList.setBorder(null);
+        pnlAutoPayList.setBackground(theme.PANELS_BACKGROUND);
+        pnlAutoPayList.setBorder(new LineBorder(theme.BORDER_GRAY));
+        pnlAutoPayList.getVerticalScrollBar().setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, theme.SidePanel));
+
+        pnlAutoPayList.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
+
+            @Override
+            protected void configureScrollBarColors() {
+                thumbColor = theme.ThumbBar;
+                trackColor = theme.TrackBar;
+            }
+        });
+
         add(pnlAutoPayList);
 
         pnlAutoPayList.getViewport().setOpaque(false);
@@ -171,20 +157,45 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         pnlAutoPayListContent = new JPanel();
         pnlAutoPayListContent.setLayout(null);
         pnlAutoPayListContent.setOpaque(false);
-        
+        pnlAutoPayListContent.setBackground(theme.PANELS_BACKGROUND);
+
         pnlAutoPayList.setViewportView(pnlAutoPayListContent);
+
+        loadExistingAutoPayments();
+
+    }
+
+    public void loadExistingAutoPayments() {
+
+        resetList();
+
+        ArrayList<AutoPayment> list = AppService.AutoPaymentFunctions.getAllUserPayments(currentEmail);
+
+        if (list == null) {
+            return;
+        }
+
+        for (AutoPayment p : list) {
+
+            displayScheduledPayment(
+                    p.getAutoPayID(),
+                    p.getPayee(),
+                    p.getAmount(),
+                    p.getFrequency(),
+                    p.getDate()
+            );
+        }
     }
 
     // RECEIPT
-    
-    public void createScheduledPayment(String RecipientName, double Amount, String Frequency, String DueDate) {
+    public void displayScheduledPayment(String ID, String RecipientName, double Amount, String Frequency, LocalDate DueDate) {
         ScheduledCount++;
 
         pnlScheduledPayment = new JPanel();
         pnlScheduledPayment.setName(RecipientName);
         pnlScheduledPayment.setBounds(15, y, 357, 110);
-        pnlScheduledPayment.setBackground(new Color(243, 243, 243));
-        pnlScheduledPayment.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        pnlScheduledPayment.setBackground(theme.PANELS_BACKGROUND);
+        pnlScheduledPayment.setBorder(new LineBorder(theme.BORDER_GRAY));
         pnlScheduledPayment.setLayout(null);
         pnlAutoPayListContent.add(pnlScheduledPayment);
 
@@ -192,38 +203,134 @@ public class AutoPaymentPanel extends JPanel implements ActionListener {
         lblRecipient.setFont(new Font("Arial", Font.PLAIN, 16));
         lblRecipient.setBounds(10, 5, 337, 25);
         lblRecipient.setText(RecipientName);
+        lblRecipient.setForeground(theme.TEXT_BLACK);
         pnlScheduledPayment.add(lblRecipient);
 
         lblAmount = new JLabel();
         lblAmount.setBounds(10, 30, 337, 25);
-        lblAmount.setText("Amount: " + String.format("%.2f",Amount));
+        lblAmount.setText("Amount: " + String.format("%.2f", Amount));
+        lblAmount.setForeground(theme.TEXT_BLACK);
         pnlScheduledPayment.add(lblAmount);
 
         lblFrequency = new JLabel();
         lblFrequency.setBounds(10, 55, 337, 25);
         lblFrequency.setText("Frequency: " + Frequency);
+        lblFrequency.setForeground(theme.TEXT_BLACK);
         pnlScheduledPayment.add(lblFrequency);
+
+        String dueDateFormatted = DueDate.format(DateTimeFormatter.ofPattern("MMMM dd, yyyy"));
 
         lblDate = new JLabel();
         lblDate.setBounds(10, 80, 337, 25);
-        lblDate.setText("Due Date: " + DueDate);
+        lblDate.setText("Due Date: " + dueDateFormatted);
+        lblDate.setForeground(theme.TEXT_BLACK);
         pnlScheduledPayment.add(lblDate);
 
-        pnlAutoPayListContent.setPreferredSize(new Dimension(357, y));
+        btnUnsub = new JButton("Unsubscribe");
+        btnUnsub.setBounds(240, 75, 107, 25);
+        btnUnsub.putClientProperty("ID", ID);
+        btnUnsub.setHorizontalAlignment(JButton.CENTER);
+        btnUnsub.setBackground(theme.CancelButton);
+        btnUnsub.setForeground(theme.TEXT_WHITE);
+        btnUnsub.setFocusPainted(false);
+        pnlScheduledPayment.add(btnUnsub);
+        btnUnsub.addActionListener(this);
+
+        // FOR SCROLLPANE'S SPACING
+        int itemHeight = 115;
+        int padding = 25;
+        int height = (ScheduledCount * itemHeight) + padding;
+
+        pnlAutoPayListContent.setPreferredSize(new Dimension(337, height));
         pnlAutoPayListContent.revalidate();
         pnlAutoPayListContent.repaint();
 
         y += 115;
     }
-    
-    
+
+    public void resetList() {
+        ScheduledCount = 0;
+        y = 15;
+        pnlAutoPayListContent.removeAll();
+        pnlAutoPayListContent.revalidate();
+        pnlAutoPayListContent.repaint();
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btnEnableAuto) {
-            createScheduledPayment(txtRecipient.getText(), Double.parseDouble(txtAmount.getText()), cmbFrequency.getSelectedItem().toString(), cmbMonth.getSelectedItem() + " " + cmbDay.getSelectedItem() + " " + cmbYear.getSelectedItem());
-        }
+            String payee = txtRecipient.getText().trim();
 
+            for (AutoPayment payment : AppService.AutoPaymentFunctions.getAllUserPayments(currentEmail)) {
+                if (payment.getPayee().equalsIgnoreCase(payee)) {
+                    JOptionPane.showMessageDialog(this, "An enabled auto-payment for this payee already exists.", "Invalid", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            if (!payee.isEmpty()) {
+                try {
+                    double amount = Double.parseDouble(txtAmount.getText().trim());
+
+                    String frequency = String.valueOf(cmbFrequency.getSelectedItem());
+                    LocalDate dueDate = LocalDate.now();
+
+                    switch (frequency.toLowerCase()) {
+                        case "daily":
+                            dueDate = dueDate.plusDays(1);
+                            break;
+                        case "monthly":
+                            dueDate = dueDate.plusMonths(1);
+                            break;
+
+                        case "quarterly":
+                            dueDate = dueDate.plusMonths(3);
+                            break;
+
+                        case "semi-annually":
+                            dueDate = dueDate.plusMonths(6);
+                            break;
+
+                        case "annually":
+                            dueDate = dueDate.plusYears(1);
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    String dueDateFormatted = dueDate.format(DateTimeFormatter.ofPattern("MMMM dd, yyyy"));
+                    DateTimeFormatter format = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+
+                    AppService.AutoPaymentFunctions.createAutoPayment(
+                            currentEmail,
+                            payee,
+                            amount,
+                            frequency,
+                            dueDate
+                    );
+
+                    AppService.AutoPaymentFunctions.processDuePayments();
+                    loadExistingAutoPayments();
+
+                    txtRecipient.setText("");
+                    txtAmount.setText("");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Invalid amount!");
+                }
+            }
+        } else if (e.getSource() == btnCancel) {
+            txtRecipient.setText("");
+            txtAmount.setText("");
+        } else {
+            JButton btn = (JButton) e.getSource();
+
+            String id = (String) btn.getClientProperty("ID");
+
+            AppService.AutoPaymentFunctions.removeAutoPay(id);
+
+            loadExistingAutoPayments();
+        }
     }
 }

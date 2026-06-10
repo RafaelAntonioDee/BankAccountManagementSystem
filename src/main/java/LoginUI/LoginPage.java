@@ -83,7 +83,7 @@ public class LoginPage extends JFrame implements ActionListener {
         btnLogin = new JButton("Log In");
         btnLogin.setHorizontalAlignment(JButton.CENTER);
         btnLogin.setBounds(32, 230, 295, 35);
-        btnLogin.setBackground(new Color(82, 124, 174));
+        btnLogin.setBackground(new Color(59, 130, 246));
         btnLogin.setForeground(Color.WHITE);
         btnLogin.setFocusPainted(false);
         btnLogin.addActionListener(this);
@@ -118,12 +118,16 @@ public class LoginPage extends JFrame implements ActionListener {
         if (e.getSource() == btnLogin) {
             String email = txtEmail.getText();
             String pass = new String(txtPass.getPassword());
-
+            
+            
             Account loggedUser = AccountFunctions.getAuthenticatedUser(email, pass);
-            AccountPersonalInformation loggedUserInfo = AccountFunctions.getUserInfo(email);
-
             
             if (loggedUser != null) {
+                
+                DataService.AutoPaymentService.processDuePayments();
+                AccountPersonalInformation loggedUserInfo = AccountFunctions.getUserInfo(email);
+                Account updatedUser = AccountFunctions.getUser(email);
+                
                 MainDashboard md = new MainDashboard(loggedUser, loggedUserInfo);
                 md.setVisible(true);
                 this.dispose();

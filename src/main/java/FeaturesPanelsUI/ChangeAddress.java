@@ -4,7 +4,11 @@
  */
 package FeaturesPanelsUI;
 
+import AppService.SettingsFunctions;
+import DashboardUIDefault.Colors;
 import DashboardUIDefault.MainDashboard;
+import Objects.Account;
+import Objects.AccountPersonalInformation;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -13,13 +17,26 @@ import javax.swing.*;
  *
  * @author rafra
  */
-public class ChangeAddress extends JFrame implements ActionListener {
+public class ChangeAddress extends JDialog implements ActionListener {
 
     private JLabel lblAddress, lblLogo;
     private JTextField txtAddress;
     private JButton btnConfirm, btnCancel;
+    private String updatedAddress;
+    private Account currentuser;
+    private AccountPersonalInformation currentuserInfo;
+    public static Colors theme = Colors.LIGHT();
 
-    public ChangeAddress() {
+    public ChangeAddress(Account user, AccountPersonalInformation userInfo) {
+        this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
+        this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
+        
+        if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
+            theme = Colors.LIGHT();
+        } else {
+            theme = Colors.DARK();
+        }
+
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
         ImageIcon ResizedBankIcon = new ImageIcon(BankIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH));
@@ -29,20 +46,23 @@ public class ChangeAddress extends JFrame implements ActionListener {
         setSize(375, 250);
         setLayout(null);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(243, 243, 243));
+        getContentPane().setBackground(theme.BACKGROUND);
 
         // NEW ADDRESS
         lblAddress = new JLabel("New Address");
         lblAddress.setBounds(38, 25, 65, 10);
         lblAddress.setOpaque(true);
-        lblAddress.setBackground(new Color(243, 243, 243));
         lblAddress.setFont(new Font("Arial", Font.PLAIN, 10));
+        lblAddress.setForeground(theme.TEXT_BLACK);
+        lblAddress.setBackground(theme.BACKGROUND);
         lblAddress.setHorizontalAlignment(JLabel.CENTER);
         add(lblAddress);
 
         txtAddress = new JTextField();
         txtAddress.setBounds(32, 30, 295, 35);
         txtAddress.setOpaque(false);
+        txtAddress.setForeground(theme.TEXT_BLACK);
+        txtAddress.setBackground(theme.PANELS_BACKGROUND);
         txtAddress.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         add(txtAddress);
 
@@ -50,8 +70,8 @@ public class ChangeAddress extends JFrame implements ActionListener {
         btnConfirm = new JButton("Confirm");
         btnConfirm.setHorizontalAlignment(JButton.CENTER);
         btnConfirm.setBounds(32, 90, 295, 35);
-        btnConfirm.setBackground(new Color(82, 124, 174));
-        btnConfirm.setForeground(Color.WHITE);
+        btnConfirm.setBackground(theme.PRIMARY_BLUE);
+        btnConfirm.setForeground(theme.TEXT_WHITE);
         btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(this);
         add(btnConfirm);
@@ -59,7 +79,8 @@ public class ChangeAddress extends JFrame implements ActionListener {
         btnCancel = new JButton("Cancel");
         btnCancel.setHorizontalAlignment(JButton.CENTER);
         btnCancel.setBounds(32, 150, 295, 35);
-        btnCancel.setBackground(new Color(243, 243, 243));
+        btnCancel.setBackground(theme.CancelButton);
+        btnCancel.setForeground(theme.TEXT_WHITE);
         btnCancel.setFocusPainted(false);
         btnCancel.addActionListener(this);
         add(btnCancel);
@@ -75,12 +96,13 @@ public class ChangeAddress extends JFrame implements ActionListener {
             if (newAddress.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
             } else {
-                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
+                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (choice == 0) {
-                SettingsPanel.lblAddressField.setText(newAddress);
-                dispose();
-                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
-                }   
+                    updatedAddress = SettingsFunctions.changeAddress(currentuser.getEmail(), newAddress);
+                    SettingsPanel.lblAddressField.setText(newAddress);
+                    dispose();
+                    JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         } else if (e.getSource() == btnCancel) {
             dispose();

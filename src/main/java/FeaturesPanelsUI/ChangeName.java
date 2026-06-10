@@ -116,7 +116,8 @@ public class ChangeName extends JDialog implements ActionListener {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String newFirst = txtFirst.getText();
             String newLast = txtLast.getText();
-
+            
+            // NAME VALIDATION
             if (newFirst.isEmpty() || newLast.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
                 return;

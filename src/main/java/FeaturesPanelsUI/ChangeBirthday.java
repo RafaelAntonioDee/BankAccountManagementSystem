@@ -196,6 +196,7 @@ public class ChangeBirthday extends JDialog implements ActionListener {
             String newBirthday = newMonth + " " + newDay + ", " + newYear;
 
             int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
+            
             if (choice == 0) {
                 updateBirthday = SettingsFunctions.changeBirthday(currentuser.getEmail(), newBirthday);
                 SettingsPanel.lblBirthdayField.setText(newBirthday);

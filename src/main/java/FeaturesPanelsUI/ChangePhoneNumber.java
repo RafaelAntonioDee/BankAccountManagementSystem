@@ -93,12 +93,13 @@ public class ChangePhoneNumber extends JDialog implements ActionListener {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String newPhoneInput = txtNewPhone.getText();
             String currentPhone = SettingsPanel.lblPhoneField.getText();
-
+            
+            // PHONE NUMBER VALIDATION
             if (newPhoneInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+            
             if (!AccountFunctions.validatePhoneNumber(newPhoneInput)) {
                 JOptionPane.showMessageDialog(this, "Invalid Phone Number!", "Try Again", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -114,9 +115,11 @@ public class ChangePhoneNumber extends JDialog implements ActionListener {
                 SettingsFunctions.changePhone(currentuser.getEmail(), newPhoneInput);
                 SettingsPanel.lblPhoneField.setText(newPhoneInput);
                 dispose();
-                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Phone Change", JOptionPane.INFORMATION_MESSAGE);
             }
-        } else if (e.getSource() == btnCancel) {
+        }
+        
+        else if (e.getSource() == btnCancel) {
             dispose();
         }
     }

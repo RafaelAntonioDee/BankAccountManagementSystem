@@ -95,7 +95,8 @@ public class ChangeEmail extends JDialog implements ActionListener {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String currentEmail = SettingsPanel.lblEmailField.getText();
             String newEmailInput = txtEmail.getText();
-
+            
+            // EMAIL VALIDATION
             if (newEmailInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -130,7 +131,7 @@ public class ChangeEmail extends JDialog implements ActionListener {
                 DashboardUIDefault.MainDashboard.currentUserInfo = AppService.AccountFunctions.getUserInfo(newEmailInput);
 
                 dispose();
-                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Email Change", JOptionPane.INFORMATION_MESSAGE);
             }
 
         } else if (e.getSource() == btnCancel) {

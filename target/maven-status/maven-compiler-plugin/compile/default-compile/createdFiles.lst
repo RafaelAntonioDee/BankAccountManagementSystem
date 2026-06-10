@@ -27,6 +27,7 @@ FeaturesPanelsUI\ChangePhoneNumber.class
 FeaturesPanelsUI\DepositPanel$2.class
 FeaturesPanelsUI\TransactionsPanel$2.class
 DashboardUIDefault\SidePanel.class
+FeaturesPanelsUI\AutoPaymentPanel$2.class
 AppService\AccountFunctions.class
 FeaturesPanelsUI\WithdrawPanel$1.class
 Objects\AutoPayment.class

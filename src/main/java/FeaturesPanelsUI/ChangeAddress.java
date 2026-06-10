@@ -30,7 +30,7 @@ public class ChangeAddress extends JDialog implements ActionListener {
     public ChangeAddress(Account user, AccountPersonalInformation userInfo) {
         this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
         this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
-        
+
         if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {

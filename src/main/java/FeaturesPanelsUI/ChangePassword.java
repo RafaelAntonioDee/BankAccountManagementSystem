@@ -33,13 +33,12 @@ public class ChangePassword extends JDialog implements ActionListener {
     public ChangePassword(Account user, AccountPersonalInformation userInfo) {
         this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
         this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
-        
+
         if (currentuser.getSystemTheme().equals("Light") || currentuser.getSystemTheme().equals("System")) {
             theme = Colors.LIGHT();
         } else {
             theme = Colors.DARK();
         }
-
 
         //------------------------------- Frame Initialization -------------------------------
         ImageIcon BankIcon = new ImageIcon(getClass().getResource("/images/BankLogo.png"));
@@ -136,24 +135,37 @@ public class ChangePassword extends JDialog implements ActionListener {
 
             if (currentPass.isEmpty() || newPassInput.isEmpty() || confirmPassInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
-            } else if (confirmPassInput.length() < 8) {
-                JOptionPane.showMessageDialog(this, "Password must be 8 characters long!", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (!currentPass.equals(currentuser.getPassword())) {
-                JOptionPane.showMessageDialog(this, "Current password is incorrect!", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (currentPass.equals(newPassInput)) {
-                JOptionPane.showMessageDialog(this, "New password can't be the same as the old!", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (!newPassInput.equals(confirmPassInput)) {
-                JOptionPane.showMessageDialog(this, "Password do not match", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
+                return;
+            }
 
-                if (choice == 0) {
-                    updatedPassword = SettingsFunctions.changePassword(currentuser.getEmail(), confirmPassInput);
-                    String hiddenPass = "*".repeat(confirmPassInput.length());
-                    SettingsPanel.lblPasswordField.setText(hiddenPass);
-                    dispose();
-                    JOptionPane.showMessageDialog(this, "Password Changed!", "Password Change", JOptionPane.INFORMATION_MESSAGE);
-                }
+            if (confirmPassInput.length() < 8) {
+                JOptionPane.showMessageDialog(this, "Password must be 8 characters long!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!currentPass.equals(currentuser.getPassword())) {
+                JOptionPane.showMessageDialog(this, "Current password is incorrect!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (currentPass.equals(newPassInput)) {
+                JOptionPane.showMessageDialog(this, "New password can't be the same as the old!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!newPassInput.equals(confirmPassInput)) {
+                JOptionPane.showMessageDialog(this, "Password do not match", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
+
+            if (choice == 0) {
+                updatedPassword = SettingsFunctions.changePassword(currentuser.getEmail(), confirmPassInput);
+                String hiddenPass = "*".repeat(confirmPassInput.length());
+                SettingsPanel.lblPasswordField.setText(hiddenPass);
+                dispose();
+                JOptionPane.showMessageDialog(this, "Password Changed!", "Password Change", JOptionPane.INFORMATION_MESSAGE);
             }
         } else if (e.getSource() == btnCancel) {
             dispose();

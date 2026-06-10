@@ -141,32 +141,60 @@ public class AutoPaymentService {
     public static void processDuePayments() {
 
         ArrayList<AutoPayment> payments = AutoPaymentService.getAllAutoPayments();
-
         LocalDate today = LocalDate.now();
+
+        List<String> validSubscriptions = Arrays.asList(
+                "Spotify", "Apple Music", "YouTube Premium",
+                "Netflix", "Disney+", "Canva Pro"
+        );
 
         for (AutoPayment p : payments) {
 
+            String payee = p.getPayee();
+            String email = p.getEmail();
+            double amount = p.getAmount();
+            boolean isSubscription = validSubscriptions.contains(payee);
+
             while (!today.isBefore(p.getDate())) {
-
-                double amount = p.getAmount();
-                String email = p.getEmail();
-
                 boolean success = AccountService.deductBalance(email, amount);
                 String sequentialTxnId = BalanceFunctions.getNextTransactionID();
 
                 if (success) {
-                    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+                    DecimalFormat amountFormat = new DecimalFormat("#,##0.00");
 
-                    TransactionsService.addTransaction(
-                            email,
-                            "Auto Payment",
-                            today,
-                            "-" + amountFormat.format(amount),
-                            sequentialTxnId
-                    );
+                    if (!isSubscription) {
+                        AccountService.deposit(payee, amount);
 
-                    LocalDate nextDate
-                            = calculateNextDueDate(p.getDate(), p.getFrequency());
+                        TransactionsService.addTransaction(
+                                email,
+                                "to" + payee,
+                                today,
+                                "+" + amountFormat.format(amount),
+                                sequentialTxnId
+                        );
+
+                        String receiverTxnId = sequentialTxnId + "R";
+                        TransactionsService.addTransaction(
+                                payee,
+                                "Auto Payment",
+                                today,
+                                "+" + amountFormat.format(amount),
+                                receiverTxnId
+                        );
+
+                    } else if (isSubscription) {
+
+                        TransactionsService.addTransaction(
+                                email,
+                                "Subscription",
+                                today,
+                                "-" + amountFormat.format(amount),
+                                sequentialTxnId
+                        );
+
+                    }
+
+                    LocalDate nextDate = calculateNextDueDate(p.getDate(), p.getFrequency());
 
                     AutoPaymentService.updatePaymentForNextCycle(
                             p.getAutoPayID(),
@@ -174,15 +202,14 @@ public class AutoPaymentService {
                     );
 
                     p.setPaymentDate(nextDate);
-                }
-                else{
+                } else {
                     break;
                 }
             }
         }
     }
 
-    // Mark if Paid na 'yung AutoPayment
+    // Mark if Paid na 'yung Auto Payment (for Date Change / Eligibility for Cancellation)
     public static void markAsPaid(String autoPayID) {
 
         String sql = "UPDATE autopayments SET IsPaid = 1 WHERE AutoPayID = ?";
@@ -196,7 +223,8 @@ public class AutoPaymentService {
             ex.printStackTrace();
         }
     }
-
+    
+    // Determines the Next Date After Successfully Paying in Auto Payment
     private static LocalDate calculateNextDueDate(LocalDate currentDueDate, String frequency) {
         if (frequency == null) {
             return null;
@@ -232,8 +260,8 @@ public class AutoPaymentService {
             ex.printStackTrace();
         }
     }
-    
-    // Check if you're eligible to unsubscribe (Can't if you have unpaid subscription)
+
+    // Check if you're eligible to unsubscribe (Can't if you have a due unpaid)
     public static boolean canUnsubscribe(String id) {
 
         String sql = "SELECT IsPaid, DueDate FROM autopayments WHERE AutoPayID = ?";

@@ -84,7 +84,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
 
         lblAmount = new JLabel("    ₱" + amountFormat.format(balance));
         lblAmount.setForeground(theme.TEXT_WHITE);
-        lblAmount.setFont(new Font("Arial", Font.PLAIN, 20));
+        lblAmount.setFont(new Font("Arial", Font.BOLD, 20));
         lblAmount.setBounds(25, 60, 250, 50);
         lblAmount.setOpaque(true);
         lblAmount.setBackground(theme.PRIMARY_BLUE);

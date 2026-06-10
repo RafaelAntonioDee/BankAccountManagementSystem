@@ -30,7 +30,7 @@ public class TransactionsPanel extends JPanel implements ActionListener {
     private JPanel pnlProcess;
     private Account currentUser;
     private String[] dateRange = {"Past Day", "Past Week", "Past Month", "Past 3 Months"},
-            transacType = {"All", "Deposit", "Withdraw", "Transfer", "Payment", "Received", "Auto Payment"};
+            transacType = {"All", "Deposit", "Withdraw", "Transfer", "Received", "Auto Payment"};
     public static Colors theme = Colors.LIGHT();
     public static Icons icons = Icons.LIGHT();
 

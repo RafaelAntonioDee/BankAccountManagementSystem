@@ -28,7 +28,7 @@ public class TransferPanel extends JPanel implements ActionListener {
     public static Colors theme = Colors.LIGHT();
 
     private double balance = 0;
-    
+
     // Money Display Formatter
     DecimalFormat amountFormat = new DecimalFormat("#,###.00");
 
@@ -264,12 +264,13 @@ public class TransferPanel extends JPanel implements ActionListener {
                 int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Transfer Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                 if (choice == JOptionPane.YES_OPTION) {
+                    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
 
                     String sequentialTxnId = BalanceFunctions.getNextTransactionID();
-                    BalanceFunctions.addTransaction(currentUser.getEmail(), "Transfer", LocalDate.now(), "- " + amount, sequentialTxnId);
+                    BalanceFunctions.addTransaction(currentUser.getEmail(), "Transfer", LocalDate.now(), "- " + amountFormat.format(amount), sequentialTxnId);
 
                     String sequentialTxnId2 = BalanceFunctions.getNextTransactionID();
-                    BalanceFunctions.addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amount, sequentialTxnId2);
+                    BalanceFunctions.addTransaction(receiver.getEmail(), "Received", LocalDate.now(), "+ " + amountFormat.format(amount), sequentialTxnId2);
 
                     System.out.println(sequentialTxnId + sequentialTxnId2);
 

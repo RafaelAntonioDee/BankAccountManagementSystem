@@ -196,6 +196,12 @@ public class WithdrawPanel extends JPanel implements ActionListener {
                 }
 
                 double amount = Double.parseDouble(amountText);
+                
+                if (amount > 50000) {
+                    JOptionPane.showMessageDialog(this, "Amount exceeds per withdraw limit!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
                 if (amount <= 0) {
                     JOptionPane.showMessageDialog(this, "Invalid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;

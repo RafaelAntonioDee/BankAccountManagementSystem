@@ -7,6 +7,7 @@ package AppService;
 import Objects.Account;
 import DataService.AccountService;
 import DataService.TransactionsService;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -17,18 +18,24 @@ import java.util.ArrayList;
 public class BalanceFunctions {
 
     public static double deposit(String email, double amount, String transactionId) {
-        addTransaction(email, "Deposit", LocalDate.now(), "+ " + amount, transactionId);
+        DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+
+        addTransaction(email, "Deposit", LocalDate.now(), "+ " + amountFormat.format(amount), transactionId);
 
         return AccountService.deposit(email, amount);
     }
 
     public static double withdraw(String email, double amount, String transactionId) {
-        addTransaction(email, "Withdraw", LocalDate.now(), "- " + amount, transactionId);
+        DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+
+        addTransaction(email, "Withdraw", LocalDate.now(), "- " + amountFormat.format(amount), transactionId);
 
         return AccountService.withdraw(email, amount);
     }
 
     public static void transfer(Account user, Account receiver, double amount) {
+        DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+
         AccountService.withdraw(user.getEmail(), amount);
         AccountService.deposit(receiver.getEmail(), amount);
     }
@@ -40,8 +47,8 @@ public class BalanceFunctions {
     public static void addTransaction(String email, String type, LocalDate date, String balancechange, String newId) {
         TransactionsService.addTransaction(email, type, date, balancechange, newId);
     }
-    
-    public static String getNextTransactionID(){
+
+    public static String getNextTransactionID() {
         return TransactionsService.generateNextTransactionID();
     }
 }

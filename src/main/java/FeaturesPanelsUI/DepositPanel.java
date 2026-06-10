@@ -238,6 +238,7 @@ public class DepositPanel extends JPanel implements ActionListener {
                 }
 
                 double amount = Double.parseDouble(amountText);
+                
                 if (amount <= 0) {
                     JOptionPane.showMessageDialog(this, "Invalid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;

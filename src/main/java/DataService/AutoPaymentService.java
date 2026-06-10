@@ -167,7 +167,7 @@ public class AutoPaymentService {
 
                         TransactionsService.addTransaction(
                                 email,
-                                "to" + payee,
+                                "Auto Payment",
                                 today,
                                 "+" + amountFormat.format(amount),
                                 sequentialTxnId

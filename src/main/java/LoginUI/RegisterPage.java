@@ -25,7 +25,7 @@ public class RegisterPage extends JFrame implements ActionListener {
     private final JPasswordField txtNewPass;
 
     private String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Noob", "Dec"};
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
     RegisterPage() {
         //------------------------------- Frame Initialization -------------------------------
@@ -189,6 +189,10 @@ public class RegisterPage extends JFrame implements ActionListener {
         cmbBirthMonth.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         add(cmbBirthMonth);
 
+        cmbBirthMonth.addActionListener(e -> {
+            updateDays((String) cmbBirthMonth.getSelectedItem());
+        });
+
         lblDay = new JLabel("Day");
         lblDay.setBounds(143, 375, 25, 10);
         lblDay.setOpaque(true);
@@ -243,22 +247,25 @@ public class RegisterPage extends JFrame implements ActionListener {
 
         // FOR DAYS TO HAVE INITIAL OPTION
         updateDays((String) cmbBirthMonth.getSelectedItem());
+
     }
 
     // FOR DIFFERENT DAYS EACH MONTH
     private void updateDays(String month) {
-        String[] initialDays = new String[31];
-        for (int i = 0; i < 31; i++) {
-            initialDays[i] = String.valueOf(i + 1);
-        }
-        for (String day : initialDays) {
-            cmbBirthDay.addItem(day);
-        }
+
+//        String[] initialDays = new String[31];
+//        for (int i = 0; i < 31; i++) {
+//            initialDays[i] = String.valueOf(i + 1);
+//        }
+//        for (String day : initialDays) {
+//            cmbBirthDay.addItem(day);
+//        }
         cmbBirthDay.removeAllItems();
 
         int days = 31;
 
         switch (month) {
+
             case "Apr":
             case "Jun":
             case "Sep":
@@ -284,7 +291,6 @@ public class RegisterPage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btnSignup) {
-            
 
             String fName = txtFName.getText();
             String lName = txtLName.getText();
@@ -298,7 +304,7 @@ public class RegisterPage extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Fields can't be empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             if (AccountFunctions.validateExistingEmail(email)) {
                 JOptionPane.showMessageDialog(this, "Email Already Exists!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -308,7 +314,7 @@ public class RegisterPage extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Invalid Email Address!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             if (!AccountFunctions.validateFirstName(fName)) {
                 JOptionPane.showMessageDialog(this, "Invalid First Name!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;

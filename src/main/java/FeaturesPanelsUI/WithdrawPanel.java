@@ -30,7 +30,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
     double balance = 0;
     
     // Money Display Formatter
-    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+    DecimalFormat amountFormat = new DecimalFormat("#,##0.00");
 
     public WithdrawPanel(Account user) {
         this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
@@ -156,7 +156,9 @@ public class WithdrawPanel extends JPanel implements ActionListener {
                 + "• Handled immediately in real-time. \n"
                 + " \n"
                 + "Notice:  \n"
-                + "Ensure your balance can cover  \n"
+                + "• The maximum withdrawal amount per\n"
+                + "transaction is ₱ 100,000. \n"
+                + "• Ensure your balance can cover  \n"
                 + "both the withdrawal amount and the  \n"
                 + "charge fee before submitting.  \n";
 
@@ -197,8 +199,8 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
                 double amount = Double.parseDouble(amountText);
                 
-                if (amount > 50000) {
-                    JOptionPane.showMessageDialog(this, "Amount exceeds per withdraw limit!", "Error", JOptionPane.ERROR_MESSAGE);
+                if (amount > 10000) {
+                    JOptionPane.showMessageDialog(this, "Amount exceeds per withdrawal limit!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 

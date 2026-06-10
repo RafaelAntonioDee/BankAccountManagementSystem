@@ -232,4 +232,33 @@ public class AutoPaymentService {
             ex.printStackTrace();
         }
     }
+    
+    // Check if you're eligible to unsubscribe (Can't if you have unpaid subscription)
+    public static boolean canUnsubscribe(String id) {
+
+        String sql = "SELECT IsPaid, DueDate FROM autopayments WHERE AutoPayID = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setString(1, id);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+
+                boolean isPaid = rs.getBoolean("IsPaid");
+                LocalDate dueDate = rs.getDate("DueDate").toLocalDate();
+
+                if (!isPaid && LocalDate.now().isBefore(dueDate)) {
+                    return true;
+                }
+
+                return isPaid;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
+    }
 }

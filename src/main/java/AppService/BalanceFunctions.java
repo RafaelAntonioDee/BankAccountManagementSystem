@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class BalanceFunctions {
 
     public static double deposit(String email, double amount, String transactionId) {
-        DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+        DecimalFormat amountFormat = new DecimalFormat("#,##0.00");
 
         addTransaction(email, "Deposit", LocalDate.now(), "+ " + amountFormat.format(amount), transactionId);
 
@@ -26,7 +26,7 @@ public class BalanceFunctions {
     }
 
     public static double withdraw(String email, double amount, String transactionId) {
-        DecimalFormat amountFormat = new DecimalFormat("#,###.00");
+        DecimalFormat amountFormat = new DecimalFormat("#,##0.00");
 
         addTransaction(email, "Withdraw", LocalDate.now(), "- " + amountFormat.format(amount), transactionId);
 
@@ -34,6 +34,8 @@ public class BalanceFunctions {
     }
 
     public static void transfer(Account user, Account receiver, double amount) {
+        DecimalFormat amountFormat = new DecimalFormat("#,##0.00");
+
         AccountService.withdraw(user.getEmail(), amount);
         AccountService.deposit(receiver.getEmail(), amount);
     }

@@ -12,51 +12,66 @@ import java.time.LocalDateTime;
  * @author rafra
  */
 public class AutoPayment {
+
     private String AutoPayID, Payee, Frequency, Email;
     private LocalDate Date;
     private double Amount;
-        
-    public String getAutoPayID(){
+    private boolean isPaid;
+
+    public String getAutoPayID() {
         return AutoPayID;
     }
-    public void setAutoPayID(String newAutoPayID){
+
+    public void setAutoPayID(String newAutoPayID) {
         AutoPayID = newAutoPayID;
     }
-    
-    public String getEmail(){
+
+    public String getEmail() {
         return Email;
     }
-    public void setEmail(String newEmail){
+
+    public void setEmail(String newEmail) {
         Email = newEmail;
     }
-    
-    public String getPayee(){
+
+    public String getPayee() {
         return Payee;
     }
-    public void setPayee(String newPayee){
+
+    public void setPayee(String newPayee) {
         Payee = newPayee;
     }
-    
-    public String getFrequency(){
+
+    public String getFrequency() {
         return Frequency;
     }
-    public void setFrequency(String newFrequency){
+
+    public void setFrequency(String newFrequency) {
         Frequency = newFrequency;
     }
-    
-    public LocalDate getDate(){
+
+    public LocalDate getDate() {
         return Date;
     }
-    public void setPaymentDate(LocalDate newPaymentDate){
+
+    public void setPaymentDate(LocalDate newPaymentDate) {
         Date = newPaymentDate;
     }
-    
-    public double getAmount(){
+
+    public double getAmount() {
         return Amount;
     }
-    public void setAmount(double newAmount){
+
+    public void setAmount(double newAmount) {
         Amount = newAmount;
     }
-    
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.isPaid = paid;
+    }
 
 }

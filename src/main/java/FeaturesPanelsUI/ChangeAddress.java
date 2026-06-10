@@ -96,7 +96,7 @@ public class ChangeAddress extends JFrame implements ActionListener {
             if (newAddress.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
             } else {
-                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
+                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (choice == 0) {
                     updatedAddress = SettingsFunctions.changeAddress(currentuser.getEmail(), newAddress);
                     SettingsPanel.lblAddressField.setText(newAddress);

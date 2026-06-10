@@ -350,4 +350,25 @@ public class AccountService {
             ex.printStackTrace();
         }
     }
+
+    public static boolean deductBalance(String email, double amount) {
+
+        String sql = "UPDATE accounts SET Balance = Balance - ? " + "WHERE Email = ? AND Balance >= ?";
+
+        try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setDouble(1, amount);
+            st.setString(2, email);
+            st.setDouble(3, amount);
+
+            int rows = st.executeUpdate();
+
+            return rows > 0;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
+    }
 }

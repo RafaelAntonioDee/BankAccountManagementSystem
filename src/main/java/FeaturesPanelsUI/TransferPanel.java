@@ -177,7 +177,7 @@ public class TransferPanel extends JPanel implements ActionListener {
                 + "• Handled immediately in real-time. \n"
                 + " \n"
                 + "Notice:  \n"
-                + "Ensure your balance can fully cover  \n"
+                + "• Ensure your balance can fully cover  \n"
                 + "the transfer amount prior to submitting.";
 
         txaGuideBody = new JTextArea(guideText);
@@ -241,26 +241,26 @@ public class TransferPanel extends JPanel implements ActionListener {
                 String amountText = txtAmount.getText().trim();
 
                 if (email.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Enter recipient email!");
+                    JOptionPane.showMessageDialog(this, "Enter recipient email!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (email.equalsIgnoreCase(currentUser.getEmail())) {
-                    JOptionPane.showMessageDialog(this, "You cannot transfer money to your own account!");
+                    JOptionPane.showMessageDialog(this, "You cannot transfer money to your own account!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (amountText.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Enter transfer amount!");
+                    JOptionPane.showMessageDialog(this, "Enter transfer amount!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 double amount = Double.parseDouble(amountText);
                 if (amount <= 0) {
-                    JOptionPane.showMessageDialog(this, "Invalid amount calculation!");
+                    JOptionPane.showMessageDialog(this, "Invalid amount calculation!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 if (balance < amount) {
-                    JOptionPane.showMessageDialog(this, "Insufficient balance!");
+                    JOptionPane.showMessageDialog(this, "Insufficient balance!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -406,9 +406,9 @@ public class TransferPanel extends JPanel implements ActionListener {
                     pnlReceiptImage.paint(g);
                     g.dispose();
                     ImageIO.write(img, "png", chooser.getSelectedFile());
-                    JOptionPane.showMessageDialog(dialog, "Saved successfully!");
+                    JOptionPane.showMessageDialog(dialog, "Saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(dialog, "Error: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(dialog, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

@@ -95,13 +95,18 @@ public class ChangeEmail extends JFrame implements ActionListener {
             UIManager.put("Button.focus", new Color(0, 0, 0, 0));
             String currentEmail = SettingsPanel.lblEmailField.getText();
             String newEmailInput = txtEmail.getText();
+            
+            if (newEmailInput.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             if (currentEmail.equals(newEmailInput)) {
-                JOptionPane.showMessageDialog(this, "New email cannot be the same as the old email!", "", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "New email cannot be the same as the old email!", "Try Again", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (!AccountFunctions.validateEmail(newEmailInput)) {
-                JOptionPane.showMessageDialog(this, "Invalid Email Address!");
+                JOptionPane.showMessageDialog(this, "Invalid Email Address!", "Try Again", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -114,11 +119,8 @@ public class ChangeEmail extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Invalid Email Address!", "Try Again", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
-            if (newEmailInput.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Fields cannot be empty!", "Missing Fields", JOptionPane.ERROR_MESSAGE);
-            } else {
-                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION);
+            
+                int choice = JOptionPane.showConfirmDialog(this, "Are you sure?", "Change Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                 if (choice == 0) {
                     updatedUser = SettingsFunctions.changeEmail(currentuser.getEmail(), newEmailInput);
@@ -127,7 +129,7 @@ public class ChangeEmail extends JFrame implements ActionListener {
                     dispose();
                     JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Name Change", JOptionPane.INFORMATION_MESSAGE);
                 }
-            }
+            
         } else if (e.getSource() == btnCancel) {
             dispose();
         }

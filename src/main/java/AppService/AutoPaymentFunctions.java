@@ -71,4 +71,13 @@ public class AutoPaymentFunctions {
     public static void processDuePayments() {
         AutoPaymentService.processDuePayments();
     }
+
+    public static boolean canUnsubscribe(String id) {
+        return AutoPaymentService.canUnsubscribe(id);
+    }
+
+    public static void removeAutoPayment(String id) {
+        AutoPaymentService.removeAutoPayment(id);
+    }
+
 }

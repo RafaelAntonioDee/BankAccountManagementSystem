@@ -24,7 +24,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
     private JComboBox cmbModeOfTransac;
     private JPanel pnlProcess, pnlGuidelines;
     private Account currentuser;
-    private String[] modeOfTransac = {"Select Mode", "Linked Bank Account", "Over-the-Counter Cashier"};
+    private String[] modeOfTransac = {"Select Mode", "Linked Bank Account", "Over-the-Counter"};
     public static Colors theme = Colors.LIGHT();
 
     double balance = 0;
@@ -208,15 +208,22 @@ public class WithdrawPanel extends JPanel implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Invalid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
+                
+                
                 double fee = 0;
+                
+                if (mode.equals("Over-the-Counter")) {
+                    fee = 20;
+                }
+                
+
                 double totalDeduction = amount + fee;
                 if (totalDeduction > balance) {
                     JOptionPane.showMessageDialog(this, "Insufficient balance!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                String sequentialTxnId = BalanceFunctions.getNextTransactionID();;
+                String sequentialTxnId = BalanceFunctions.getNextTransactionID();
 
                 balance = BalanceFunctions.withdraw(currentuser.getEmail(), totalDeduction, sequentialTxnId);
                 lblBalanceAmount.setText("    ₱" + amountFormat.format(balance));

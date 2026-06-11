@@ -169,7 +169,7 @@ public class AutoPaymentService {
                                 email,
                                 "Auto Payment",
                                 today,
-                                "+" + amountFormat.format(amount),
+                                "-" + amountFormat.format(amount),
                                 sequentialTxnId
                         );
 
@@ -276,11 +276,11 @@ public class AutoPaymentService {
                 boolean isPaid = rs.getBoolean("IsPaid");
                 LocalDate dueDate = rs.getDate("DueDate").toLocalDate();
 
-                if (!isPaid && LocalDate.now().isBefore(dueDate)) {
+                if (!isPaid && (LocalDate.now().isBefore(dueDate) || LocalDate.now().isEqual(dueDate))){
                     return true;
                 }
 
-                return isPaid;
+                return false;
             }
 
         } catch (SQLException ex) {

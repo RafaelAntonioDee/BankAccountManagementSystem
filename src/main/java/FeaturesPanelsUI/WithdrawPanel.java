@@ -212,7 +212,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
                 
                 double fee = 0;
                 
-                if (mode.equals("Over-the-Counter")) {
+                if (mode.equals("Over-the-Counter") || mode.equals("Over-the-Counter Cashier")) {
                     fee = 20;
                 }
                 

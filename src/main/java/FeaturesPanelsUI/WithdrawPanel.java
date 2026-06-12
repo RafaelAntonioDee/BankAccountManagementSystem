@@ -156,8 +156,8 @@ public class WithdrawPanel extends JPanel implements ActionListener {
                 + "• Handled immediately in real-time. \n"
                 + " \n"
                 + "Notice:  \n"
-                + "• The maximum withdrawal amount per\n"
-                + "transaction is ₱ 100,000. \n"
+                + "• The maximum withdrawal amount\n"
+                + "per transaction is ₱ 100,000. \n"
                 + "• Ensure your balance can cover  \n"
                 + "both the withdrawal amount and the  \n"
                 + "charge fee before submitting.  \n";

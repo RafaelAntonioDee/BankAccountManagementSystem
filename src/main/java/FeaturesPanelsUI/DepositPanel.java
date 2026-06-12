@@ -194,9 +194,9 @@ public class DepositPanel extends JPanel implements ActionListener {
                 + "Notice:  \n"
                 + "• The maximum deposit amount per\n"
                 + "transaction is ₱ 500,000. \n"
-                + " • Ensure your source funds are active  \n"
-                + "before submitting. Deductions for  \n"
-                + "processing fees are automatically  \n"
+                + " • Ensure your source funds are\n"
+                + "active before submitting. Deductions\n"
+                + "for processing fees are automatically  \n"
                 + "handled upon deposit completion.";
 
         txaGuideBody = new JTextArea(guideText);

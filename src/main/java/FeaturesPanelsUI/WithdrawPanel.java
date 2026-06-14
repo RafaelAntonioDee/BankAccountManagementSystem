@@ -199,7 +199,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
                 double amount = Double.parseDouble(amountText);
                 
-                if (amount > 10000) {
+                if (amount > 100000) {
                     JOptionPane.showMessageDialog(this, "Amount exceeds per withdrawal limit!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -243,6 +243,7 @@ public class WithdrawPanel extends JPanel implements ActionListener {
 
     private void clearInputs() {
         txtAmount.setText("");
+//        lbl
         cmbModeOfTransac.setSelectedIndex(0);
     }
 

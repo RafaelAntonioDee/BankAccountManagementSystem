@@ -85,7 +85,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblAmount = new JLabel("    ₱" + amountFormat.format(balance));
         lblAmount.setForeground(theme.TEXT_WHITE);
         lblAmount.setFont(new Font("Arial", Font.BOLD, 20));
-        lblAmount.setBounds(25, 60, 250, 50);
+        lblAmount.setBounds(25, 60, 375, 50);
         lblAmount.setOpaque(true);
         lblAmount.setBackground(theme.PRIMARY_BLUE);
         pnlBalance.add(lblAmount);
@@ -176,7 +176,7 @@ public class DashboardPanel extends JPanel implements ActionListener {
         lblScheduledPayments.setForeground(theme.TEXT_BLACK);
         pnlScheduledPay.add(lblScheduledPayments);
 
-        btnManagePayments = new JButton("Manage Payments");
+        btnManagePayments = new JButton("Manage Auto Payments");
         btnManagePayments.setHorizontalAlignment(JButton.CENTER);
         btnManagePayments.setBounds(25, 140, 280, 35);
         btnManagePayments.setBackground(theme.PRIMARY_BLUE);

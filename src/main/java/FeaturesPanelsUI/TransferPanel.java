@@ -6,6 +6,7 @@ import AppService.AccountFunctions;
 import static AppService.BalanceFunctions.addTransaction;
 import DashboardUIDefault.Colors;
 import static FeaturesPanelsUI.DepositPanel.theme;
+import Objects.AccountPersonalInformation;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -84,7 +85,7 @@ public class TransferPanel extends JPanel implements ActionListener {
         txtEmail.setBackground(theme.BACKGROUND);
         pnlProcess.add(txtEmail);
 
-        lblName = new JLabel("Transferring to (email): ---");
+        lblName = new JLabel("Transferring to: ---");
         lblName.setFont(new Font("Arial", Font.ITALIC, 13));
         lblName.setForeground(theme.PRIMARY_BLUE);
         lblName.setBounds(30, 85, 360, 20);
@@ -197,14 +198,23 @@ public class TransferPanel extends JPanel implements ActionListener {
 
     private void lookupRecipientName() {
         String email = txtEmail.getText().trim();
+        
         if (email.isEmpty()) {
-            lblName.setText("Transferring to (email): ---");
+            lblName.setText("Transferring to: ---");
+            lblName.setForeground(theme.PRIMARY_BLUE);
+        }
+        else if (AppService.AccountFunctions.getUser(email) == null) {
+            lblName.setText("Account Not Found!");
+            lblName.setForeground(new Color(185, 70, 75));
             return;
         }
+        
 
         Account receiver = AccountFunctions.getUser(email);
+        AccountPersonalInformation receiveInfo = AccountFunctions.getUserInfo(email);
+        
         if (receiver != null) {
-            lblName.setText("Transferring to (email): " + receiver.getEmail());
+            lblName.setText("Transferring to: " + receiveInfo.getFirstName() + " " + receiveInfo.getLastName());
         }
     }
 
@@ -295,7 +305,8 @@ public class TransferPanel extends JPanel implements ActionListener {
     private void clearInputs() {
         txtEmail.setText("");
         txtAmount.setText("");
-        lblName.setText("Account Holder Name: ---");
+        lblName.setText("Transferring to: ---");
+        lblName.setForeground(theme.PRIMARY_BLUE);
     }
 
     private void showReceiptPopup(double amount, Account receiver, String txnId) {

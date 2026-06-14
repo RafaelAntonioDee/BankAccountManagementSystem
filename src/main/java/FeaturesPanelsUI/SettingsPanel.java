@@ -32,6 +32,7 @@ public class SettingsPanel extends JPanel implements ActionListener {
     public static Colors theme = Colors.LIGHT();
 
     public SettingsPanel(Account user, AccountPersonalInformation userInfo) {
+
         this.currentuser = AppService.AccountFunctions.getUser(user.getEmail());
         this.currentuserInfo = AppService.AccountFunctions.getUserInfo(user.getEmail());
 
@@ -237,18 +238,17 @@ public class SettingsPanel extends JPanel implements ActionListener {
                 int choice = JOptionPane.showConfirmDialog(SettingsPanel.this, "Are you sure?", "Theme Change", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                 if (choice == JOptionPane.YES_OPTION) {
-                    AppService.AccountFunctions.ChangeTheme(currentuser.getEmail(), cmbTheme.getSelectedItem().toString());
-                    MainDashboard md = new MainDashboard(currentuser, currentuserInfo);
+                    AppService.AccountFunctions.ChangeTheme(lblEmailField.getText(), cmbTheme.getSelectedItem().toString());
+                    MainDashboard md = new MainDashboard(AppService.AccountFunctions.getUser(lblEmailField.getText()), AppService.AccountFunctions.getUserInfo(lblEmailField.getText()));
                     md.setVisible(true);
                     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(SettingsPanel.this);
                     frame.dispose();
-                }
-                
-                else {
+                } else {
                     cmbTheme.setSelectedItem(user.getSystemTheme());
                 }
             }
         });
+        setUserSettings(user, userInfo);
 
     }
 
@@ -290,13 +290,10 @@ public class SettingsPanel extends JPanel implements ActionListener {
 
     public void setUserSettings(Account user, AccountPersonalInformation userinfo) {
 
-        String password = user.getPassword();
-        String hiddenPassword = "*".repeat(password.length());
-
         lblNameField.setText(AccountFunctions.getFullName(userinfo));
         lblEmailField.setText(user.getEmail());
         lblPhoneField.setText(userinfo.getPhoneNum());
-        lblPasswordField.setText(hiddenPassword);
+        lblPasswordField.setText("********");
         lblBirthdayField.setText(userinfo.getBirthdate());
         lblAddressField.setText(userinfo.getAddress());
     }

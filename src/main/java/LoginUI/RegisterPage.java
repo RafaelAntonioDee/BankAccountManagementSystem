@@ -315,6 +315,11 @@ public class RegisterPage extends JFrame implements ActionListener {
                 return;
             }
 
+            if (pass.length() < 8) {
+                JOptionPane.showMessageDialog(this, "Password must be 8 characters long!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             if (!AccountFunctions.validateFirstName(fName)) {
                 JOptionPane.showMessageDialog(this, "Invalid First Name!", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return;

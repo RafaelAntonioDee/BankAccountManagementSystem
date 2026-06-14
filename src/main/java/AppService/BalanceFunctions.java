@@ -51,4 +51,8 @@ public class BalanceFunctions {
     public static String getNextTransactionID() {
         return TransactionsService.generateNextTransactionID();
     }
+    
+    public static boolean updateTransactionEmail(String oldEmail, String newEmail){
+        return TransactionsService.updateTransactionEmail(oldEmail, newEmail);
+    }
 }

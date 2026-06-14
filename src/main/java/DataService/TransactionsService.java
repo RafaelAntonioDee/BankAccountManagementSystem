@@ -117,4 +117,25 @@ public class TransactionsService {
 
         return true;
     }
+
+    // Update Email for All Transactions
+    public static boolean updateTransactionEmail(String oldEmail, String newEmail) {
+
+        String sql = "UPDATE transactions SET Email = ? WHERE Email = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setString(1, newEmail);
+            st.setString(2, oldEmail);
+
+            int rowsAffected = st.executeUpdate();
+
+            return rowsAffected > 0;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
+    }
 }

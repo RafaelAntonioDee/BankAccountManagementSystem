@@ -80,4 +80,7 @@ public class AutoPaymentFunctions {
         AutoPaymentService.removeAutoPayment(id);
     }
 
+    public static boolean updateAutoPaymentEmail(String oldEmail, String newEmail){
+        return AutoPaymentService.updateAutoPaymentEmail(oldEmail, newEmail);
+    }
 }

@@ -51,7 +51,7 @@ public class ChangeEmail extends JDialog implements ActionListener {
         getContentPane().setBackground(theme.BACKGROUND);
 
         // NEW ADDRESS
-        lblEmail = new JLabel("New Address");
+        lblEmail = new JLabel("New Email");
         lblEmail.setBounds(38, 25, 65, 10);
         lblEmail.setOpaque(true);
         lblEmail.setBackground(theme.BACKGROUND);
@@ -130,6 +130,8 @@ public class ChangeEmail extends JDialog implements ActionListener {
                 DashboardUIDefault.MainDashboard.currentUser = AppService.AccountFunctions.getUser(newEmailInput);
                 DashboardUIDefault.MainDashboard.currentUserInfo = AppService.AccountFunctions.getUserInfo(newEmailInput);
 
+                AppService.BalanceFunctions.updateTransactionEmail(currentuser.getEmail(), newEmailInput);
+                AppService.AutoPaymentFunctions.updateAutoPaymentEmail(currentuser.getEmail(), newEmailInput);
                 dispose();
                 JOptionPane.showMessageDialog(this, "Saved Succesfully!", "Email Change", JOptionPane.INFORMATION_MESSAGE);
             }

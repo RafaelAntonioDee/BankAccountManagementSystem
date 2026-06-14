@@ -223,7 +223,7 @@ public class AutoPaymentService {
             ex.printStackTrace();
         }
     }
-    
+
     // Determines the Next Date After Successfully Paying in Auto Payment
     private static LocalDate calculateNextDueDate(LocalDate currentDueDate, String frequency) {
         if (frequency == null) {
@@ -276,7 +276,7 @@ public class AutoPaymentService {
                 boolean isPaid = rs.getBoolean("IsPaid");
                 LocalDate dueDate = rs.getDate("DueDate").toLocalDate();
 
-                if (!isPaid && (LocalDate.now().isBefore(dueDate) || LocalDate.now().isEqual(dueDate))){
+                if (!isPaid && (LocalDate.now().isBefore(dueDate) || LocalDate.now().isEqual(dueDate))) {
                     return true;
                 }
 
@@ -289,4 +289,26 @@ public class AutoPaymentService {
 
         return false;
     }
+
+    // Update Email for All Auto Payments
+    public static boolean updateAutoPaymentEmail(String oldEmail, String newEmail) {
+
+        String sql = "UPDATE autopayments SET Email = ? WHERE Email = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql)) {
+
+            st.setString(1, newEmail);
+            st.setString(2, oldEmail);
+
+            int rowsAffected = st.executeUpdate();
+
+            return rowsAffected > 0;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

@@ -221,6 +221,9 @@ public class TransactionsPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (txtSearch.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Enter a Transaction ID to search!", "Invalid", JOptionPane.ERROR_MESSAGE);
+        }
         showTransactions();
     }
 }

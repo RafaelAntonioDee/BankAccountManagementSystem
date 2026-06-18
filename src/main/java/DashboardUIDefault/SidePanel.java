@@ -250,6 +250,8 @@ public class SidePanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+        AppService.AutoPaymentFunctions.processDuePayments();
+
         clearSelected();
         switch (SelectedButton) {
             case "btnDashboard":

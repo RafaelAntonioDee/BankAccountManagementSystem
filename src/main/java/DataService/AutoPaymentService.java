@@ -4,6 +4,7 @@ import AppService.BalanceFunctions;
 import Objects.Account;
 import Objects.AutoPayment;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -145,11 +146,7 @@ public class AutoPaymentService {
 
         for (AutoPayment p : payments) {
 
-            if (p.isPaid()) {
-                continue;
-            }
-
-            if (!today.isBefore(p.getDate())) {
+            while (!today.isBefore(p.getDate())) {
 
                 double amount = p.getAmount();
                 String email = p.getEmail();
@@ -157,16 +154,29 @@ public class AutoPaymentService {
                 boolean success = AccountService.deductBalance(email, amount);
                 String sequentialTxnId = BalanceFunctions.getNextTransactionID();
 
-                if (!success) {
-                    TransactionsService.addTransaction(email, "Auto Payment", today, "Insufficient Balance", sequentialTxnId);
+                if (success) {
+                    DecimalFormat amountFormat = new DecimalFormat("#,###.00");
 
-                } else {
-                    TransactionsService.addTransaction(email, "Auto Payment", today, "-" + amount, sequentialTxnId);
-                    AutoPaymentService.markAsPaid(p.getAutoPayID());
+                    TransactionsService.addTransaction(
+                            email,
+                            "Auto Payment",
+                            today,
+                            "-" + amountFormat.format(amount),
+                            sequentialTxnId
+                    );
 
-                    // Changes the Auto Payment Status back to Unpaid
-                    LocalDate nextDate = calculateNextDueDate(p.getDate(), p.getFrequency());
-                    AutoPaymentService.updatePaymentForNextCycle(p.getAutoPayID(), nextDate);
+                    LocalDate nextDate
+                            = calculateNextDueDate(p.getDate(), p.getFrequency());
+
+                    AutoPaymentService.updatePaymentForNextCycle(
+                            p.getAutoPayID(),
+                            nextDate
+                    );
+
+                    p.setPaymentDate(nextDate);
+                }
+                else{
+                    break;
                 }
             }
         }

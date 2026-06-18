@@ -34,8 +34,6 @@ public class BalanceFunctions {
     }
 
     public static void transfer(Account user, Account receiver, double amount) {
-        DecimalFormat amountFormat = new DecimalFormat("#,###.00");
-
         AccountService.withdraw(user.getEmail(), amount);
         AccountService.deposit(receiver.getEmail(), amount);
     }

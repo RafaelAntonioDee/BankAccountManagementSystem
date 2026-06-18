@@ -29,7 +29,7 @@ public class DepositPanel extends JPanel implements ActionListener {
     public static Colors theme = Colors.LIGHT();
 
     double balance = 0;
-    
+
     // Money Display Formatter
     DecimalFormat amountFormat = new DecimalFormat("#,###.00");
 
@@ -227,6 +227,7 @@ public class DepositPanel extends JPanel implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Enter an amount!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+
                 if (mode.equals("Select Mode")) {
                     JOptionPane.showMessageDialog(this, "Select transaction mode!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -238,7 +239,12 @@ public class DepositPanel extends JPanel implements ActionListener {
                 }
 
                 double amount = Double.parseDouble(amountText);
-                
+
+                if (amount > 100000) {
+                    JOptionPane.showMessageDialog(this, "Amount exceeds per deposit limit!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 if (amount <= 0) {
                     JOptionPane.showMessageDialog(this, "Invalid amount!", "Invalid", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -267,6 +273,7 @@ public class DepositPanel extends JPanel implements ActionListener {
 
                 showReceiptPopup(amount, fee, netAmount, displayMode, sequentialTxnId);
                 clearInputs();
+                AppService.AutoPaymentFunctions.processDuePayments();
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid input!");
